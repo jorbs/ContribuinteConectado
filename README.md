@@ -1,6 +1,6 @@
 # Contribuinte Conectado
 
-App vencedor do 1° Hackathon Insano 72h no projeto Contribuinte Conectado da Sefaz
+App vencedor do 1° Hackathon Insano 72h no projeto Contribuinte Conectado da Sefaz.
 
 ## Instalação e Execução
 
