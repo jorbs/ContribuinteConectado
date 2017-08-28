@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import DeviceInfo from 'react-native-device-info';
-import { Text, TextInput, View, Alert, Switch, TouchableOpacity, AsyncStorage } from 'react-native';
+import { Text, TextInput, View, Alert, Switch, TouchableOpacity, AsyncStorage, Modal, WebView } from 'react-native';
 
 import * as Constants from '../common/Constants';
 import * as SefazAPI from '../api/SefazAPI';
@@ -32,7 +32,7 @@ export default class Home extends Component {
     }
   }
 
-  async submitCredentials() {
+  async login() {
     if (this.state.rememberMe) {
       await AsyncStorage.setItem(Constants.REMEMBER_ME_KEY, this.state.login);
     } else {
@@ -55,12 +55,14 @@ export default class Home extends Component {
 
     this.setState({ pendingRequest: true });
 
-    // TODO: Visitar página de retorno e então obter o requestToken
-
     const response = await SefazAPI.solicitarAutorizacao(this.state.login, deviceId);
 
     if (response.idAutorizacao != null) {
-      await this.authenticate(response.idAutorizacao);
+      this.setState({
+        authorizationId: response.idAutorizacao,
+        authorizationUrl: response.urlAutorizacao,
+        authorizationModalVisible: true
+      });
     } else if (response.mensagem != null) {
       Alert.alert(response.mensagem);
     } else {
@@ -70,8 +72,8 @@ export default class Home extends Component {
     this.setState({ pendingRequest: false });
   }
 
-  async authenticate(authorizationId) {
-    const response = await SefazAPI.autenticar(this.state.login, authorizationId);
+  async authenticate() {
+    const response = await SefazAPI.autenticar(this.state.login, this.state.authorizationId);
     
     if (response.id_token != null) {
       try {
@@ -90,6 +92,32 @@ export default class Home extends Component {
       Alert.alert(response.mensagem);
     } else {
       Alert.alert('Não foi possível autenticar-se.');
+    }
+  }
+
+  async onAuthorizationModalClosed() {
+    this.setState({authorizationModalVisible: false});
+    await this.authenticate();
+  }
+
+  renderAuthorizationModal() {
+    if (this.state.authorizationModalVisible) {
+      return (
+        <Modal
+          animationType={'slide'}
+          transparent={false}
+          visible={this.state.authorizationModalVisible}
+          onRequestClose={() => this.onAuthorizationModalClosed()}
+        >
+          <TouchableOpacity
+            onPress={() => this.onAuthorizationModalClosed()}
+            style={{margin: 20}}
+          >
+            <Text>Retornar</Text>
+          </TouchableOpacity>
+          <WebView source={{uri: this.state.authorizationUrl}} />
+        </Modal>
+      );
     }
   }
 
@@ -112,7 +140,7 @@ export default class Home extends Component {
           <TouchableOpacity
               style={{backgroundColor: '#c4225f', paddingTop: 6, paddingBottom: 6, paddingLeft: 12, paddingRight: 12}}
               accessibilityLabel="Acesse o Portal do Contribuinte"
-              onPress={() => this.submitCredentials()}>
+              onPress={() => this.login()}>
             <Text style={{color: 'blue', textAlign: 'center', color: 'white', fontSize: 18}}>Entrar</Text>
           </TouchableOpacity>
         </View>
@@ -123,6 +151,7 @@ export default class Home extends Component {
           />
           <Text style={{lineHeight: 26, marginLeft: 4, backgroundColor: 'transparent'}}>Lembrar acesso</Text>
         </View>
+        {this.renderAuthorizationModal()}
       </View>
     );
   }
