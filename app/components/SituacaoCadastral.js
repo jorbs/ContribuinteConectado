@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, SectionList, StyleSheet } from 'react-native';
+import { View, Text, SectionList, Image, StyleSheet } from 'react-native';
 
 import * as App from '../common/Styles';
 import * as SefazAPI from '../api/SefazAPI';
@@ -8,11 +8,10 @@ import MyActivityIndicator from './MyActivityIndicator';
 export default class SituacaoCadastral extends Component {
   static navigationOptions = {
     title: 'Situação Cadastral',
-    headerStyle: {backgroundColor: '#0a235f'},
-    headerTitleStyle: {color: 'white'},
-    headerBackTitleStyle: {color: 'white'},
-    headerTintColor: 'white',
-    headerPressColorAndroid: '#e3a3b5',
+    headerStyle: App.styles.headerStyle,
+    headerTitleStyle: App.styles.headerTitleStyle,
+    headerTintColor: App.styles.headerTintColor,
+    headerPressColorAndroid: App.styles.headerPressColorAndroid,
     gesturesEnabled: true,
   };
 
@@ -39,12 +38,21 @@ export default class SituacaoCadastral extends Component {
 
       this.setState({
         sections: [
-          {title: 'Dados Gerais', data: dadosGerais},
-          {title: 'Endereço', data: endereco}
+          {title: 'Dados Gerais', image: require('../images/user-info-red.png'), data: dadosGerais},
+          {title: 'Endereço', image: require('../images/geolocation-red.png'), data: endereco}
         ],
         pendingRequest: false
       });
     });
+  }
+
+  renderSectionHeader(section) {
+    return (
+      <View style={App.styles.sectionHeaderContainer}>
+        <Image source={section.image} resizeMode={'contain'} style={App.styles.sectionHeaderImage}/>
+        <Text style={App.styles.sectionHeader}>{section.title}</Text>
+      </View>
+    );
   }
 
   renderSectionItem(item) {
@@ -62,7 +70,7 @@ export default class SituacaoCadastral extends Component {
       <View style={App.styles.mainContainer}>
         <SectionList
           sections={this.state.sections}
-          renderSectionHeader={({section}) => <Text style={App.styles.sectionHeader}>{section.title}</Text>}
+          renderSectionHeader={({section}) => this.renderSectionHeader(section)}
           renderItem={({item}) => this.renderSectionItem(item)}
           style={App.styles.sectionList}
         />
