@@ -1,12 +1,16 @@
 import React, { Component } from 'react';
 import DeviceInfo from 'react-native-device-info';
-import { Text, TextInput, View, Alert, Switch, TouchableOpacity, AsyncStorage, Modal, WebView } from 'react-native';
+import { Text, TextInput, View, Alert, Switch, TouchableOpacity, AsyncStorage, Modal, WebView, StyleSheet } from 'react-native';
 
-import * as Constants from '../common/Constants';
+import * as App from '../common/Constants';
 import * as SefazAPI from '../api/SefazAPI';
 import MyActivityIndicator from './MyActivityIndicator';
 
 export default class Home extends Component {
+  static navigationOptions = {
+    header: null,    
+  };
+
   constructor(props) {
     super(props);
 
@@ -18,8 +22,8 @@ export default class Home extends Component {
 
   async componentDidMount() {
     try {
-      const login = await AsyncStorage.getItem(Constants.REMEMBER_ME_KEY);
-      const requestToken = await AsyncStorage.getItem(Constants.REQUEST_TOKEN_KEY);
+      const login = await AsyncStorage.getItem(App.Constants.REMEMBER_ME_KEY);
+      const requestToken = await AsyncStorage.getItem(App.Constants.REQUEST_TOKEN_KEY);
       const rememberMe = login != null;
       
       this.setState({
@@ -34,11 +38,11 @@ export default class Home extends Component {
 
   async login() {
     if (this.state.rememberMe) {
-      await AsyncStorage.setItem(Constants.REMEMBER_ME_KEY, this.state.login);
+      await AsyncStorage.setItem(App.Constants.REMEMBER_ME_KEY, this.state.login);
     } else {
       await AsyncStorage.removeItem(this.state.login);
-      await AsyncStorage.removeItem(Constants.REQUEST_TOKEN_KEY);
-      await AsyncStorage.removeItem(Constants.REMEMBER_ME_KEY);
+      await AsyncStorage.removeItem(App.Constants.REQUEST_TOKEN_KEY);
+      await AsyncStorage.removeItem(App.Constants.REMEMBER_ME_KEY);
     }
 
     if (this.state.login == null || this.state.login.length === 0) {
@@ -48,6 +52,7 @@ export default class Home extends Component {
 
     if (this.state.requestToken != null) {
       console.log('Using requestToken: ', this.state.requestToken);
+      this.props.navigation.navigate('SituacaoCadastral', { login: this.state.login, requestToken: this.state.requestToken })
       return;
     }
 
@@ -77,7 +82,7 @@ export default class Home extends Component {
     
     if (response.id_token != null) {
       try {
-        await AsyncStorage.setItem(Constants.REQUEST_TOKEN_KEY, response.id_token);
+        await AsyncStorage.setItem(App.Constants.REQUEST_TOKEN_KEY, response.id_token);
       } catch (error) {
         console.error('Unable to persist requestToken on AsyncStorage: ', error);
       }
@@ -86,8 +91,8 @@ export default class Home extends Component {
         requestToken: response.id_token,
         pendingRequest: false
       });
-    
-      this.props.setUserInfo(this.state.login, this.state.requestToken);
+
+      this.props.navigation.navigate('SituacaoCadastral', {login: this.state.login, requestToken: this.state.requestToken});
     } else if (response.mensagem != null) {
       Alert.alert(response.mensagem);
     } else {
@@ -123,33 +128,36 @@ export default class Home extends Component {
 
   renderLoginForm() {
     if (this.state.pendingRequest) {
-      return <MyActivityIndicator />
+      return <MyActivityIndicator />;
     }
 
     return (
-      <View style={{flex: 1, marginTop: 60, alignItems: 'center'}}>
+      <View style={styles.container}>
+        <View>
+          <Text style={{fontSize: 32, width: 200, textAlign: 'center', marginBottom: 80, color: 'white'}}>Contribuinte Conectado</Text>
+        </View>
         <View>
           <TextInput
               keyboardType='numeric'
               value={this.state.login}
-              style={{height: 40, width: 200, textAlign: 'center'}}
-              placeholder="Digite o seu usuário"
+              style={{height: 50, width: 200, textAlign: 'center', fontSize: 20, color: 'white'}}
+              placeholder="Digite o seu Caceal"
               onChangeText={(value) => this.setState({login: value})}/>
         </View>
         <View>
           <TouchableOpacity
-              style={{backgroundColor: '#c4225f', paddingTop: 6, paddingBottom: 6, paddingLeft: 12, paddingRight: 12}}
+              style={styles.loginButton}
               accessibilityLabel="Acesse o Portal do Contribuinte"
               onPress={() => this.login()}>
-            <Text style={{color: 'blue', textAlign: 'center', color: 'white', fontSize: 18}}>Entrar</Text>
+            <Text style={{textAlign: 'center', color: 'white', fontSize: 18}}>Entrar</Text>
           </TouchableOpacity>
         </View>
-        <View style={{flexDirection: 'row', marginTop: 15}}>
+        <View style={{flexDirection: 'row'}}>
           <Switch
               value={this.state.rememberMe}
               onValueChange={(value) => this.setState({ rememberMe: value })}
           />
-          <Text style={{lineHeight: 26, marginLeft: 4, backgroundColor: 'transparent'}}>Lembrar acesso</Text>
+          <Text style={{lineHeight: 23, marginLeft: 4, color: 'white'}}>Lembrar acesso</Text>
         </View>
         {this.renderAuthorizationModal()}
       </View>
@@ -160,3 +168,22 @@ export default class Home extends Component {
     return this.renderLoginForm();
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: 'column',
+    backgroundColor: '#113A7E',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loginButton: {
+    backgroundColor: '#890f23',
+    marginTop: 15,
+    marginBottom: 10,
+    paddingTop: 6,
+    paddingBottom: 6,
+    paddingLeft: 12,
+    paddingRight: 12,
+  }
+});

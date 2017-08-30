@@ -1,27 +1,15 @@
 import React, { Component } from 'react';
-import { Text, ActivityIndicator, StyleSheet, View } from 'react-native';
+import { Text, ActivityIndicator, View } from 'react-native';
+
+import * as App from '../common/Styles';
 
 export default class MyActivityIndicator extends Component {
   render() {
     return (
-        <View style={styles.container}>
+        <View style={App.styles.activityIndicatorContainer}>
           <ActivityIndicator />
-          <Text style={styles.requestingData}>Solicitando dados...</Text>
+          <Text style={App.styles.requestingDataLabel}>Solicitando dados...</Text>
         </View>
     );
   }
 };
-
-var styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#efeff4',
-  },
-  requestingData: {
-    marginLeft: 5,
-    height: 18
-  }
-});
