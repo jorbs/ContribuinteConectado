@@ -5,9 +5,9 @@ import * as App from '../common/Styles';
 import * as SefazAPI from '../api/SefazAPI';
 import MyActivityIndicator from './MyActivityIndicator';
 
-export default class SituacaoCadastral extends Component {
+export default class Certidao extends Component {
   static navigationOptions = {
-    title: 'Situação Cadastral',
+    title: 'Certidões',
     headerStyle: App.styles.headerStyle,
     headerTitleStyle: App.styles.headerTitleStyle,
     headerTintColor: App.styles.headerTintColor,
@@ -20,30 +20,37 @@ export default class SituacaoCadastral extends Component {
     this.state = {pendingRequest: true};
   }
 
+  mapDocumentType(documentType) {
+    if (documentType === 'CP') {
+      return 'Certidão Positiva';
+    }
+
+    if (documentType === 'CN') {
+      return 'Certidão Negativa';
+    }
+
+    return 'Certidão Positiva com Efeito de Negativa';
+  }
+
   componentDidMount() {
     const {params} = this.props.navigation.state;
+    const okImage = require('../images/ok-red.png');
+    const notOkImage = require('../images/not-ok-red.png');
 
-    SefazAPI.obterContribuinte(params.requestToken, params.login).then(userData => {
-      const dadosGerais = [
-        {key: 'Razão Social', data: userData.razaoSocial},
-        {key: 'Nome Fantasia', data: userData.nomeFantasia},
-        {key: 'CNPJ', data: userData.cnpj},
-        {key: 'Natureza Jurídica', data: userData.descricao},
-        {key: 'Situação', data: userData.descricaoSituacaoCadastral},
-      ];
-      const endereco = [
-        {key: 'Logradouro', data: userData.endereco},
-        {key: 'Telefone', data: userData.numeroTelefone},
-      ];
-
+    SefazAPI.consultarCnd(params.requestToken, params.login).then(response =>
       this.setState({
-        sections: [
-          {title: 'Dados Gerais', image: require('../images/user-info-red.png'), data: dadosGerais},
-          {title: 'Endereço', image: require('../images/geolocation-red.png'), data: endereco}
-        ],
-        pendingRequest: false
-      });
-    });
+        pendingRequest: false,
+        sections: [{
+          title: this.mapDocumentType(response.tipoCertidao),
+          image: response.tipoCertidao === 'CN' ? notOkImage : okImage,
+          data: [
+            {key: 'Número do Documento', data: response.numeroDocumento},
+            {key: 'Emissão', data: `${response.dataEmissao} ${response.horaEmissao}`},
+            {key: 'Código de Autenticação', data: response.codigoAutenticacao},
+          ]
+        }]
+      })
+    );
   }
 
   renderSectionHeader(section) {
