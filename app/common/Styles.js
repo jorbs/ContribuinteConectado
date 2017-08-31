@@ -31,6 +31,12 @@ const Styles = StyleSheet.create({
     marginLeft: 5,
     height: 18,
   },
+  h1: {
+    fontSize: 24,
+    color: colors.red,
+    marginTop: 15,
+    marginLeft: 10,
+  },
   sectionList: {
     padding: 20,
   },
@@ -64,6 +70,22 @@ const Styles = StyleSheet.create({
     color: colors.black,
     fontSize: 18,
   },
+  searchContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    margin: 20
+  },
+  searchResultLabel: {
+    textAlign: 'center',
+  },
+  button: {
+    backgroundColor: colors.darkBlue,
+    color: colors.white,
+    padding: 5,
+  },
+  buttonLast: {
+    marginLeft: 10,
+  }
 });
 
 Styles.headerTintColor = colors.white;

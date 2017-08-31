@@ -38,7 +38,7 @@ export default class SituacaoCadastral extends Component {
 
       this.setState({
         sections: [
-          {title: 'Dados Gerais', image: require('../images/user-info-red.png'), data: dadosGerais},
+          {title: 'Dados Gerais', image: require('../images/sheet-red.png'), data: dadosGerais},
           {title: 'Endereço', image: require('../images/geolocation-red.png'), data: endereco}
         ],
         pendingRequest: false
