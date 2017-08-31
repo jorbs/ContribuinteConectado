@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-export const colors = {
+const colors = {
   white: '#fff',
   black: '#000',
   red: '#ad1125',
@@ -8,7 +8,7 @@ export const colors = {
   lightGray: '#efefef',
 }
 
-export const styles = StyleSheet.create({
+const Styles = StyleSheet.create({
   headerStyle: {
     backgroundColor: colors.darkBlue,
   },
@@ -66,5 +66,7 @@ export const styles = StyleSheet.create({
   },
 });
 
-styles.headerTintColor = colors.white;
-styles.headerPressColorAndroid = colors.lightGray;
+Styles.headerTintColor = colors.white;
+Styles.headerPressColorAndroid = colors.lightGray;
+
+export default Styles;

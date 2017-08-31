@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import DeviceInfo from 'react-native-device-info';
 import { Text, TextInput, View, Alert, Switch, TouchableOpacity, AsyncStorage, Modal, WebView, StyleSheet } from 'react-native';
 
-import * as App from '../common/Constants';
+import Constants from '../common/Constants';
 import * as SefazAPI from '../api/SefazAPI';
 import MyActivityIndicator from './MyActivityIndicator';
 
@@ -22,8 +22,8 @@ export default class Home extends Component {
 
   async componentDidMount() {
     try {
-      const login = await AsyncStorage.getItem(App.Constants.REMEMBER_ME_KEY);
-      const requestToken = await AsyncStorage.getItem(App.Constants.REQUEST_TOKEN_KEY);
+      const login = await AsyncStorage.getItem(Constants.REMEMBER_ME_KEY);
+      const requestToken = await AsyncStorage.getItem(Constants.REQUEST_TOKEN_KEY);
       const rememberMe = login != null;
       
       this.setState({
@@ -38,11 +38,11 @@ export default class Home extends Component {
 
   async login() {
     if (this.state.rememberMe) {
-      await AsyncStorage.setItem(App.Constants.REMEMBER_ME_KEY, this.state.login);
+      await AsyncStorage.setItem(Constants.REMEMBER_ME_KEY, this.state.login);
     } else {
       await AsyncStorage.removeItem(this.state.login);
-      await AsyncStorage.removeItem(App.Constants.REQUEST_TOKEN_KEY);
-      await AsyncStorage.removeItem(App.Constants.REMEMBER_ME_KEY);
+      await AsyncStorage.removeItem(Constants.REQUEST_TOKEN_KEY);
+      await AsyncStorage.removeItem(Constants.REMEMBER_ME_KEY);
     }
 
     if (this.state.login == null || this.state.login.length === 0) {
@@ -82,7 +82,7 @@ export default class Home extends Component {
     
     if (response.id_token != null) {
       try {
-        await AsyncStorage.setItem(App.Constants.REQUEST_TOKEN_KEY, response.id_token);
+        await AsyncStorage.setItem(Constants.REQUEST_TOKEN_KEY, response.id_token);
       } catch (error) {
         console.error('Unable to persist requestToken on AsyncStorage: ', error);
       }

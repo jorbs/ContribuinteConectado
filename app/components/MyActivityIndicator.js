@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import { Text, ActivityIndicator, View } from 'react-native';
 
-import * as App from '../common/Styles';
+import Styles from '../common/Styles';
 
 export default class MyActivityIndicator extends Component {
   render() {
     return (
-        <View style={App.styles.activityIndicatorContainer}>
+        <View style={Styles.activityIndicatorContainer}>
           <ActivityIndicator />
-          <Text style={App.styles.requestingDataLabel}>Solicitando dados...</Text>
+          <Text style={Styles.requestingDataLabel}>Solicitando dados...</Text>
         </View>
     );
   }
