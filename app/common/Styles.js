@@ -6,7 +6,7 @@ const colors = {
   red: '#ad1125',
   darkBlue: '#0a235f',
   lightGray: '#efefef',
-}
+};
 
 const Styles = StyleSheet.create({
   headerStyle: {

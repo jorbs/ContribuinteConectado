@@ -39,7 +39,7 @@ export default class TermoApreensao extends Component {
             {key: 'Status', data: term.status},
             {key: 'Emissão', data: moment(term.dataEmissao).utc().format(Constants.DATETIME_FORMAT)},
             {key: 'Papel', data: term.papel},
-            {key: 'Posto', data: term.posto},
+            {key: 'Posto', data: term.posto, detail: 'Detalhes'},
           ]
         }
       });
@@ -80,11 +80,26 @@ export default class TermoApreensao extends Component {
     );
   }
 
+  renderSectionItemData(item) {
+    if (item.detail) {
+      return (
+        <View style={{flexDirection: 'row'}}>
+          <Text style={Styles.itemBody}>{item.data}</Text>
+          <TouchableOpacity onPress={() => console.log('detail!')}>
+            <Text style={{marginLeft: 20, marginTop: 3, color: '#0a235f'}}>{item.detail}</Text>
+          </TouchableOpacity>
+        </View>
+      );
+    }
+
+    return <Text style={Styles.itemBody}>{item.data}</Text>;
+  }
+
   renderSectionItem(item) {
     return (
       <View style={Styles.itemContainer}>
         <Text style={Styles.itemHeader}>{item.key}</Text>
-        <Text style={Styles.itemBody}>{item.data}</Text>
+        {this.renderSectionItemData(item)}
       </View>
     );
   }
