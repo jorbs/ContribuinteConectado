@@ -2,12 +2,16 @@
 
 App vencedor do 1° Hackathon Insano 72h no projeto Contribuinte Conectado da Sefaz.
 
+## Funcionalidades
+
 ## Instalação e Execução
 
 1. `npm install -g react-native-cli`
 2. `npm install -g yarn`
-2. `yarn install`
-3. `react-native run-android`
+3. `yarn install`
+4. `react-native run-android`
+
+Nota: É preciso executar o simulador da plataforma Android antes do passo #3.
 
 ## API
 
