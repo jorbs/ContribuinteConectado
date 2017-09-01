@@ -8,3 +8,7 @@ App vencedor do 1° Hackathon Insano 72h no projeto Contribuinte Conectado da Se
 2. `npm install -g yarn`
 2. `yarn install`
 3. `react-native run-android`
+
+## API
+
+O app do Contribuinte Conectado faz chamadas remotas à API disponibilizada pela Sefaz/AL, documentada em https://sefazal.github.io.
