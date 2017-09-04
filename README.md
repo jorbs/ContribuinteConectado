@@ -4,9 +4,11 @@ App vencedor do 1° Hackathon Insano 72h no projeto Contribuinte Conectado da Se
 
 ## Funcionalidades
 
-* Consulta de situação cadastral;
+* Consulta de situação cadastral e Certidão de Débito;
+* Consulta de antecipados e termos de apreensão;
+* Consulta de restrições, pendências e processos;
 * Simulador de Substituição Tributária (ST);
-* ...
+* Notificações sobre vencimento de DAR, mudança de situação na Certidão de Débito e etc.
 
 ## Instalação e Execução
 
