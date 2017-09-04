@@ -27,12 +27,12 @@ export default class Processos extends Component {
       return;
     }
 
-    const {params} = this.props.navigation.state;
-    
     this.setState({pendingRequest: true});
 
+    const {params} = this.props.navigation.state;
+
     SefazAPI.consultarPorNumeroProcesso(params.requestToken, this.state.processNumber).then(process => {
-      const processDetails = {
+      const processDetails = [{
         title: process.descricaoAssunto,
         image: require('../images/sheet-red.png'),
         data: [
@@ -43,7 +43,7 @@ export default class Processos extends Component {
           {key: 'Setor', data: process.setor},
           {key: 'Última movimentação', data: process.ultimaMovimentacao},
         ]
-      };
+      }];
 
       this.setState({
         processDetails,
