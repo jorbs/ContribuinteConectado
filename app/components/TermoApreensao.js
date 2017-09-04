@@ -45,6 +45,8 @@ export default class TermoApreensao extends Component {
       });
 
       this.setState({terms});
+
+      // Linking.openURL('tel:+5582996741312')
     });
   }
 

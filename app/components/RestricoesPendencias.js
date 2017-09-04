@@ -28,7 +28,7 @@ export default class RestricoesPendencias extends Component {
     const restrictions = response.map(restriction => {
       return {
         title: restriction.descricaoRestricao,
-        image: require('../images/sheet-red.png'),        
+        image: require('../images/sheet-red.png'),
         data: [
           {key: 'Competência', data: moment(restriction.dataCompetencia).utc().format(Constants.DATE_FORMAT)},
           {key: 'Solução', data: restriction.solucao},
@@ -43,7 +43,7 @@ export default class RestricoesPendencias extends Component {
     });*/
 
     this.setState({
-      restrictions: restrictions,
+      restrictions,
       pendingRequest: false
     });
   }

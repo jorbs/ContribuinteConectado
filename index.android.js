@@ -6,6 +6,7 @@ import SituacaoCadastral from './app/components/SituacaoCadastral';
 import Certidao from './app/components/Certidao';
 import TermoApreensao from './app/components/TermoApreensao';
 import RestricoesPendencias from './app/components/RestricoesPendencias';
+import Antecipado from './app/components/Antecipado';
 
 const ContribuinteConectado = StackNavigator({
   Home: {
@@ -26,6 +27,10 @@ const ContribuinteConectado = StackNavigator({
   RestricoesPendencias: {
     path: 'restricoesPendencias/:login/:requestToken',
     screen: RestricoesPendencias
+  },
+  Antecipado: {
+    path: 'antecipado/:login/:requestToken',
+    screen: Antecipado
   }
 })
 
