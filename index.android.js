@@ -8,6 +8,7 @@ import TermoApreensao from './app/components/TermoApreensao';
 import RestricoesPendencias from './app/components/RestricoesPendencias';
 import Antecipado from './app/components/Antecipado';
 import Processos from './app/components/Processos';
+import SimuladorST from './app/components/SimuladorST';
 
 const ContribuinteConectado = StackNavigator({
   Home: {
@@ -36,6 +37,10 @@ const ContribuinteConectado = StackNavigator({
   Processos: {
     path: 'processos/:login/:requestToken',
     screen: Processos
+  },
+  SimuladorST: {
+    path: 'simulador',
+    screen: SimuladorST
   }
 })
 

@@ -82,6 +82,13 @@ const Styles = StyleSheet.create({
     width: 120,
     textAlign: 'center',
   },
+  inputTextSm: {
+    width: 80,
+    textAlign: 'center',
+  },
+  textRight: {
+    textAlign: 'right',
+  },
   button: {
     backgroundColor: colors.darkBlue,
     color: colors.white,
