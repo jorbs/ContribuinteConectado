@@ -60,27 +60,62 @@ export default class SimuladorST extends Component {
       <View style={Styles.mainContainer}>
         <View>
           <Text>Valor total do produto (R$)</Text>
-          <TextInput style={[Styles.inputTextSm, Styles.textRight]} onChange={(e) => this.setState({valorTotalProduto: Number(e.target.value)})} />
+          <TextInput
+            keyboardType="numeric"
+            returnKeyType="next"
+            style={[Styles.inputTextSm, Styles.textRight]}
+            onSubmitEditing={(event) => this.refs.frete.focus()}
+            onChange={(e) => this.setState({valorTotalProduto: Number(e.target.value)})} />
         </View>
         <View>
           <Text>Frete (R$)</Text>
-          <TextInput style={[Styles.inputTextSm, Styles.textRight]} onChange={(e) => this.setState({frete: Number(e.target.value)})} />
+          <TextInput
+            ref="frete"
+            keyboardType="numeric"
+            returnKeyType="next"
+            style={[Styles.inputTextSm, Styles.textRight]}
+            onSubmitEditing={(event) => this.refs.seguro.focus()}
+            onChange={(e) => this.setState({frete: Number(e.target.value)})} />
         </View>
         <View>
           <Text>Seguro (R$)</Text>
-          <TextInput style={[Styles.inputTextSm, Styles.textRight]} onChange={(e) => this.setState({seguro: Number(e.target.value)})} />
+          <TextInput
+            ref="seguro"
+            keyboardType="numeric"
+            returnKeyType="next"
+            style={[Styles.inputTextSm, Styles.textRight]}
+            onSubmitEditing={(event) => this.refs.outrasDespesas.focus()}
+            onChange={(e) => this.setState({seguro: Number(e.target.value)})} />
         </View>
         <View>
           <Text>Outras despesas (R$)</Text>
-          <TextInput style={[Styles.inputTextSm, Styles.textRight]} onChange={(e) => this.setState({outrasDespesas: Number(e.target.value)})} />
+          <TextInput
+            ref="outrasDespesas"
+            keyboardType="numeric"
+            returnKeyType="next"
+            style={[Styles.inputTextSm, Styles.textRight]}
+            onSubmitEditing={(event) => this.refs.ipi.focus()}
+            onChange={(e) => this.setState({outrasDespesas: Number(e.target.value)})} />
         </View>
         <View>
           <Text>IPI (R$)</Text>
-          <TextInput style={[Styles.inputTextSm, Styles.textRight]} onChange={(e) => this.setState({ipi: Number(e.target.value)})} />
+          <TextInput
+            ref="ipi"
+            keyboardType="numeric"
+            returnKeyType="next"
+            style={[Styles.inputTextSm, Styles.textRight]}
+            onSubmitEditing={(event) => this.refs.desconto.focus()}
+            onChange={(e) => this.setState({ipi: Number(e.target.value)})} />
         </View>
         <View>
           <Text>Desconto (R$)</Text>
-          <TextInput style={[Styles.inputTextSm, Styles.textRight]} onChange={(e) => this.setState({desconto: Number(e.target.value)})} />
+          <TextInput
+            ref="desconto"
+            keyboardType="numeric"
+            returnKeyType="next"
+            style={[Styles.inputTextSm, Styles.textRight]}
+            onSubmitEditing={(event) => this.refs.aliquota.focus()}
+            onChange={(e) => this.setState({desconto: Number(e.target.value)})} />
         </View>
         <View>
           <Text>Subtotal (R$)</Text>
@@ -92,11 +127,23 @@ export default class SimuladorST extends Component {
         </View>
         <View>
           <Text>Alíquota (%)</Text>
-          <TextInput style={[Styles.inputTextSm, Styles.textRight]} onChange={(e) => this.setState({aliquota: Number(e.target.value)})} />
+          <TextInput
+            ref="aliquota"
+            keyboardType="numeric"
+            returnKeyType="next"
+            style={[Styles.inputTextSm, Styles.textRight]}
+            onSubmitEditing={(event) => this.refs.mva.focus()}
+            onChange={(e) => this.setState({aliquota: Number(e.target.value)})} />
         </View>
         <View>
           <Text>MVA (%)</Text>
-          <TextInput style={[Styles.inputTextSm, Styles.textRight]} onChange={(e) => this.setState({mva: Number(e.target.value)})} />
+          <TextInput
+            ref="mva"
+            keyboardType="numeric"
+            returnKeyType="next"
+            style={[Styles.inputTextSm, Styles.textRight]}
+            onSubmitEditing={(event) => this.refs.aliquotaIcmsSt.focus()}
+            onChange={(e) => this.setState({mva: Number(e.target.value)})} />
         </View>
         <View>
           <Text>Base de cálculo ST (R$)</Text>
@@ -104,7 +151,13 @@ export default class SimuladorST extends Component {
         </View>
         <View>
           <Text>Alíquota ICMS ST (%)</Text>
-          <TextInput style={[Styles.inputTextSm, Styles.textRight]} onChange={(e) => this.setState({aliquotaIcmsSt: Number(e.target.value)})} />
+          <TextInput
+            ref="aliquotaIcmsSt"
+            keyboardType="numeric"
+            returnKeyType="next"
+            style={[Styles.inputTextSm, Styles.textRight]}
+            onSubmitEditing={(event) => this.refs.aliquotaFecoep.focus()}
+            onChange={(e) => this.setState({aliquotaIcmsSt: Number(e.target.value)})} />
         </View>
         <View>
           <Text>Valor da ST (R$)</Text>
@@ -112,7 +165,12 @@ export default class SimuladorST extends Component {
         </View>
         <View>
           <Text>Alíquota FECOEP  (%)</Text>
-          <TextInput style={[Styles.inputTextSm, Styles.textRight]} onChange={(e) => this.setState({aliquotaFecoep: Number(e.target.value)})} />
+          <TextInput
+            ref="aliquotaFecoep"
+            keyboardType="numeric"
+            returnKeyType="done"
+            style={[Styles.inputTextSm, Styles.textRight]}
+            onChange={(e) => this.setState({aliquotaFecoep: Number(e.target.value)})} />
         </View>
         <View>
           <Text>Valor FECOEP (R$)</Text>
