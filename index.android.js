@@ -7,6 +7,7 @@ import Certidao from './app/components/Certidao';
 import TermoApreensao from './app/components/TermoApreensao';
 import RestricoesPendencias from './app/components/RestricoesPendencias';
 import Antecipado from './app/components/Antecipado';
+import Processos from './app/components/Processos';
 
 const ContribuinteConectado = StackNavigator({
   Home: {
@@ -31,6 +32,10 @@ const ContribuinteConectado = StackNavigator({
   Antecipado: {
     path: 'antecipado/:login/:requestToken',
     screen: Antecipado
+  },
+  Processos: {
+    path: 'processos/:login/:requestToken',
+    screen: Processos
   }
 })
 

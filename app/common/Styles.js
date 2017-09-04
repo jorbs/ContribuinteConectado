@@ -78,6 +78,10 @@ const Styles = StyleSheet.create({
   searchResultLabel: {
     textAlign: 'center',
   },
+  inputTextMd: {
+    width: 120,
+    textAlign: 'center',
+  },
   button: {
     backgroundColor: colors.darkBlue,
     color: colors.white,

@@ -25,10 +25,6 @@ export default class Antecipado extends Component {
     };
   }
 
-  // componentDidMount() {
-  //   this.setState({month: moment().subtract(1, 'month').format('MM')});
-  // }
-
   onSchedule() {
     const day = '28';
     const month = '09';

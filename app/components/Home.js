@@ -52,7 +52,7 @@ export default class Home extends Component {
 
     if (this.state.requestToken != null) {
       console.log('Using requestToken: ', this.state.requestToken);
-      this.props.navigation.navigate('RestricoesPendencias', { login: this.state.login, requestToken: this.state.requestToken })
+      this.props.navigation.navigate('Processos', { login: this.state.login, requestToken: this.state.requestToken })
       return;
     }
 
