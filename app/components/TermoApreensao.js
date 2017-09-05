@@ -37,7 +37,7 @@ export default class TermoApreensao extends Component {
           image: require('../images/sheet-red.png'),
           data: [
             {key: 'Status', data: term.status},
-            {key: 'Emissão', data: moment(term.dataEmissao).utc().format(Constants.DATETIME_FORMAT)},
+            {key: 'Emissão', data: term.dataEmissao && moment(term.dataEmissao).utc().format(Constants.DATETIME_FORMAT)},
             {key: 'Papel', data: term.papel},
             {key: 'Posto', data: term.posto, detail: 'Detalhes'},
           ]

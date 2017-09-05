@@ -52,7 +52,7 @@ export default class Home extends Component {
 
     if (this.state.requestToken != null) {
       console.log('Using requestToken: ', this.state.requestToken);
-      this.props.navigation.navigate('Processos', { login: this.state.login, requestToken: this.state.requestToken })
+      this.props.navigation.navigate('CallCenter', { login: this.state.login, requestToken: this.state.requestToken })
       return;
     }
 
@@ -92,7 +92,7 @@ export default class Home extends Component {
         pendingRequest: false
       });
 
-      this.props.navigation.navigate('SituacaoCadastral', {login: this.state.login, requestToken: this.state.requestToken});
+      this.props.navigation.navigate('CallCenter', {login: this.state.login, requestToken: this.state.requestToken});
     } else if (response.mensagem != null) {
       Alert.alert(response.mensagem);
     } else {

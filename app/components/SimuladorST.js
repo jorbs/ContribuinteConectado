@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import {View, Text, TextInput} from 'react-native';
 
 import Styles from '../common/Styles';
-import Constants from '../common/Constants';
 
 export default class SimuladorST extends Component {
   static navigationOptions = {
@@ -164,7 +163,7 @@ export default class SimuladorST extends Component {
           <Text>{this.valorSt()}</Text>
         </View>
         <View>
-          <Text>Alíquota FECOEP  (%)</Text>
+          <Text>Alíquota FECOEP (%)</Text>
           <TextInput
             ref="aliquotaFecoep"
             keyboardType="numeric"

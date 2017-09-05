@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import {View, Text, SectionList, Image, TouchableOpacity, TextInput, Alert} from 'react-native';
 
 import Styles from '../common/Styles';
-import Constants from '../common/Constants';
 import * as SefazAPI from '../api/SefazAPI';
 import MyActivityIndicator from './MyActivityIndicator';
 
