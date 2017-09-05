@@ -78,8 +78,17 @@ const Styles = StyleSheet.create({
   searchResultLabel: {
     textAlign: 'center',
   },
+  row: {
+    flexDirection: 'row',
+  },
+  centerContainer: {
+    alignItems: 'center',
+  },
+  inputTextLg: {
+    width: 300,
+  },
   inputTextMd: {
-    width: 120,
+    width: 150,
     textAlign: 'center',
   },
   inputTextSm: {
@@ -89,6 +98,15 @@ const Styles = StyleSheet.create({
   textRight: {
     textAlign: 'right',
   },
+  textCenter: {
+    textAlign: 'center',
+  },
+  textLeft: {
+    textAlign: 'left',
+  },
+  textBold: {
+    fontWeight: 'bold',
+  },
   button: {
     backgroundColor: colors.darkBlue,
     color: colors.white,
@@ -96,7 +114,7 @@ const Styles = StyleSheet.create({
   },
   buttonLast: {
     marginLeft: 10,
-  }
+  },
 });
 
 Styles.headerTintColor = colors.white;
