@@ -31,8 +31,8 @@ export default class Home extends Component {
         requestToken,
         rememberMe
       });
-    } catch (error) {
-      console.error('Unable to retrieve login and requestToken from AsyncStorage: ', error);
+    } catch (e) {
+      console.warn('Unable to retrieve login and requestToken from AsyncStorage: ', e);
     }
   }
 
@@ -52,51 +52,60 @@ export default class Home extends Component {
 
     if (this.state.requestToken != null) {
       console.log('Using requestToken: ', this.state.requestToken);
-      this.props.navigation.navigate('CallCenter', { login: this.state.login, requestToken: this.state.requestToken })
+      this.props.navigation.navigate('TermoApreensao', {login: this.state.login, requestToken: this.state.requestToken})
       return;
     }
 
     const deviceId = DeviceInfo.getDeviceId();
 
-    this.setState({ pendingRequest: true });
+    this.setState({pendingRequest: true});
 
-    const response = await SefazAPI.solicitarAutorizacao(this.state.login, deviceId);
-
-    if (response.idAutorizacao != null) {
-      this.setState({
-        authorizationId: response.idAutorizacao,
-        authorizationUrl: response.urlAutorizacao,
-        authorizationModalVisible: true
-      });
-    } else if (response.mensagem != null) {
-      Alert.alert(response.mensagem);
-    } else {
-      Alert.alert('Não foi possível autorizar a aplicação.');
+    try {
+      const response = await SefazAPI.solicitarAutorizacao(this.state.login, deviceId);
+        
+      if (response.idAutorizacao != null) {
+        this.setState({
+          authorizationId: response.idAutorizacao,
+          authorizationUrl: response.urlAutorizacao,
+          authorizationModalVisible: true
+        });
+      } else if (response.mensagem != null) {
+        Alert.alert(response.mensagem);
+      } else {
+        Alert.alert('Não foi possível autorizar a aplicação.');
+      }
+    } catch(e) {
+      const {goBack} = this.props.navigation;
+      Alert.alert('Erro na solicitação', e.message, [{text: 'OK', onPress: () => goBack()}]);
+    } finally {
+      this.setState({pendingRequest: false});
     }
-
-    this.setState({ pendingRequest: false });
   }
 
   async authenticate() {
-    const response = await SefazAPI.autenticar(this.state.login, this.state.authorizationId);
-    
-    if (response.id_token != null) {
-      try {
-        await AsyncStorage.setItem(Constants.REQUEST_TOKEN_KEY, response.id_token);
-      } catch (error) {
-        console.error('Unable to persist requestToken on AsyncStorage: ', error);
+    try {
+      const response = await SefazAPI.autenticar(this.state.login, this.state.authorizationId);
+        
+      if (response.id_token != null) {
+        try {
+          await AsyncStorage.setItem(Constants.REQUEST_TOKEN_KEY, response.id_token);
+        } catch (error) {
+          console.error('Unable to persist requestToken on AsyncStorage: ', error);
+        }
+
+        this.setState({requestToken: response.id_token});
+
+        this.props.navigation.navigate('TermoApreensao', {login: this.state.login, requestToken: this.state.requestToken});
+      } else if (response.mensagem != null) {
+        Alert.alert(response.mensagem);
+      } else {
+        Alert.alert('Não foi possível autenticar-se.');
       }
-
-      this.setState({
-        requestToken: response.id_token,
-        pendingRequest: false
-      });
-
-      this.props.navigation.navigate('CallCenter', {login: this.state.login, requestToken: this.state.requestToken});
-    } else if (response.mensagem != null) {
-      Alert.alert(response.mensagem);
-    } else {
-      Alert.alert('Não foi possível autenticar-se.');
+    } catch(e) {
+      const {goBack} = this.props.navigation;
+      Alert.alert('Erro na solicitação', e.message, [{text: 'OK', onPress: () => goBack()}]);
+    } finally {
+      this.setState({pendingRequest: false});
     }
   }
 

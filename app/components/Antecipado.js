@@ -56,30 +56,30 @@ export default class Antecipado extends Component {
     }
   }
 
-  async onSearch() {
+  onSearch() {
+    const {goBack} = this.props.navigation;
     const {params} = this.props.navigation.state;
     
     this.setState({pendingRequest: true});
 
-    const response = await SefazAPI.consultarValoresAntecipados(params.requestToken, params.login, this.state.date);
-    const records = response.map(record => {
-      return {
-        key: record.sequencialAntecipacao,
-        image: require('../images/sheet-red.png'),
-        title: `Antecipado N\u00BA ${record.sequencialAntecipacao}`,
-        data: [
-          {key: 'Código do Tributo', data: record.codigoTributo},
-          {key: 'Valor', data: 'R$ ' + Number(record.valorAntecipado).toFixed(2).replace('.', ',')},
-          {key: 'Vencimento', data: moment(record.dataVencimento, Constants.DATE_FORMAT).format(Constants.DATE_FORMAT)},
-          {key: 'Detalhes', data: record.sequencialAntecipacao, touchable: true},
-        ]
-      };
-    });
+    SefazAPI.consultarValoresAntecipados(params.requestToken, params.login, this.state.date).then(response => {
+      const records = response.map(record => {
+        return {
+          key: record.sequencialAntecipacao,
+          image: require('../images/sheet-red.png'),
+          title: `Antecipado N\u00BA ${record.sequencialAntecipacao}`,
+          data: [
+            {key: 'Código do Tributo', data: record.codigoTributo},
+            {key: 'Valor', data: 'R$ ' + Number(record.valorAntecipado).toFixed(2).replace('.', ',')},
+            {key: 'Vencimento', data: moment(record.dataVencimento, Constants.DATE_FORMAT).format(Constants.DATE_FORMAT)},
+            {key: 'Detalhes', data: record.sequencialAntecipacao, touchable: true},
+          ]
+        };
+      });
 
-    this.setState({
-      records,
-      pendingRequest: false,
-    });
+      this.setState({records});
+    }).catch(e => Alert.alert('Erro na solicitação', e.message, [{text: 'OK', onPress: () => goBack()}]))
+      .then(() => this.setState({pendingRequest: false}));
   }
 
   onViewRecordDetails(recordId) {
@@ -89,7 +89,8 @@ export default class Antecipado extends Component {
 
     SefazAPI.consultarAntecipado(params.requestToken, params.login, recordId).then(recordDetails => {
       this.setState({pendingRequest: false});
-    });
+    }).catch(e => Alert.alert('Erro na solicitação', e.message, [{text: 'OK', onPress: () => goBack()}]))
+      .then(() => this.setState({pendingRequest: false}));
   }
 
   renderSectionHeader(section) {

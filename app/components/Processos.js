@@ -28,6 +28,7 @@ export default class Processos extends Component {
 
     this.setState({pendingRequest: true});
 
+    const {goBack} = this.props.navigation;
     const {params} = this.props.navigation.state;
 
     SefazAPI.consultarPorNumeroProcesso(params.requestToken, this.state.processNumber).then(process => {
@@ -44,11 +45,9 @@ export default class Processos extends Component {
         ]
       }];
 
-      this.setState({
-        processDetails,
-        pendingRequest: false
-      })
-    });
+      this.setState({processDetails});
+    }).catch(e => Alert.alert('Erro na solicitação', e.message, [{text: 'OK', onPress: () => goBack()}]))
+      .then(() => this.setState({pendingRequest: false}));
   }
 
   renderSectionHeader(section) {

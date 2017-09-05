@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, SectionList, Image, StyleSheet } from 'react-native';
+import {View, Text, SectionList, Image, StyleSheet, Alert} from 'react-native';
 
 import Styles from '../common/Styles';
 import * as SefazAPI from '../api/SefazAPI';
@@ -21,29 +21,30 @@ export default class SituacaoCadastral extends Component {
   }
 
   componentDidMount() {
+    const {goBack} = this.props.navigation;
     const {params} = this.props.navigation.state;
 
-    SefazAPI.obterContribuinte(params.requestToken, params.login).then(userData => {
+    SefazAPI.obterContribuinte(params.requestToken, params.login).then(response => {
       const dadosGerais = [
-        {key: 'Razão Social', data: userData.razaoSocial},
-        {key: 'Nome Fantasia', data: userData.nomeFantasia},
-        {key: 'CNPJ', data: userData.cnpj},
-        {key: 'Natureza Jurídica', data: userData.descricao},
-        {key: 'Situação', data: userData.descricaoSituacaoCadastral},
+        {key: 'Razão Social', data: response.razaoSocial},
+        {key: 'Nome Fantasia', data: response.nomeFantasia},
+        {key: 'CNPJ', data: response.cnpj},
+        {key: 'Natureza Jurídica', data: response.descricao},
+        {key: 'Situação', data: response.descricaoSituacaoCadastral},
       ];
       const endereco = [
-        {key: 'Logradouro', data: userData.endereco},
-        {key: 'Telefone', data: userData.numeroTelefone},
+        {key: 'Logradouro', data: response.endereco},
+        {key: 'Telefone', data: response.numeroTelefone},
       ];
 
       this.setState({
         sections: [
           {title: 'Dados Gerais', image: require('../images/sheet-red.png'), data: dadosGerais},
           {title: 'Endereço', image: require('../images/geolocation-red.png'), data: endereco}
-        ],
-        pendingRequest: false
+        ]
       });
-    });
+    }).catch(e => Alert.alert('Erro na solicitação', e.message, [{text: 'OK', onPress: () => goBack()}]))
+      .then(() => this.setState({pendingRequest: false}));
   }
 
   renderSectionHeader(section) {

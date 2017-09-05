@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text, SectionList, Image} from 'react-native';
+import {View, Text, SectionList, Image, Alert} from 'react-native';
 import moment from 'moment';
 
 import * as SefazAPI from '../api/SefazAPI';
@@ -23,6 +23,7 @@ export default class CallCenter extends Component {
   }
 
   componentDidMount() {
+    const {goBack} = this.props.navigation;
     const {params} = this.props.navigation.state;
 
     SefazAPI.listarChamados(params.requestToken).then(response => {
@@ -39,11 +40,9 @@ export default class CallCenter extends Component {
         };
       });
 
-      this.setState({
-        tickets,
-        pendingRequest: false,
-      });
-    });
+      this.setState({tickets});
+    }).catch((e) => Alert.alert('Erro na solicitação', e.message, [{text: 'OK', onPress: () => goBack()}]))
+      .then(() => this.setState({pendingRequest: false}));
   }
 
   renderSectionHeader(section) {

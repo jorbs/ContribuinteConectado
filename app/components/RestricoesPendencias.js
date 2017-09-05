@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text, SectionList, Image} from 'react-native';
+import {View, Text, SectionList, Image, Alert} from 'react-native';
 import moment from 'moment';
 
 import Styles from '../common/Styles';
@@ -23,29 +23,34 @@ export default class RestricoesPendencias extends Component {
   }
 
   async componentDidMount() {
+    const {goBack} = this.props.navigation;
     const {params} = this.props.navigation.state;
-    const response = await SefazAPI.obterRestricoes(params.requestToken, params.login);
-    const restrictions = response.map(restriction => {
-      return {
-        title: restriction.descricaoRestricao,
-        image: require('../images/sheet-red.png'),
-        data: [
-          {key: 'Competência', data: moment(restriction.dataCompetencia).utc().format(Constants.DATE_FORMAT)},
-          {key: 'Solução', data: restriction.solucao},
-        ]
-      };
-    });
+    
+    try {
+      const response = await SefazAPI.obterRestricoes(params.requestToken, params.login);
+      const restrictions = response.map(restriction => {
+        return {
+          title: restriction.descricaoRestricao,
+          image: require('../images/sheet-red.png'),
+          data: [
+            {key: 'Competência', data: moment(restriction.dataCompetencia).utc().format(Constants.DATE_FORMAT)},
+            {key: 'Solução', data: restriction.solucao},
+          ]
+        };
+      });
 
-    /*const pendencies = await SefazAPI.consultarPendencias(params.requestToken, params.login).map(pendency => {
-      return {
-        title: pendency
-      };
-    });*/
+      /*const pendencies = await SefazAPI.consultarPendencias(params.requestToken, params.login).map(pendency => {
+        return {
+          title: pendency
+        };
+      });*/
 
-    this.setState({
-      restrictions,
-      pendingRequest: false
-    });
+      this.setState({restrictions});
+    } catch (e) {
+      Alert.alert('Erro na solicitação', e.message, [{text: 'OK', onPress: () => goBack()}]);
+    } finally {
+      this.setState({pendingRequest: false});      
+    }
   }
 
   renderSectionHeader(section) {

@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { View, Text, SectionList, Image, StyleSheet } from 'react-native';
+import React, {Component} from 'react';
+import {View, Text, SectionList, Image, StyleSheet, Alert} from 'react-native';
 
 import Styles from '../common/Styles';
 import * as SefazAPI from '../api/SefazAPI';
@@ -33,24 +33,25 @@ export default class Certidao extends Component {
   }
 
   componentDidMount() {
+    const {goBack} = this.props.navigation;
     const {params} = this.props.navigation.state;
     const okImage = require('../images/ok-red.png');
     const notOkImage = require('../images/not-ok-red.png');
 
-    SefazAPI.consultarCnd(params.requestToken, params.login).then(response =>
-      this.setState({
-        pendingRequest: false,
-        sections: [{
-          title: this.mapDocumentType(response.tipoCertidao),
-          image: response.tipoCertidao === 'CN' ? okImage : notOkImage,
-          data: [
-            {key: 'Número do Documento', data: response.numeroDocumento},
-            {key: 'Emissão', data: `${response.dataEmissao} ${response.horaEmissao}`},
-            {key: 'Código de Autenticação', data: response.codigoAutenticacao},
-          ]
-        }]
-      })
-    );
+    SefazAPI.consultarCnd(params.requestToken, params.login).then(response => {
+      const sections = [{
+        title: this.mapDocumentType(response.tipoCertidao),
+        image: response.tipoCertidao === 'CN' ? okImage : notOkImage,
+        data: [
+          {key: 'Número do Documento', data: response.numeroDocumento},
+          {key: 'Emissão', data: `${response.dataEmissao} ${response.horaEmissao}`},
+          {key: 'Código de Autenticação', data: response.codigoAutenticacao},
+        ]
+      }];
+
+      this.setState({sections});
+    }).catch((e) => Alert.alert('Erro na solicitação', e.message, [{text: 'OK', onPress: () => goBack()}]))
+      .then(() => this.setState({pendingRequest: false}));
   }
 
   renderSectionHeader(section) {

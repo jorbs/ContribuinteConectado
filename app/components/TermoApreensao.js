@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { View, Text, SectionList, Image, StyleSheet, TouchableOpacity, DatePickerAndroid } from 'react-native';
+import {View, Text, SectionList, Image, TouchableOpacity, DatePickerAndroid, Alert} from 'react-native';
 import moment from 'moment';
 
 import * as SefazAPI from '../api/SefazAPI';
@@ -27,6 +27,7 @@ export default class TermoApreensao extends Component {
   }
 
   componentDidMount() {
+    const {goBack} = this.props.navigation;
     const {params} = this.props.navigation.state;
     const {startDate, endDate} = this.state;
 
@@ -47,7 +48,8 @@ export default class TermoApreensao extends Component {
       this.setState({terms});
 
       // Linking.openURL('tel:+5582996741312')
-    });
+    }).catch(e => Alert.alert('Erro na solicitação', e.message, [{text: 'OK', onPress: () => goBack()}]))
+      .then(() => this.setState({pendingRequest: false}));
   }
 
   renderTerms() {
