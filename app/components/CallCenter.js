@@ -25,10 +25,7 @@ export default class CallCenter extends Component {
   componentDidMount() {
     const {params} = this.props.navigation.state;
 
-    console.log(params);
-    
     SefazAPI.listarChamados(params.requestToken).then(response => {
-      console.log(response);
       const tickets = response.map(ticket => {
         return {
           title: `${ticket.titulo} (ID: ${ticket.id})`,
@@ -67,7 +64,7 @@ export default class CallCenter extends Component {
         </View>
       );
     }
-    
+
     return null;
   }
 
