@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import {View, Text, SectionList, Image, TouchableOpacity, TextInput, Alert} from 'react-native';
+import {View, Text, SectionList, Image, TouchableOpacity, TextInput, Alert, TouchableWithoutFeedback} from 'react-native';
+import dismissKeyboard from 'dismissKeyboard';
 
 import Styles from '../common/Styles';
 import * as SefazAPI from '../api/SefazAPI';
@@ -82,16 +83,18 @@ export default class Processos extends Component {
   render() {
     return (this.state.pendingRequest ?
       <MyActivityIndicator/> :
-      <View style={Styles.mainContainer}>
-        <Text style={Styles.h1}>Digite o número do processo</Text>
-        <View style={Styles.searchContainer}>
-          <TextInput style={Styles.inputTextMd} onChangeText={(processNumber) => this.setState({processNumber})}>{this.state.date}</TextInput>
-          <TouchableOpacity onPress={() => this.onSearch()}>
-            <Text style={Styles.button}>Consultar</Text>
-          </TouchableOpacity>
+      <TouchableWithoutFeedback onPress={dismissKeyboard}>
+        <View style={Styles.mainContainer}>
+          <Text style={Styles.h1}>Digite o número do processo</Text>
+          <View style={Styles.searchContainer}>
+            <TextInput style={Styles.inputTextMd} onChangeText={(processNumber) => this.setState({processNumber})}>{this.state.date}</TextInput>
+            <TouchableOpacity onPress={() => this.onSearch()}>
+              <Text style={Styles.button}>Consultar</Text>
+            </TouchableOpacity>
+          </View>
+          {this.renderProcessDetails()}
         </View>
-        {this.renderProcessDetails()}
-      </View>
+      </TouchableWithoutFeedback>
     );
   }
 }
