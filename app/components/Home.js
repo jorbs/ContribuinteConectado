@@ -168,6 +168,30 @@ export default class Home extends Component {
           />
           <Text style={{lineHeight: 23, marginLeft: 4, color: 'white'}}>Lembrar acesso</Text>
         </View>
+        <TouchableOpacity onPress={() => this.props.navigation.navigate('SituacaoCadastral', {login: 24006664, requestToken: 'requestToken'})}>
+          <Text style={{color: 'white', marginTop: 20}}>Situação Cadastral</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => this.props.navigation.navigate('Certidao', {login: 24006664, requestToken: 'requestToken'})}>
+          <Text style={{color: 'white', marginTop: 20}}>Certidões</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => this.props.navigation.navigate('TermoApreensao', {login: 24006664, requestToken: 'requestToken'})}>
+          <Text style={{color: 'white', marginTop: 20}}>Termos de Apreensão</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => this.props.navigation.navigate('RestricoesPendencias', {login: 24006664, requestToken: 'requestToken'})}>
+          <Text style={{color: 'white', marginTop: 20}}>Restrições e Pendências</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => this.props.navigation.navigate('Antecipado', {login: 24006664, requestToken: 'requestToken'})}>
+          <Text style={{color: 'white', marginTop: 20}}>Antecipados</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => this.props.navigation.navigate('Processos', {login: 24006664, requestToken: 'requestToken'})}>
+          <Text style={{color: 'white', marginTop: 20}}>Processos</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => this.props.navigation.navigate('SimuladorST')}>
+          <Text style={{color: 'white', marginTop: 20}}>Simulador ST</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => this.props.navigation.navigate('CallCenter', {requestToken: 'requestToken'})}>
+          <Text style={{color: 'white', marginTop: 20}}>Call Center</Text>
+        </TouchableOpacity>
         {this.renderAuthorizationModal()}
       </View>
     );
