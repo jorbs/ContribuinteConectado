@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import DeviceInfo from 'react-native-device-info';
 import { Text, TextInput, View, Alert, Switch, TouchableOpacity, AsyncStorage, Modal, WebView, StyleSheet } from 'react-native';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Entypo from 'react-native-vector-icons/Entypo';
 
 import Constants from '../common/Constants';
+import Styles from '../common/Styles';
 import * as SefazAPI from '../api/SefazAPI';
 import MyActivityIndicator from './MyActivityIndicator';
 
@@ -114,6 +117,11 @@ export default class Home extends Component {
     await this.authenticate();
   }
 
+  navigate(path) {
+    this.props.navigation.navigate(path, {login: 24006664, requestToken: 'requestToken'});
+    // this.props.navigation.navigate(path, {login: this.state.login, requestToken: this.state.requestToken});
+  }
+
   renderAuthorizationModal() {
     if (this.state.authorizationModalVisible) {
       return (
@@ -143,7 +151,7 @@ export default class Home extends Component {
     return (
       <View style={styles.container}>
         <View>
-          <Text style={{fontSize: 32, width: 200, textAlign: 'center', marginBottom: 80, color: 'white'}}>Contribuinte Conectado</Text>
+          <Text style={{fontSize: 32, width: 200, textAlign: 'center', marginBottom: 20, color: 'white'}}>Contribuinte Conectado</Text>
         </View>
         <View>
           <TextInput
@@ -154,44 +162,54 @@ export default class Home extends Component {
               onChangeText={(value) => this.setState({login: value})}/>
         </View>
         <View>
-          <TouchableOpacity
-              style={styles.loginButton}
-              accessibilityLabel="Acesse o Portal do Contribuinte"
-              onPress={() => this.login()}>
+          <TouchableOpacity style={styles.loginButton} accessibilityLabel="Acesse o Portal do Contribuinte" onPress={() => this.login()}>
             <Text style={{textAlign: 'center', color: 'white', fontSize: 18}}>Entrar</Text>
           </TouchableOpacity>
         </View>
         <View style={{flexDirection: 'row'}}>
-          <Switch
-              value={this.state.rememberMe}
-              onValueChange={(value) => this.setState({ rememberMe: value })}
-          />
+          <Switch value={this.state.rememberMe} onValueChange={rememberMe => this.setState({rememberMe})}/>
           <Text style={{lineHeight: 23, marginLeft: 4, color: 'white'}}>Lembrar acesso</Text>
         </View>
-        <TouchableOpacity onPress={() => this.props.navigation.navigate('SituacaoCadastral', {login: 24006664, requestToken: 'requestToken'})}>
-          <Text style={{color: 'white', marginTop: 20}}>Situação Cadastral</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => this.props.navigation.navigate('Certidao', {login: 24006664, requestToken: 'requestToken'})}>
-          <Text style={{color: 'white', marginTop: 20}}>Certidões</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => this.props.navigation.navigate('TermoApreensao', {login: 24006664, requestToken: 'requestToken'})}>
-          <Text style={{color: 'white', marginTop: 20}}>Termos de Apreensão</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => this.props.navigation.navigate('RestricoesPendencias', {login: 24006664, requestToken: 'requestToken'})}>
-          <Text style={{color: 'white', marginTop: 20}}>Restrições e Pendências</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => this.props.navigation.navigate('Antecipado', {login: 24006664, requestToken: 'requestToken'})}>
-          <Text style={{color: 'white', marginTop: 20}}>Antecipados</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => this.props.navigation.navigate('Processos', {login: 24006664, requestToken: 'requestToken'})}>
-          <Text style={{color: 'white', marginTop: 20}}>Processos</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => this.props.navigation.navigate('SimuladorST')}>
-          <Text style={{color: 'white', marginTop: 20}}>Simulador ST</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => this.props.navigation.navigate('CallCenter', {requestToken: 'requestToken'})}>
-          <Text style={{color: 'white', marginTop: 20}}>Call Center</Text>
-        </TouchableOpacity>
+        <View style={Styles.menuRow}>
+          <TouchableOpacity onPress={() => this.navigate('SituacaoCadastral')} style={[Styles.menuCol, Styles.menuColFirst]}>
+            <FontAwesome name="vcard-o" color="white" size={48} />
+            <Text style={Styles.menuItemLabel}>Situação{"\n"}Cadastral</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => this.navigate('Certidao')} style={Styles.menuCol}>
+            <Entypo name="price-ribbon" color="#fff" size={48}/>
+            <Text style={Styles.menuItemLabel}>Certidões</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={Styles.menuRow}>
+          <TouchableOpacity onPress={() => this.navigate('TermoApreensao')} style={[Styles.menuCol, Styles.menuColFirst]}>
+            <FontAwesome name="truck" color="white" size={48} />
+            <Text style={Styles.menuItemLabel}>Termos de{"\n"}Apreensão</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => this.navigate('RestricoesPendencias')} style={Styles.menuCol}>
+            <FontAwesome name="list-alt" color="#fff" size={48}/>
+            <Text style={Styles.menuItemLabel}>Restrições e{"\n"}Pendências</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={Styles.menuRow}>
+          <TouchableOpacity onPress={() => this.navigate('Antecipado')} style={[Styles.menuCol, Styles.menuColFirst]}>
+            <FontAwesome name="money" color="#fff" size={48}/>
+            <Text style={Styles.menuItemLabel}>Antecipados</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => this.navigate('Processos')} style={Styles.menuCol}>
+            <Entypo name="archive" color="#fff" size={48}/>
+            <Text style={Styles.menuItemLabel}>Processos</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={Styles.menuRow}>
+          <TouchableOpacity onPress={() => this.navigate('SimuladorST')} style={[Styles.menuCol, Styles.menuColFirst]}>
+            <FontAwesome name="calculator" color="#fff" size={48}/>
+            <Text style={Styles.menuItemLabel}>Simulador ST</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => this.navigate('CallCenter')} style={Styles.menuCol}>
+            <FontAwesome name="phone" color="#fff" size={48}/>
+            <Text style={Styles.menuItemLabel}>Call Center</Text>
+          </TouchableOpacity>
+        </View>
         {this.renderAuthorizationModal()}
       </View>
     );

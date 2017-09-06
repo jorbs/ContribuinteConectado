@@ -20,6 +20,23 @@ const Styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.white,
   },
+  menuRow: {
+    flexDirection: 'row',
+    padding: 5
+  },
+  menuCol: {
+    alignItems: 'center',
+    padding: 3,
+    marginLeft: 30,    
+  },
+  menuColFirst: {
+    marginLeft: 0,
+  },
+  menuItemLabel: {
+    marginTop: 10,
+    color: colors.white,
+    fontSize: 18,    
+  },
   activityIndicatorContainer: {
     flex: 1,
     flexDirection: 'row',
