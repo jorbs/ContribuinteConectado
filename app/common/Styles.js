@@ -4,7 +4,7 @@ const colors = {
   white: '#fff',
   black: '#000',
   red: '#ad1125',
-  darkBlue: '#0a235f',
+  darkBlue: '#113A7E',
   lightGray: '#efefef',
 };
 
@@ -19,6 +19,13 @@ const Styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
     backgroundColor: colors.white,
+  },
+  menu: {
+    flex: 1,
+    flexDirection: 'column',
+    backgroundColor: '#113A7E',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   menuRow: {
     flexDirection: 'row',

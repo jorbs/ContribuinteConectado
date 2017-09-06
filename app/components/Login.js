@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import DeviceInfo from 'react-native-device-info';
 import { Text, TextInput, View, Alert, Switch, TouchableOpacity, AsyncStorage, Modal, WebView, StyleSheet } from 'react-native';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import Entypo from 'react-native-vector-icons/Entypo';
 
 import Constants from '../common/Constants';
 import Styles from '../common/Styles';
@@ -54,8 +52,8 @@ export default class Login extends Component {
     }
 
     if (this.state.requestToken != null) {
-      console.log('Using requestToken: ', this.state.requestToken);
-      this.props.navigation.navigate('TermoApreensao', {login: this.state.login, requestToken: this.state.requestToken})
+      console.log(`Using requestToken: ${this.state.requestToken}`);
+      this.props.navigation.navigate('Home', {login: this.state.login, requestToken: this.state.requestToken})
       return;
     }
 
@@ -98,7 +96,7 @@ export default class Login extends Component {
 
         this.setState({requestToken: response.id_token});
 
-        this.props.navigation.navigate('TermoApreensao', {login: this.state.login, requestToken: this.state.requestToken});
+        this.props.navigation.navigate('Home', {login: this.state.login, requestToken: this.state.requestToken});
       } else if (response.mensagem != null) {
         Alert.alert(response.mensagem);
       } else {
@@ -115,11 +113,6 @@ export default class Login extends Component {
   async onAuthorizationModalClosed() {
     this.setState({authorizationModalVisible: false});
     await this.authenticate();
-  }
-
-  navigate(path) {
-    this.props.navigation.navigate(path, {login: 24006664, requestToken: 'requestToken'});
-    // this.props.navigation.navigate(path, {login: this.state.login, requestToken: this.state.requestToken});
   }
 
   renderAuthorizationModal() {
@@ -143,15 +136,12 @@ export default class Login extends Component {
     }
   }
 
-  renderLoginForm() {
-    if (this.state.pendingRequest) {
-      return <MyActivityIndicator />;
-    }
-
-    return (
+  render() {
+    return (this.state.pendingRequest ?
+      <MyActivityIndicator/> :
       <View style={styles.container}>
         <View>
-          <Text style={{fontSize: 32, width: 200, textAlign: 'center', marginBottom: 20, color: 'white'}}>Contribuinte Conectado</Text>
+          <Text style={{fontSize: 32, width: 200, textAlign: 'center', marginBottom: 80, color: 'white'}}>Contribuinte Conectado</Text>
         </View>
         <View>
           <TextInput
@@ -170,53 +160,9 @@ export default class Login extends Component {
           <Switch value={this.state.rememberMe} onValueChange={rememberMe => this.setState({rememberMe})}/>
           <Text style={{lineHeight: 23, marginLeft: 4, color: 'white'}}>Lembrar acesso</Text>
         </View>
-        <View style={Styles.menuRow}>
-          <TouchableOpacity onPress={() => this.navigate('SituacaoCadastral')} style={[Styles.menuCol, Styles.menuColFirst]}>
-            <FontAwesome name="vcard-o" color="white" size={48} />
-            <Text style={Styles.menuItemLabel}>Situação{"\n"}Cadastral</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => this.navigate('Certidao')} style={Styles.menuCol}>
-            <Entypo name="price-ribbon" color="#fff" size={48}/>
-            <Text style={Styles.menuItemLabel}>Certidões</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={Styles.menuRow}>
-          <TouchableOpacity onPress={() => this.navigate('TermoApreensao')} style={[Styles.menuCol, Styles.menuColFirst]}>
-            <FontAwesome name="truck" color="white" size={48} />
-            <Text style={Styles.menuItemLabel}>Termos de{"\n"}Apreensão</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => this.navigate('RestricoesPendencias')} style={Styles.menuCol}>
-            <FontAwesome name="list-alt" color="#fff" size={48}/>
-            <Text style={Styles.menuItemLabel}>Restrições e{"\n"}Pendências</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={Styles.menuRow}>
-          <TouchableOpacity onPress={() => this.navigate('Antecipado')} style={[Styles.menuCol, Styles.menuColFirst]}>
-            <FontAwesome name="money" color="#fff" size={48}/>
-            <Text style={Styles.menuItemLabel}>Antecipados</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => this.navigate('Processos')} style={Styles.menuCol}>
-            <Entypo name="archive" color="#fff" size={48}/>
-            <Text style={Styles.menuItemLabel}>Processos</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={Styles.menuRow}>
-          <TouchableOpacity onPress={() => this.navigate('SimuladorST')} style={[Styles.menuCol, Styles.menuColFirst]}>
-            <FontAwesome name="calculator" color="#fff" size={48}/>
-            <Text style={Styles.menuItemLabel}>Simulador ST</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => this.navigate('CallCenter')} style={Styles.menuCol}>
-            <FontAwesome name="phone" color="#fff" size={48}/>
-            <Text style={Styles.menuItemLabel}>Call Center</Text>
-          </TouchableOpacity>
-        </View>
         {this.renderAuthorizationModal()}
       </View>
     );
-  }
-
-  render() {
-    return this.renderLoginForm();
   }
 }
 
