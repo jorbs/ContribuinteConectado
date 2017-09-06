@@ -1,7 +1,7 @@
 import { AppRegistry } from 'react-native';
 import { StackNavigator } from 'react-navigation';
 
-import Home from './app/components/Home';
+import Login from './app/components/Login';
 import SituacaoCadastral from './app/components/SituacaoCadastral';
 import Certidao from './app/components/Certidao';
 import TermoApreensao from './app/components/TermoApreensao';
@@ -12,8 +12,8 @@ import CallCenter from './app/components/CallCenter';
 import SimuladorST from './app/components/SimuladorST';
 
 const ContribuinteConectado = StackNavigator({
-  Home: {
-    screen: Home
+  Login: {
+    screen: Login
   },
   SituacaoCadastral: {
     path: 'situacaoCadastral/:login/:requestToken',

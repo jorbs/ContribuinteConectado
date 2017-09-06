@@ -9,7 +9,7 @@ import Styles from '../common/Styles';
 import * as SefazAPI from '../api/SefazAPI';
 import MyActivityIndicator from './MyActivityIndicator';
 
-export default class Home extends Component {
+export default class Login extends Component {
   static navigationOptions = {
     header: null,    
   };
