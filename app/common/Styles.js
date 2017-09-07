@@ -23,7 +23,7 @@ const Styles = StyleSheet.create({
   menu: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: '#113A7E',
+    backgroundColor: colors.darkBlue,
     justifyContent: 'center',
     alignItems: 'center',
   },

@@ -1,87 +1,33 @@
-import React, {Component} from 'react';
-import {View, Text, SectionList, Image, Alert} from 'react-native';
-import moment from 'moment';
+import {TabNavigator} from 'react-navigation';
 
-import Styles from '../common/Styles';
-import Constants from '../common/Constants';
-import * as SefazAPI from '../api/SefazAPI';
-import MyActivityIndicator from './MyActivityIndicator';
+import Restricoes from './Restricoes';
+import Pendencias from './Pendencias';
 
-export default class RestricoesPendencias extends Component {
-  static navigationOptions = {
-    title: 'Restrições e Pendências',
-    headerStyle: Styles.headerStyle,
-    headerTitleStyle: Styles.headerTitleStyle,
-    headerTintColor: Styles.headerTintColor,
-    headerPressColorAndroid: Styles.headerPressColorAndroid,
-    gesturesEnabled: true,
-  };
-
-  constructor(props) {
-    super(props);
-    this.state = {pendingRequest: true};
-  }
-
-  async componentDidMount() {
-    const {goBack} = this.props.navigation;
-    const {params} = this.props.navigation.state;
-    
-    try {
-      const response = await SefazAPI.obterRestricoes(params.requestToken, params.login);
-      const restrictions = response.map(restriction => {
-        return {
-          title: restriction.descricaoRestricao,
-          image: require('../images/sheet-red.png'),
-          data: [
-            {key: 'Competência', data: moment(restriction.dataCompetencia).utc().format(Constants.DATE_FORMAT)},
-            {key: 'Solução', data: restriction.solucao},
-          ]
-        };
-      });
-
-      /*const pendencies = await SefazAPI.consultarPendencias(params.requestToken, params.login).map(pendency => {
-        return {
-          title: pendency
-        };
-      });*/
-
-      this.setState({restrictions});
-    } catch (e) {
-      Alert.alert('Erro na solicitação', e.message, [{text: 'OK', onPress: () => goBack()}]);
-    } finally {
-      this.setState({pendingRequest: false});      
+const RestricoesPendencias = TabNavigator(
+  {
+    RestricoesTab: {
+      screen: Restricoes,
+      path: 'restricoes/:login/:requestToken',
+      navigationOptions: {
+        tabBarLabel: 'Restrições',
+      }
+    },
+    PendenciasTab: {
+      screen: Pendencias,
+      path: 'pendencias/:login/:requestToken',
+      navigationOptions: {
+        tabBarLabel: 'Pendências',
+      }
+    }
+  },
+  {
+    tabBarPosition: 'bottom',
+    animationEnabled: false,
+    swipeEnabled: false,
+    tabBarOptions: {
+      tabStyle: {backgroundColor: '#113A7E'},
     }
   }
+);
 
-  renderSectionHeader(section) {
-    return (
-      <View style={Styles.sectionHeaderContainer}>
-        <Image source={section.image} resizeMode={'contain'} style={Styles.sectionHeaderImage}/>
-        <Text style={Styles.sectionHeader}>{section.title}</Text>
-      </View>
-    );
-  }
-
-  renderSectionItem(item) {
-    return (
-      <View style={Styles.itemContainer}>
-        <Text style={Styles.itemHeader}>{item.key}</Text>
-        <Text style={Styles.itemBody}>{item.data}</Text>
-      </View>
-    );
-  }
-
-  render() {
-    return (this.state.pendingRequest ?
-      <MyActivityIndicator/> :
-      <View style={Styles.mainContainer}>
-        <SectionList
-          sections={this.state.restrictions}
-          renderSectionHeader={({section}) => this.renderSectionHeader(section)}
-          renderItem={({item}) => this.renderSectionItem(item)}
-          style={Styles.sectionList}
-        />
-      </View>
-    );
-  }
-}  
+export default RestricoesPendencias;
