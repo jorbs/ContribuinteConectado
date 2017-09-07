@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import {View, Text, SectionList, Image, TouchableOpacity, DatePickerAndroid, Alert} from 'react-native';
+import {View, Text, TextInput, SectionList, TouchableOpacity, DatePickerAndroid, Alert} from 'react-native';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import moment from 'moment';
 
 import * as SefazAPI from '../api/SefazAPI';
@@ -26,7 +27,7 @@ export default class TermoApreensao extends Component {
     };
   }
 
-  componentDidMount() {
+  searchTerms() {
     const {goBack} = this.props.navigation;
     const {params} = this.props.navigation.state;
     const {startDate, endDate} = this.state;
@@ -35,7 +36,7 @@ export default class TermoApreensao extends Component {
       const terms = response.map(term => {
         return {
           title: `Termo ${term.numeroTermo}`,
-          image: require('../images/sheet-red.png'),
+          icon: 'file-text-o',
           data: [
             {key: 'Status', data: term.status},
             {key: 'Emissão', data: term.dataEmissao && moment(term.dataEmissao).utc().format(Constants.DATETIME_FORMAT)},
@@ -54,6 +55,10 @@ export default class TermoApreensao extends Component {
 
   renderTerms() {
     if (this.state.terms == null) {
+      return null;
+    }
+
+    if (this.state.terms.length === 0) {
       return (
         <View>
           <Text style={Styles.searchResultLabel}>Nenhum termo de apreensão foi encontrado no período.</Text>
@@ -78,7 +83,7 @@ export default class TermoApreensao extends Component {
   renderSectionHeader(section) {
     return (
       <View style={Styles.sectionHeaderContainer}>
-        <Image source={section.image} resizeMode={'contain'} style={Styles.sectionHeaderImage}/>
+        <FontAwesome name={section.icon} size={24} style={Styles.sectionHeaderIcon} />
         <Text style={Styles.sectionHeader}>{section.title}</Text>
       </View>
     );
@@ -132,16 +137,26 @@ export default class TermoApreensao extends Component {
     return (this.state.pendingRequest ?
       <MyActivityIndicator/> :
       <View style={Styles.mainContainer}>
-        <Text style={Styles.h1}>Período</Text>
         <View style={Styles.searchContainer}>
-          <TouchableOpacity onPress={() => this.renderDatePicker('start')}>
-            <Text style={Styles.button}>{this.state.startDate.format(Constants.DATE_FORMAT)}</Text>
+          <View style={Styles.searchRow}>
+            <Text style={Styles.searchLabel}>Data início</Text>
+            <TouchableOpacity style={Styles.searchInputGroup} onPress={() => this.renderDatePicker('start')}>
+              <TextInput editable={false} value={this.state.startDate.format(Constants.DATE_FORMAT)} style={[Styles.inputTextMd, Styles.searchInputText]} />
+              <FontAwesome name="calendar" style={Styles.searchFieldIcon} />
+            </TouchableOpacity>
+          </View>
+          <View style={Styles.searchRow}>
+            <Text style={Styles.searchLabel}>Data término</Text>
+            <TouchableOpacity style={Styles.searchInputGroup} onPress={() => this.renderDatePicker('start')}>
+              <TextInput editable={false} value={this.state.endDate.format(Constants.DATE_FORMAT)} style={[Styles.inputTextMd, Styles.searchInputText]} />
+              <FontAwesome name="calendar" style={Styles.searchFieldIcon} />
+            </TouchableOpacity>
+          </View>
+          <TouchableOpacity style={Styles.searchButton} onPress={() => this.searchTerms()}>
+            <Text style={Styles.searchButtonCenter}>Buscar termos</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => this.renderDatePicker('end')}>
-            <Text style={[Styles.button, Styles.buttonLast]}>{this.state.endDate.format(Constants.DATE_FORMAT)}</Text>
-          </TouchableOpacity>
+          {this.renderTerms()}
         </View>
-        {this.renderTerms()}
       </View>
     );
   }

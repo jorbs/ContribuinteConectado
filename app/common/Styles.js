@@ -56,10 +56,10 @@ const Styles = StyleSheet.create({
     height: 18,
   },
   h1: {
-    fontSize: 24,
+    fontSize: 22,
     color: colors.red,
-    marginTop: 15,
-    marginLeft: 10,
+    borderBottomColor: colors.lightGray,
+    borderBottomWidth: 1,
   },
   sectionList: {
     padding: 20,
@@ -67,7 +67,6 @@ const Styles = StyleSheet.create({
   sectionHeaderContainer: {
     flex: 1,
     flexDirection: 'row',
-    marginTop: 10,
     marginBottom: 15,
     paddingBottom: 2,
     borderBottomColor: colors.lightGray,
@@ -94,11 +93,48 @@ const Styles = StyleSheet.create({
     fontSize: 18,
   },
   searchContainer: {
+    padding: 10,
+    marginBottom: 10,
+  },
+  searchRow: {
     flexDirection: 'row',
-    justifyContent: 'center',
-    margin: 20
+    padding: 10,
+    marginTop: 5,
+  },
+  searchLabel: {
+    color: colors.black,
+    fontSize: 20,
+    textAlignVertical: 'center',
+  },
+  searchInputGroup: {
+    flexDirection: 'row',
+    position: 'absolute',
+    right: 10
+  },
+  searchInputText: {
+    fontSize: 18,
+    color: colors.black,
+  },
+  searchFieldIcon: {
+    marginTop: 12,
+    marginLeft: 8,
+    fontSize: 26,
+    color: colors.red,
+  },
+  searchButton: {
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  searchButtonCenter: {
+    color: colors.white,
+    backgroundColor: colors.darkBlue,
+    paddingTop: 5,
+    paddingRight: 15,
+    paddingBottom: 5,
+    paddingLeft: 15,
   },
   searchResultLabel: {
+    marginTop: 10,
     textAlign: 'center',
   },
   row: {
@@ -115,7 +151,7 @@ const Styles = StyleSheet.create({
     textAlign: 'center',
   },
   inputTextSm: {
-    width: 80,
+    width: 100,
     textAlign: 'center',
   },
   textRight: {
