@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import {View, Text, SectionList, Image, StyleSheet, Alert} from 'react-native';
+import {View, Text, SectionList, StyleSheet, Alert} from 'react-native';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 import Styles from '../common/Styles';
 import * as SefazAPI from '../api/SefazAPI';
@@ -35,13 +36,11 @@ export default class Certidao extends Component {
   componentDidMount() {
     const {goBack} = this.props.navigation;
     const {params} = this.props.navigation.state;
-    const okImage = require('../images/ok-red.png');
-    const notOkImage = require('../images/not-ok-red.png');
 
     SefazAPI.consultarCnd(params.requestToken, params.login).then(response => {
       const sections = [{
         title: this.mapDocumentType(response.tipoCertidao),
-        image: response.tipoCertidao === 'CN' ? okImage : notOkImage,
+        icon: response.tipoCertidao === 'CN' ? 'check-circle' : 'times-circle',
         data: [
           {key: 'Número do Documento', data: response.numeroDocumento},
           {key: 'Emissão', data: `${response.dataEmissao} ${response.horaEmissao}`},
@@ -57,7 +56,7 @@ export default class Certidao extends Component {
   renderSectionHeader(section) {
     return (
       <View style={Styles.sectionHeaderContainer}>
-        <Image source={section.image} resizeMode={'contain'} style={Styles.sectionHeaderImage}/>
+        <FontAwesome name={section.icon} size={24} style={Styles.sectionHeaderIcon} />
         <Text style={Styles.sectionHeader}>{section.title}</Text>
       </View>
     );

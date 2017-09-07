@@ -78,10 +78,9 @@ const Styles = StyleSheet.create({
     fontSize: 24,
     color: colors.red,
   },
-  sectionHeaderImage: {
-    height: 24,
-    width: 20,
+  sectionHeaderIcon: {
     marginRight: 6,
+    color: colors.red,
   },
   itemContainer: {
     marginBottom: 12,

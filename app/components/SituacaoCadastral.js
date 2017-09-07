@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import {View, Text, SectionList, Image, StyleSheet, Alert} from 'react-native';
+import {View, Text, SectionList, StyleSheet, Alert} from 'react-native';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 import Styles from '../common/Styles';
 import * as SefazAPI from '../api/SefazAPI';
@@ -39,8 +40,8 @@ export default class SituacaoCadastral extends Component {
 
       this.setState({
         sections: [
-          {title: 'Dados Gerais', image: require('../images/sheet-red.png'), data: dadosGerais},
-          {title: 'Endereço', image: require('../images/geolocation-red.png'), data: endereco}
+          {title: 'Dados Gerais', icon: 'file-text-o', data: dadosGerais},
+          {title: 'Endereço', icon: 'location-arrow', data: endereco}
         ]
       });
     }).catch(e => Alert.alert('Erro na solicitação', e.message, [{text: 'OK', onPress: () => goBack()}]))
@@ -50,7 +51,7 @@ export default class SituacaoCadastral extends Component {
   renderSectionHeader(section) {
     return (
       <View style={Styles.sectionHeaderContainer}>
-        <Image source={section.image} resizeMode={'contain'} style={Styles.sectionHeaderImage}/>
+        <FontAwesome name={section.icon} size={24} style={Styles.sectionHeaderIcon} />
         <Text style={Styles.sectionHeader}>{section.title}</Text>
       </View>
     );
