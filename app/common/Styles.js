@@ -67,6 +67,7 @@ const Styles = StyleSheet.create({
   sectionHeaderContainer: {
     flex: 1,
     flexDirection: 'row',
+    marginTop: 10,
     marginBottom: 15,
     paddingBottom: 2,
     borderBottomColor: colors.lightGray,
@@ -142,6 +143,7 @@ const Styles = StyleSheet.create({
   },
   centerContainer: {
     alignItems: 'center',
+    marginTop: 10,
   },
   inputTextLg: {
     width: 300,

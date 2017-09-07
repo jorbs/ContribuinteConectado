@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
-import {View, TouchableOpacity, Text, Alert, DatePickerAndroid, SectionList, Image} from 'react-native';
+import {View, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, Alert, SectionList} from 'react-native';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import dismissKeyboard from 'dismissKeyboard';
 import moment from 'moment';
 
 import * as SefazAPI from '../api/SefazAPI';
@@ -19,9 +21,13 @@ export default class Antecipado extends Component {
 
   constructor(props) {
     super(props);
+
+    const previousMonth = moment().subtract(1, 'month').format('MM');
+    const currentYear = moment().year();
+
     this.state = {
       pendingRequest: false,
-      date: moment().subtract(1, 'month').format('MM')
+      monthYear: `${previousMonth}/${currentYear}`
     };
   }
 
@@ -40,33 +46,17 @@ export default class Antecipado extends Component {
     );
   }
 
-  async renderDatePicker() {
-    try {
-      const {action, year, month, day} = await DatePickerAndroid.open({
-        date: new Date()
-      });
-
-      if (action !== DatePickerAndroid.dismissedAction) {
-        const selectedDate = moment(new Date(year, month, day));
-
-        this.setState({date: selectedDate.format('MM')});
-      }
-    } catch ({code, message}) {
-      console.warn('Cannot open date picker', message);
-    }
-  }
-
   onSearch() {
     const {goBack} = this.props.navigation;
     const {params} = this.props.navigation.state;
     
     this.setState({pendingRequest: true});
 
-    SefazAPI.consultarValoresAntecipados(params.requestToken, params.login, this.state.date).then(response => {
+    SefazAPI.consultarValoresAntecipados(params.requestToken, params.login, this.state.monthYear).then(response => {
       const records = response.map(record => {
         return {
           key: record.sequencialAntecipacao,
-          image: require('../images/sheet-red.png'),
+          icon: 'money',
           title: `Antecipado N\u00BA ${record.sequencialAntecipacao}`,
           data: [
             {key: 'Código do Tributo', data: record.codigoTributo},
@@ -83,6 +73,7 @@ export default class Antecipado extends Component {
   }
 
   onViewRecordDetails(recordId) {
+    const {goBack} = this.props.navigation;
     const {params} = this.props.navigation.state;
 
     this.setState({pendingRequest: true});
@@ -96,7 +87,7 @@ export default class Antecipado extends Component {
   renderSectionHeader(section) {
     return (
       <View style={Styles.sectionHeaderContainer}>
-        <Image source={section.image} resizeMode={'contain'} style={Styles.sectionHeaderImage}/>
+        <FontAwesome name={section.icon} size={24} style={Styles.sectionHeaderIcon} />
         <Text style={Styles.sectionHeader}>{section.title}</Text>
       </View>
     );
@@ -121,33 +112,50 @@ export default class Antecipado extends Component {
   }
 
   renderRecords() {
-    if (this.state.records) {
-      return <SectionList
-        sections={this.state.records}
-        renderSectionHeader={({section}) => this.renderSectionHeader(section)}
-        renderItem={({item}) => this.renderSectionItem(item)}
-        style={Styles.sectionList}
-      />;
+    if (this.state.records == null) {
+      return null;
     }
 
-    return null;
+    if (this.state.records.length === 0) {
+      return (
+        <View>
+          <Text style={Styles.searchResultLabel}>Nenhum resultado foi encontrado no período.</Text>
+        </View>
+      );
+    }
+
+    return <SectionList
+      sections={this.state.records}
+      renderSectionHeader={({section}) => this.renderSectionHeader(section)}
+      renderItem={({item}) => this.renderSectionItem(item)}
+      style={Styles.sectionList}
+    />;
   }
 
   render() {
     return (this.state.pendingRequest ?
       <MyActivityIndicator/> :
-      <View style={Styles.mainContainer}>
-        <Text style={Styles.h1}>Competência</Text>
-        <View style={Styles.searchContainer}>
-          <TouchableOpacity onPress={() => this.renderDatePicker()}>
-            <Text style={Styles.button}>{this.state.date}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => this.onSearch()}>
-            <Text style={Styles.button}>Consultar</Text>
-          </TouchableOpacity>
+      <TouchableWithoutFeedback onPress={dismissKeyboard}>
+        <View style={Styles.mainContainer}>
+          <View style={Styles.searchContainer}>
+            <View style={Styles.searchRow}>
+              <Text style={Styles.searchLabel}>Competência</Text>
+              <View style={Styles.searchInputGroup}>
+                <TextInput
+                  placeholder="mm/aaaa"
+                  defaultValue={this.state.monthYear}
+                  onChange={monthYear => this.setState(monthYear)}
+                  style={[Styles.inputTextMd, Styles.searchInputText]} />
+                <FontAwesome name="calendar" style={Styles.searchFieldIcon} />
+              </View>
+            </View>
+            <TouchableOpacity style={Styles.searchButton} onPress={() => this.onSearch()}>
+              <Text style={Styles.searchButtonCenter}>Consultar</Text>
+            </TouchableOpacity>
+          </View>
+          {this.renderRecords()}
         </View>
-        {this.renderRecords()}
-      </View>
+      </TouchableWithoutFeedback>
     );
   }
 }

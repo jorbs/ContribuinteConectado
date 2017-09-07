@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import {View, Text, SectionList, Image, TouchableOpacity, TextInput, Alert, TouchableWithoutFeedback} from 'react-native';
+import {View, Text, SectionList, TouchableOpacity, TextInput, Alert, TouchableWithoutFeedback} from 'react-native';
+import Entypo from 'react-native-vector-icons/Entypo';
 import dismissKeyboard from 'dismissKeyboard';
 
 import Styles from '../common/Styles';
@@ -35,7 +36,7 @@ export default class Processos extends Component {
     SefazAPI.consultarPorNumeroProcesso(params.requestToken, this.state.processNumber).then(process => {
       const processDetails = [{
         title: process.descricaoAssunto,
-        image: require('../images/sheet-red.png'),
+        icon: 'archive',
         data: [
           {key: 'Interessado', data: process.nomeInteressado},
           {key: 'Acatado em', data: process.dataAcatamento},
@@ -54,7 +55,7 @@ export default class Processos extends Component {
   renderSectionHeader(section) {
     return (
       <View style={Styles.sectionHeaderContainer}>
-        <Image source={section.image} resizeMode={'contain'} style={Styles.sectionHeaderImage}/>
+        <Entypo name={section.icon} size={24} style={Styles.sectionHeaderIcon} />
         <Text style={Styles.sectionHeader}>{section.title}</Text>
       </View>
     );
@@ -85,11 +86,16 @@ export default class Processos extends Component {
       <MyActivityIndicator/> :
       <TouchableWithoutFeedback onPress={dismissKeyboard}>
         <View style={Styles.mainContainer}>
-          <Text style={Styles.h1}>Digite o número do processo</Text>
           <View style={Styles.searchContainer}>
-            <TextInput style={Styles.inputTextMd} onChangeText={(processNumber) => this.setState({processNumber})}>{this.state.date}</TextInput>
-            <TouchableOpacity onPress={() => this.onSearch()}>
-              <Text style={Styles.button}>Consultar</Text>
+            <Text style={Styles.h1}>Digite o número do processo</Text>
+            <View style={Styles.centerContainer}>
+              <TextInput
+                value={this.state.processNumber}
+                style={[Styles.inputTextMd, Styles.searchInputText]}
+                onChangeText={(processNumber) => this.setState({processNumber})} />
+            </View>
+            <TouchableOpacity style={Styles.searchButton} onPress={() => this.onSearch()}>
+              <Text style={Styles.searchButtonCenter}>Consultar</Text>
             </TouchableOpacity>
           </View>
           {this.renderProcessDetails()}

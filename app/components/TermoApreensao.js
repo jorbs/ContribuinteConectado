@@ -61,7 +61,7 @@ export default class TermoApreensao extends Component {
     if (this.state.terms.length === 0) {
       return (
         <View>
-          <Text style={Styles.searchResultLabel}>Nenhum termo de apreensão foi encontrado no período.</Text>
+          <Text style={Styles.searchResultLabel}>Nenhum resultado foi encontrado no período.</Text>
         </View>
       );
     }
@@ -69,7 +69,7 @@ export default class TermoApreensao extends Component {
     return (
       <View>
         <Text style={Styles.searchResultLabel}>
-          {this.state.terms.length} {this.state.terms.length === 1 ? 'termo de apreensão foi encontrado.' : 'termos de apreensão foram encontrados.'}
+          {this.state.terms.length} {this.state.terms.length === 1 ? 'resultado foi encontrado.' : 'resultados foram encontrados.'}
         </Text>
         <SectionList
           sections={this.state.terms}
