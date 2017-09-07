@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {View, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, Alert, SectionList} from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import TextInputMask from 'react-native-text-input-mask';
 import dismissKeyboard from 'dismissKeyboard';
 import moment from 'moment';
 
@@ -47,6 +48,11 @@ export default class Antecipado extends Component {
   }
 
   onSearch() {
+    if (this.state.monthYear == null || this.state.monthYear.length == 0 || !moment(this.state.monthYear, 'MM/YYYY').isValid()) {
+      Alert.alert('Competência inválida.');
+      return;
+    }
+
     const {goBack} = this.props.navigation;
     const {params} = this.props.navigation.state;
     
@@ -141,17 +147,21 @@ export default class Antecipado extends Component {
             <View style={Styles.searchRow}>
               <Text style={Styles.searchLabel}>Competência</Text>
               <View style={Styles.searchInputGroup}>
-                <TextInput
-                  placeholder="mm/aaaa"
+                <TextInputMask
+                  mask={"[00]/[0000]"}
+                  placeholder="MM/AAAA"
+                  keyboardType="numeric"
                   defaultValue={this.state.monthYear}
-                  onChange={monthYear => this.setState(monthYear)}
+                  onChangeText={monthYear => this.setState({monthYear})}
                   style={[Styles.inputTextMd, Styles.searchInputText]} />
                 <FontAwesome name="calendar" style={Styles.searchFieldIcon} />
               </View>
             </View>
-            <TouchableOpacity style={Styles.searchButton} onPress={() => this.onSearch()}>
-              <Text style={Styles.searchButtonCenter}>Consultar</Text>
-            </TouchableOpacity>
+            <View style={Styles.searchButton}>
+              <TouchableOpacity onPress={() => this.onSearch()}>
+                <Text style={Styles.searchButtonCenter}>Consultar</Text>
+              </TouchableOpacity>
+            </View>
           </View>
           {this.renderRecords()}
         </View>

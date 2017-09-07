@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
-import {View, Text, TextInput, SectionList, TouchableOpacity, DatePickerAndroid, Alert} from 'react-native';
+import {View, Text, TextInput, SectionList, TouchableOpacity, TouchableWithoutFeedback, Alert} from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import TextInputMask from 'react-native-text-input-mask';
+import dismissKeyboard from 'dismissKeyboard';
 import moment from 'moment';
 
 import * as SefazAPI from '../api/SefazAPI';
@@ -22,12 +24,22 @@ export default class TermoApreensao extends Component {
     super(props);
     this.state = {
       pendingRequest: false,
-      startDate: moment().subtract(1, 'month'),
-      endDate: moment(),
+      startDate: moment().subtract(1, 'month').format(Constants.DATE_FORMAT),
+      endDate: moment().format(Constants.DATE_FORMAT),
     };
   }
 
-  searchTerms() {
+  onSearch() {
+    if (this.state.startDate == null || this.state.startDate.length == 0 || !moment(this.state.startDate, 'DD/MM/YYYY').isValid()) {
+      Alert.alert('Data início inválida.');
+      return;
+    }
+
+    if (this.state.endDate == null || this.state.endDate.length == 0 || !moment(this.state.endDate, 'DD/MM/YYYY').isValid()) {
+      Alert.alert('Data término inválida.');
+      return;
+    }
+
     const {goBack} = this.props.navigation;
     const {params} = this.props.navigation.state;
     const {startDate, endDate} = this.state;
@@ -113,51 +125,47 @@ export default class TermoApreensao extends Component {
     );
   }
 
-  async renderDatePicker(target) {
-    try {
-      const {action, year, month, day} = await DatePickerAndroid.open({
-        date: target === 'start' ? this.state.startDate.toDate() : this.state.endDate.toDate()
-      });
-
-      if (action !== DatePickerAndroid.dismissedAction) {
-        const selectedDate = moment(new Date(year, month, day));
-
-        if (target === 'start') {
-          this.setState({startDate: selectedDate});
-        } else {
-          this.setState({endDate: selectedDate});
-        }
-      }
-    } catch ({code, message}) {
-      console.warn('Cannot open date picker', message);
-    }
-  }
-
   render() {
     return (this.state.pendingRequest ?
       <MyActivityIndicator/> :
-      <View style={Styles.mainContainer}>
-        <View style={Styles.searchContainer}>
-          <View style={Styles.searchRow}>
-            <Text style={Styles.searchLabel}>Data início</Text>
-            <TouchableOpacity style={Styles.searchInputGroup} onPress={() => this.renderDatePicker('start')}>
-              <TextInput editable={false} value={this.state.startDate.format(Constants.DATE_FORMAT)} style={[Styles.inputTextMd, Styles.searchInputText]} />
-              <FontAwesome name="calendar" style={Styles.searchFieldIcon} />
-            </TouchableOpacity>
+      <TouchableWithoutFeedback onPress={dismissKeyboard}>
+        <View style={Styles.mainContainer}>
+          <View style={Styles.searchContainer}>
+            <View style={Styles.searchRow}>
+              <Text style={Styles.searchLabel}>Data início</Text>
+              <View style={Styles.searchInputGroup}>
+                <TextInputMask
+                  mask={"[00]/[00]/[0000]"}
+                  placeholder="DD/MM/YYYY"
+                  keyboardType="numeric"
+                  defaultValue={this.state.startDate}
+                  onChangeText={startDate => this.setState({startDate})}
+                  style={[Styles.inputTextMd, Styles.searchInputText]} />
+                <FontAwesome name="calendar" style={Styles.searchFieldIcon} />
+              </View>
+            </View>
+            <View style={Styles.searchRow}>
+              <Text style={Styles.searchLabel}>Data término</Text>
+              <View style={Styles.searchInputGroup}>
+                <TextInputMask
+                  mask={"[00]/[00]/[0000]"}
+                  placeholder="DD/MM/YYYY"
+                  keyboardType="numeric"
+                  defaultValue={this.state.endDate}
+                  onChangeText={endDate => this.setState({endDate})}
+                  style={[Styles.inputTextMd, Styles.searchInputText]} />
+                <FontAwesome name="calendar" style={Styles.searchFieldIcon} />
+              </View>
+            </View>
+            <View style={Styles.searchButton}>
+              <TouchableOpacity onPress={() => this.onSearch()}>
+                <Text style={Styles.searchButtonCenter}>Buscar termos</Text>
+              </TouchableOpacity>
+            </View>
+            {this.renderTerms()}
           </View>
-          <View style={Styles.searchRow}>
-            <Text style={Styles.searchLabel}>Data término</Text>
-            <TouchableOpacity style={Styles.searchInputGroup} onPress={() => this.renderDatePicker('start')}>
-              <TextInput editable={false} value={this.state.endDate.format(Constants.DATE_FORMAT)} style={[Styles.inputTextMd, Styles.searchInputText]} />
-              <FontAwesome name="calendar" style={Styles.searchFieldIcon} />
-            </TouchableOpacity>
-          </View>
-          <TouchableOpacity style={Styles.searchButton} onPress={() => this.searchTerms()}>
-            <Text style={Styles.searchButtonCenter}>Buscar termos</Text>
-          </TouchableOpacity>
-          {this.renderTerms()}
         </View>
-      </View>
+      </TouchableWithoutFeedback>
     );
   }
 }

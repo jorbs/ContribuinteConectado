@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import DeviceInfo from 'react-native-device-info';
-import { Text, TextInput, View, Alert, Switch, TouchableOpacity, AsyncStorage, Modal, WebView, StyleSheet } from 'react-native';
+import { Text, TextInput, View, Alert, Switch, TouchableOpacity, TouchableWithoutFeedback, AsyncStorage, Modal, WebView, StyleSheet } from 'react-native';
+import dismissKeyboard from 'dismissKeyboard';
 
 import Constants from '../common/Constants';
 import Styles from '../common/Styles';
@@ -139,29 +140,31 @@ export default class Login extends Component {
   render() {
     return (this.state.pendingRequest ?
       <MyActivityIndicator/> :
-      <View style={styles.container}>
-        <View>
-          <Text style={{fontSize: 32, width: 200, textAlign: 'center', marginBottom: 80, color: 'white'}}>Contribuinte Conectado</Text>
+      <TouchableWithoutFeedback onPress={dismissKeyboard}>
+        <View style={styles.container}>
+          <View>
+            <Text style={{fontSize: 32, width: 200, textAlign: 'center', marginBottom: 80, color: 'white'}}>Contribuinte Conectado</Text>
+          </View>
+          <View>
+            <TextInput
+                keyboardType='numeric'
+                value={this.state.login}
+                style={{height: 50, width: 200, textAlign: 'center', fontSize: 20, color: 'white'}}
+                placeholder="Digite o seu Caceal"
+                onChangeText={(value) => this.setState({login: value})}/>
+          </View>
+          <View>
+            <TouchableOpacity style={styles.loginButton} accessibilityLabel="Acesse o Portal do Contribuinte" onPress={() => this.login()}>
+              <Text style={{textAlign: 'center', color: 'white', fontSize: 18}}>Entrar</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={{flexDirection: 'row'}}>
+            <Switch value={this.state.rememberMe} onValueChange={rememberMe => this.setState({rememberMe})}/>
+            <Text style={{lineHeight: 23, marginLeft: 4, color: 'white'}}>Lembrar acesso</Text>
+          </View>
+          {this.renderAuthorizationModal()}
         </View>
-        <View>
-          <TextInput
-              keyboardType='numeric'
-              value={this.state.login}
-              style={{height: 50, width: 200, textAlign: 'center', fontSize: 20, color: 'white'}}
-              placeholder="Digite o seu Caceal"
-              onChangeText={(value) => this.setState({login: value})}/>
-        </View>
-        <View>
-          <TouchableOpacity style={styles.loginButton} accessibilityLabel="Acesse o Portal do Contribuinte" onPress={() => this.login()}>
-            <Text style={{textAlign: 'center', color: 'white', fontSize: 18}}>Entrar</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={{flexDirection: 'row'}}>
-          <Switch value={this.state.rememberMe} onValueChange={rememberMe => this.setState({rememberMe})}/>
-          <Text style={{lineHeight: 23, marginLeft: 4, color: 'white'}}>Lembrar acesso</Text>
-        </View>
-        {this.renderAuthorizationModal()}
-      </View>
+      </TouchableWithoutFeedback>
     );
   }
 }
