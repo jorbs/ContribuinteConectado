@@ -176,6 +176,26 @@ const Styles = StyleSheet.create({
   buttonLast: {
     marginLeft: 10,
   },
+  modal: {
+    backgroundColor: colors.white,
+    padding: 12,
+    borderRadius: 5,
+  },
+  modalHeader: {
+    color: colors.red,
+    fontSize: 18,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.red,
+    marginBottom: 12,
+  },
+  modalParagraph: {
+    color: colors.black,
+    marginBottom: 10,
+  },
+  modalPhone: {
+    marginLeft: 20,
+    color: colors.darkBlue,
+  }
 });
 
 Styles.headerTintColor = colors.white;

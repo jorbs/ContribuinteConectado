@@ -1,13 +1,15 @@
 import React, {Component} from 'react';
-import {View, Text, TextInput, SectionList, TouchableOpacity, TouchableWithoutFeedback, Alert} from 'react-native';
+import {View, Text, TextInput, SectionList, TouchableOpacity, TouchableWithoutFeedback, Alert, Linking} from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import TextInputMask from 'react-native-text-input-mask';
 import dismissKeyboard from 'dismissKeyboard';
+import Modal from 'react-native-modal';
 import moment from 'moment';
 
 import * as SefazAPI from '../api/SefazAPI';
 import Styles from '../common/Styles';
 import Constants from '../common/Constants';
+import Postos from '../common/Postos';
 import MyActivityIndicator from './MyActivityIndicator';
 
 export default class TermoApreensao extends Component {
@@ -24,6 +26,7 @@ export default class TermoApreensao extends Component {
     super(props);
     this.state = {
       pendingRequest: false,
+      isModalVisible: false,
       startDate: moment().subtract(1, 'month').format(Constants.DATE_FORMAT),
       endDate: moment().format(Constants.DATE_FORMAT),
     };
@@ -53,14 +56,12 @@ export default class TermoApreensao extends Component {
             {key: 'Status', data: term.status},
             {key: 'Emissão', data: term.dataEmissao && moment(term.dataEmissao).utc().format(Constants.DATETIME_FORMAT)},
             {key: 'Papel', data: term.papel},
-            {key: 'Posto', data: term.posto, detail: 'Detalhes'},
+            {key: 'Posto', data: Postos[term.posto]},
           ]
         }
       });
 
       this.setState({terms});
-
-      // Linking.openURL('tel:+5582996741312')
     }).catch(e => Alert.alert('Erro na solicitação', e.message, [{text: 'OK', onPress: () => goBack()}]))
       .then(() => this.setState({pendingRequest: false}));
   }
@@ -101,13 +102,35 @@ export default class TermoApreensao extends Component {
     );
   }
 
+  renderDetailsModal() {
+    if (this.state.posto) {
+      return (
+        <Modal isVisible={this.state.isModalVisible} onBackdropPress={() => this.setState({isModalVisible: false})}>
+          <View style={Styles.modal}>
+            <Text style={Styles.modalHeader}>{this.state.posto.name}</Text>
+            <Text style={Styles.modalParagraph}>Endereço: {this.state.posto.address}</Text>
+            <Text style={Styles.modalParagraph}>Telefones:</Text>
+            {this.state.posto.phones.map(phone => {
+              return (
+                <TouchableOpacity key={phone} style={Styles.row} onPress={() => Linking.openURL(`tel:${phone.replace(/[\(\ \)\-]/g, '')}`)}>
+                  <Text style={[Styles.modalParagraph, Styles.modalPhone]}>{phone}</Text>
+                  <FontAwesome name="phone" size={18} style={Styles.modalPhone}/>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+        </Modal>
+      );
+    }
+  }  
+
   renderSectionItemData(item) {
-    if (item.detail) {
+    if (item.key === 'Posto') {
       return (
         <View style={{flexDirection: 'row'}}>
-          <Text style={Styles.itemBody}>{item.data}</Text>
-          <TouchableOpacity onPress={() => console.log('detail!')}>
-            <Text style={{marginLeft: 20, marginTop: 3, color: '#0a235f'}}>{item.detail}</Text>
+          <Text style={Styles.itemBody}>{item.data.name}</Text>
+          <TouchableOpacity onPress={() => this.setState({isModalVisible: true, posto: item.data})}>
+            <Text style={{marginLeft: 20, marginTop: 3, color: '#0a235f'}}>Detalhes</Text>
           </TouchableOpacity>
         </View>
       );
@@ -164,6 +187,7 @@ export default class TermoApreensao extends Component {
             </View>
             {this.renderTerms()}
           </View>
+          {this.renderDetailsModal()}
         </View>
       </TouchableWithoutFeedback>
     );
