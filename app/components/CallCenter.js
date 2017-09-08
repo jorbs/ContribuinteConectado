@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import {View, Text, SectionList, Image, Alert} from 'react-native';
+import {View, Text, SectionList, Alert} from 'react-native';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import moment from 'moment';
 
 import * as SefazAPI from '../api/SefazAPI';
@@ -30,7 +31,7 @@ export default class CallCenter extends Component {
       const tickets = response.map(ticket => {
         return {
           title: `${ticket.titulo} (ID: ${ticket.id})`,
-          image: require('../images/sheet-red.png'),
+          icon: 'phone',
           data: [
             {key: 'Solução', data: ticket.solucao},
             {key: 'Aberto em', data: ticket.dataAbertura && moment(ticket.dataAbertura).utc().format(Constants.DATETIME_FORMAT)},
@@ -48,7 +49,7 @@ export default class CallCenter extends Component {
   renderSectionHeader(section) {
     return (
       <View style={Styles.sectionHeaderContainer}>
-        <Image source={section.image} resizeMode={'contain'} style={Styles.sectionHeaderImage}/>
+        <FontAwesome name={section.icon} size={24} style={Styles.sectionHeaderIcon} />
         <Text style={Styles.sectionHeader}>{section.title}</Text>
       </View>
     );
