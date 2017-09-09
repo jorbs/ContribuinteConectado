@@ -122,7 +122,7 @@ export default class TermoApreensao extends Component {
         </Modal>
       );
     }
-  }  
+  }
 
   renderSectionItemData(item) {
     if (item.key === 'Posto') {

@@ -65,7 +65,7 @@ export default class Antecipado extends Component {
           icon: 'money',
           title: `Antecipado N\u00BA ${record.sequencialAntecipacao}`,
           data: [
-            {key: 'Código do Tributo', data: record.codigoTributo},
+            {key: 'Tributo', data: record.codigoTributo === Constants.ANTECIPADO ? 'Antecipado' : 'Fecoep'},
             {key: 'Valor', data: 'R$ ' + Number(record.valorAntecipado).toFixed(2).replace('.', ',')},
             {key: 'Vencimento', data: moment(record.dataVencimento, Constants.DATE_FORMAT).format(Constants.DATE_FORMAT)},
             {key: 'Detalhes', data: record.sequencialAntecipacao, touchable: true},
