@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import DeviceInfo from 'react-native-device-info';
-import { Text, TextInput, View, Alert, Switch, TouchableOpacity, TouchableWithoutFeedback, AsyncStorage, Modal, WebView, StyleSheet } from 'react-native';
+import {Text, TextInput, View, Alert, Switch, TouchableOpacity, TouchableWithoutFeedback, AsyncStorage, StyleSheet} from 'react-native';
 import dismissKeyboard from 'dismissKeyboard';
 
 import Constants from '../common/Constants';
@@ -67,9 +67,9 @@ export default class Login extends Component {
       if (response.idAutorizacao != null) {
         this.setState({
           authorizationId: response.idAutorizacao,
-          authorizationUrl: response.urlAutorizacao,
-          authorizationModalVisible: true
+          authorizationUrl: response.urlAutorizacao
         });
+        this.props.navigation.navigate('Autorizacao', {authorizationUrl: response.urlAutorizacao})        
       } else if (response.mensagem != null) {
         Alert.alert(response.mensagem);
       } else {
@@ -108,27 +108,6 @@ export default class Login extends Component {
     }
   }
 
-  renderAuthorizationModal() {
-    if (this.state.authorizationModalVisible) {
-      return (
-        <Modal
-          animationType={'slide'}
-          transparent={false}
-          visible={this.state.authorizationModalVisible}
-          onRequestClose={() => this.setState({authorizationModalVisible: false})}
-        >
-          <TouchableOpacity
-            onPress={() => this.setState({authorizationModalVisible: false})}
-            style={{margin: 20}}
-          >
-            <Text>Retornar</Text>
-          </TouchableOpacity>
-          <WebView source={{uri: this.state.authorizationUrl}} />
-        </Modal>
-      );
-    }
-  }
-
   render() {
     return (this.state.pendingRequest ?
       <MyActivityIndicator/> :
@@ -154,7 +133,6 @@ export default class Login extends Component {
             <Switch value={this.state.rememberMe} onValueChange={rememberMe => this.setState({rememberMe})}/>
             <Text style={{lineHeight: 23, marginLeft: 4, color: 'white'}}>Lembrar acesso</Text>
           </View>
-          {this.renderAuthorizationModal()}
         </View>
       </TouchableWithoutFeedback>
     );

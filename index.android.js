@@ -2,6 +2,7 @@ import { AppRegistry } from 'react-native';
 import { StackNavigator } from 'react-navigation';
 
 import Login from './app/components/Login';
+import Autorizacao from './app/components/Autorizacao';
 import Home from './app/components/Home';
 import SituacaoCadastral from './app/components/SituacaoCadastral';
 import Certidao from './app/components/Certidao';
@@ -15,6 +16,10 @@ import SimuladorST from './app/components/SimuladorST';
 const ContribuinteConectado = StackNavigator({
   Login: {
     screen: Login
+  },
+  Autorizacao: {
+    path: 'autorizacao/:authorizationUrl',
+    screen: Autorizacao
   },
   Home: {
     screen: Home
