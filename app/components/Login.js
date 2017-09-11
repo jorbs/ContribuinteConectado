@@ -57,33 +57,39 @@ export default class Login extends Component {
       return;
     }
 
-    const deviceId = DeviceInfo.getDeviceId();
+    if (this.state.authorizationId) {
+      this.authenticate();
+    } else {
+      const deviceId = DeviceInfo.getDeviceId();
 
-    this.setState({pendingRequest: true});
+      this.setState({pendingRequest: true});
 
-    try {
-      const response = await SefazAPI.solicitarAutorizacao(this.state.login, deviceId);
+      try {
+        const response = await SefazAPI.solicitarAutorizacao(this.state.login, deviceId);
 
-      if (response.idAutorizacao != null) {
-        this.setState({
-          authorizationId: response.idAutorizacao,
-          authorizationUrl: response.urlAutorizacao
-        });
-        this.props.navigation.navigate('Autorizacao', {authorizationUrl: response.urlAutorizacao})        
-      } else if (response.mensagem != null) {
-        Alert.alert(response.mensagem);
-      } else {
-        Alert.alert('Não foi possível autorizar a aplicação.');
+        if (response.idAutorizacao != null) {
+          this.setState({
+            authorizationId: response.idAutorizacao,
+            authorizationUrl: response.urlAutorizacao
+          });
+          this.props.navigation.navigate('Autorizacao', {authorizationUrl: response.urlAutorizacao})        
+        } else if (response.mensagem != null) {
+          Alert.alert(response.mensagem);
+        } else {
+          Alert.alert('Não foi possível autorizar a aplicação.');
+        }
+      } catch(e) {
+        const {goBack} = this.props.navigation;
+        Alert.alert('Erro na solicitação', e.message, [{text: 'OK', onPress: () => goBack()}]);
+      } finally {
+        this.setState({pendingRequest: false});
       }
-    } catch(e) {
-      const {goBack} = this.props.navigation;
-      Alert.alert('Erro na solicitação', e.message, [{text: 'OK', onPress: () => goBack()}]);
-    } finally {
-      this.setState({pendingRequest: false});
     }
   }
 
   async authenticate() {
+    this.setState({pendingRequest: true});
+
     try {
       const response = await SefazAPI.autenticar(this.state.login, this.state.authorizationId);
       
