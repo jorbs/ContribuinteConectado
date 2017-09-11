@@ -28,23 +28,22 @@ export default class Login extends Component {
       const requestToken = await AsyncStorage.getItem(Constants.REQUEST_TOKEN_KEY);
       const rememberMe = login != null;
       
-      this.setState({
-        login,
-        requestToken,
-        rememberMe
-      });
+      this.setState({login, requestToken, rememberMe});
     } catch (e) {
       console.warn('Unable to retrieve login and requestToken from AsyncStorage: ', e);
     }
   }
 
   async login() {
-    if (this.state.rememberMe) {
-      await AsyncStorage.setItem(Constants.REMEMBER_ME_KEY, this.state.login);
-    } else {
-      await AsyncStorage.removeItem(this.state.login);
-      await AsyncStorage.removeItem(Constants.REQUEST_TOKEN_KEY);
-      await AsyncStorage.removeItem(Constants.REMEMBER_ME_KEY);
+    try {
+      if (this.state.rememberMe) {
+        await AsyncStorage.setItem(Constants.REMEMBER_ME_KEY, this.state.login);
+      } else {
+        await AsyncStorage.removeItem(Constants.REQUEST_TOKEN_KEY);
+        await AsyncStorage.removeItem(Constants.REMEMBER_ME_KEY);
+      }
+    } catch (e) {
+      console.warn('Unable to manipulate AsyncStorage: ', e);
     }
 
     if (this.state.login == null || this.state.login.length === 0) {
@@ -64,7 +63,7 @@ export default class Login extends Component {
 
     try {
       const response = await SefazAPI.solicitarAutorizacao(this.state.login, deviceId);
-        
+
       if (response.idAutorizacao != null) {
         this.setState({
           authorizationId: response.idAutorizacao,
@@ -87,7 +86,7 @@ export default class Login extends Component {
   async authenticate() {
     try {
       const response = await SefazAPI.autenticar(this.state.login, this.state.authorizationId);
-        
+      
       if (response.id_token != null) {
         try {
           await AsyncStorage.setItem(Constants.REQUEST_TOKEN_KEY, response.id_token);
@@ -98,22 +97,15 @@ export default class Login extends Component {
         this.setState({requestToken: response.id_token});
 
         this.props.navigation.navigate('Home', {login: this.state.login, requestToken: this.state.requestToken});
-      } else if (response.mensagem != null) {
-        Alert.alert(response.mensagem);
       } else {
         Alert.alert('Não foi possível autenticar-se.');
       }
     } catch(e) {
       const {goBack} = this.props.navigation;
-      Alert.alert('Erro na solicitação', e.message, [{text: 'OK', onPress: () => goBack()}]);
+      Alert.alert('Erro na solicitação', e.mensagem, [{text: 'OK', onPress: () => goBack()}]);
     } finally {
       this.setState({pendingRequest: false});
     }
-  }
-
-  async onAuthorizationModalClosed() {
-    this.setState({authorizationModalVisible: false});
-    await this.authenticate();
   }
 
   renderAuthorizationModal() {
@@ -123,10 +115,10 @@ export default class Login extends Component {
           animationType={'slide'}
           transparent={false}
           visible={this.state.authorizationModalVisible}
-          onRequestClose={() => this.onAuthorizationModalClosed()}
+          onRequestClose={() => this.setState({authorizationModalVisible: false})}
         >
           <TouchableOpacity
-            onPress={() => this.onAuthorizationModalClosed()}
+            onPress={() => this.setState({authorizationModalVisible: false})}
             style={{margin: 20}}
           >
             <Text>Retornar</Text>
