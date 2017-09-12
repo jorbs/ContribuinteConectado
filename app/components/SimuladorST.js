@@ -24,8 +24,8 @@ export default class SimuladorST extends Component {
       outrasDespesas: '0,00',
       ipi: '0,00',
       desconto: '0,00',
-      aliquota: '7',
-      mva: '85',
+      aliquota: '12',
+      mva: '50',
       aliquotaIcmsSt: '17',
       aliquotaFecoep: '1'
     };
@@ -146,6 +146,7 @@ export default class SimuladorST extends Component {
                   ref="aliquota"
                   keyboardType="numeric"
                   returnKeyType="next"
+                  defaultValue={this.state.aliquota}
                   style={[Styles.inputTextMd, Styles.textRight, Styles.stInput]}
                   onSubmitEditing={(event) => this.refs.mva.focus()}
                   onChangeText={(number) => this.setState({aliquota: number})} />
@@ -156,6 +157,7 @@ export default class SimuladorST extends Component {
                   ref="mva"
                   keyboardType="numeric"
                   returnKeyType="next"
+                  defaultValue={this.state.mva}
                   style={[Styles.inputTextMd, Styles.textRight, Styles.stInput]}
                   onSubmitEditing={(event) => this.refs.aliquotaIcmsSt.focus()}
                   onChangeText={(number) => this.setState({mva: number})} />
@@ -168,6 +170,7 @@ export default class SimuladorST extends Component {
                   ref="aliquotaIcmsSt"
                   keyboardType="numeric"
                   returnKeyType="next"
+                  defaultValue={this.state.aliquotaIcmsSt}
                   style={[Styles.inputTextMd, Styles.textRight, Styles.stInput]}
                   onSubmitEditing={(event) => this.refs.aliquotaFecoep.focus()}
                   onChangeText={(number) => this.setState({aliquotaIcmsSt: number})} />
@@ -178,6 +181,7 @@ export default class SimuladorST extends Component {
                   ref="aliquotaFecoep"
                   keyboardType="numeric"
                   returnKeyType="done"
+                  defaultValue={this.state.aliquotaFecoep}
                   style={[Styles.inputTextMd, Styles.textRight, Styles.stInput]}
                   onChangeText={(number) => this.setState({aliquotaFecoep: number})} />
               </View>

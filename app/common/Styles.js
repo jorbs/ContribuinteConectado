@@ -66,6 +66,7 @@ const Styles = StyleSheet.create({
     color: colors.red,
     marginLeft: 15,
     marginTop: 10,
+    marginBottom: 5
   },
   sectionList: {
     padding: 20,
