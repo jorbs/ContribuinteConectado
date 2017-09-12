@@ -130,7 +130,7 @@ export default class TermoApreensao extends Component {
         <View style={{flexDirection: 'row'}}>
           <Text style={Styles.itemBody}>{item.data.name}</Text>
           <TouchableOpacity onPress={() => this.setState({isModalVisible: true, posto: item.data})}>
-            <Text style={{marginLeft: 20, marginTop: 3, color: '#0a235f'}}>Detalhes</Text>
+            <FontAwesome name="search" style={Styles.recordDetails} />
           </TouchableOpacity>
         </View>
       );

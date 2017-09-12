@@ -237,6 +237,11 @@ const Styles = StyleSheet.create({
   },
   stTotal: {
     marginTop: 10,
+  },
+  recordDetails: {
+    marginLeft: 15,
+    color: colors.darkBlue,
+    fontSize: 24,
   }
 });
 

@@ -41,7 +41,7 @@ export default class SituacaoCadastral extends Component {
       this.setState({
         sections: [
           {title: 'Dados Gerais', icon: 'file-text-o', data: dadosGerais},
-          {title: 'Endereço', icon: 'location-arrow', data: endereco}
+          {title: 'Endereço', icon: 'map-marker', data: endereco}
         ]
       });
     }).catch(e => Alert.alert('Erro na solicitação', e.message, [{text: 'OK', onPress: () => goBack()}]))
