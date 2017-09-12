@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
-import {View, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, Alert, SectionList} from 'react-native';
+import {View, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, Alert, SectionList, Clipboard} from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import TextInputMask from 'react-native-text-input-mask';
 import dismissKeyboard from 'dismissKeyboard';
+import Modal from 'react-native-modal';
 import moment from 'moment';
 
 import * as SefazAPI from '../api/SefazAPI';
@@ -68,7 +69,7 @@ export default class Antecipado extends Component {
             {key: 'Tributo', data: record.codigoTributo === Constants.ANTECIPADO ? 'Antecipado' : 'Fecoep'},
             {key: 'Valor', data: 'R$ ' + Number(record.valorAntecipado).toFixed(2).replace('.', ',')},
             {key: 'Vencimento', data: moment(record.dataVencimento, Constants.DATE_FORMAT).format(Constants.DATE_FORMAT)},
-            {key: 'Detalhes', data: record.sequencialAntecipacao, touchable: true},
+            {key: 'Detalhes', data: record.sequencialAntecipacao},
           ]
         };
       });
@@ -85,9 +86,46 @@ export default class Antecipado extends Component {
     this.setState({pendingRequest: true});
 
     SefazAPI.consultarAntecipado(params.requestToken, params.login, recordId).then(recordDetails => {
-      this.setState({pendingRequest: false});
+      this.setState({recordDetails, isModalVisible: true});
     }).catch(e => Alert.alert('Erro na solicitação', e.message, [{text: 'OK', onPress: () => goBack()}]))
       .then(() => this.setState({pendingRequest: false}));
+  }
+
+  onCopyBarCode(barcode) {
+    Clipboard.setString(barcode.replace(/\ /g, ''));
+    Alert.alert('Código de barras copiado!');
+  }
+
+  renderRecordDetailsModal() {
+    const recordDetails = this.state.recordDetails;
+
+    return (
+      <Modal isVisible={this.state.isModalVisible} onBackdropPress={() => this.setState({isModalVisible: false})}>
+        {
+          this.state.recordDetails.map(record => {
+            const barcode = record.codigoBarras.replace(/\ /g, '').substring(0, 11) + '...' + record.codigoBarras.replace(/\ /g, '').substring(37);
+
+            return (
+              <View key={record.codigoTributo} style={Styles.modal}>
+                <Text style={Styles.modalHeader}>{record.codigoTributo === Constants.ANTECIPADO ? 'Antecipado' : 'Fecoep'}</Text>
+                <Text style={Styles.modalParagraph}>Competência: {record.competencia.toString().substring(4) + '/' + record.competencia.toString().substring(0, 4)}</Text>
+                <Text style={Styles.modalParagraph}>Emissão: {moment(record.dataEmissao).utc().format(Constants.DATETIME_FORMAT)}</Text>
+                <Text style={Styles.modalParagraph}>Vencimento: {moment(record.dataVencimento).utc().format(Constants.DATETIME_FORMAT)}</Text>
+                <Text style={Styles.modalParagraph}>Pagamento: {record.dataPagamento ? moment(record.dataPagamento).utc().format(Constants.DATETIME_FORMAT) : '-'}</Text>
+                <Text style={Styles.modalParagraph}>Valor Principal: R$ {record.valorPrincipal.toFixed(2)}</Text>
+                <Text style={Styles.modalParagraph}>Valor Principal: R$ {record.valorTotal.toFixed(2)}</Text>
+                {!record.dataPagamento && <Text style={Styles.modalParagraph}>Código de Barras: {barcode}</Text>}
+                {!record.dataPagamento && (
+                  <TouchableOpacity onPress={() => this.onCopyBarCode(record.codigoBarras)} accessibilityLabel="Copiar código de barras">
+                    <FontAwesome name="copy" style={Styles.iconBarcode} />
+                  </TouchableOpacity>
+                )}
+              </View>
+            );
+          })
+        }
+      </Modal>
+    );
   }
 
   renderSectionHeader(section) {
@@ -100,7 +138,7 @@ export default class Antecipado extends Component {
   }
 
   renderSectionItem(item) {
-    if (item.touchable) {
+    if (item.key === 'Detalhes') {
       return (
         <TouchableOpacity onPress={() => this.onViewRecordDetails(item.data)}>
           <Text style={Styles.itemHeader}>{item.key}</Text>
@@ -164,6 +202,7 @@ export default class Antecipado extends Component {
             </View>
           </View>
           {this.renderRecords()}
+          {this.state.isModalVisible && this.renderRecordDetailsModal()}
         </View>
       </TouchableWithoutFeedback>
     );
