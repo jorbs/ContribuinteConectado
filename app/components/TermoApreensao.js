@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text, TextInput, SectionList, TouchableOpacity, TouchableWithoutFeedback, Alert, Linking} from 'react-native';
+import {View, ScrollView, Text, TextInput, SectionList, TouchableOpacity, TouchableWithoutFeedback, Alert, Linking} from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import TextInputMask from 'react-native-text-input-mask';
 import dismissKeyboard from 'dismissKeyboard';
@@ -152,7 +152,7 @@ export default class TermoApreensao extends Component {
     return (this.state.pendingRequest ?
       <MyActivityIndicator/> :
       <TouchableWithoutFeedback onPress={dismissKeyboard}>
-        <View style={Styles.mainContainer}>
+        <ScrollView style={Styles.mainContainer}>
           <View style={Styles.searchContainer}>
             <View style={Styles.searchRow}>
               <Text style={Styles.searchLabel}>Data início</Text>
@@ -188,7 +188,7 @@ export default class TermoApreensao extends Component {
             {this.renderTerms()}
           </View>
           {this.renderDetailsModal()}
-        </View>
+        </ScrollView>
       </TouchableWithoutFeedback>
     );
   }

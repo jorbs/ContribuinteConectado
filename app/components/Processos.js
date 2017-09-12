@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text, SectionList, TouchableOpacity, TextInput, Alert, TouchableWithoutFeedback} from 'react-native';
+import {View, ScrollView, Text, SectionList, TouchableOpacity, TextInput, Alert, TouchableWithoutFeedback} from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import dismissKeyboard from 'dismissKeyboard';
 
@@ -85,7 +85,7 @@ export default class Processos extends Component {
     return (this.state.pendingRequest ?
       <MyActivityIndicator/> :
       <TouchableWithoutFeedback onPress={dismissKeyboard}>
-        <View style={Styles.mainContainer}>
+        <ScrollView style={Styles.mainContainer}>
           <View style={Styles.searchContainer}>
             <Text style={Styles.h1}>Digite o número do processo</Text>
             <View style={Styles.centerContainer}>
@@ -99,7 +99,7 @@ export default class Processos extends Component {
             </TouchableOpacity>
           </View>
           {this.renderProcessDetails()}
-        </View>
+        </ScrollView>
       </TouchableWithoutFeedback>
     );
   }

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, Alert, SectionList, Clipboard} from 'react-native';
+import {View, ScrollView, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, Alert, SectionList, Clipboard} from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import TextInputMask from 'react-native-text-input-mask';
 import dismissKeyboard from 'dismissKeyboard';
@@ -180,7 +180,7 @@ export default class Antecipado extends Component {
     return (this.state.pendingRequest ?
       <MyActivityIndicator/> :
       <TouchableWithoutFeedback onPress={dismissKeyboard}>
-        <View style={Styles.mainContainer}>
+        <ScrollView style={Styles.mainContainer}>
           <View style={Styles.searchContainer}>
             <View style={Styles.searchRow}>
               <Text style={Styles.searchLabel}>Competência</Text>
@@ -203,7 +203,7 @@ export default class Antecipado extends Component {
           </View>
           {this.renderRecords()}
           {this.state.isModalVisible && this.renderRecordDetailsModal()}
-        </View>
+        </ScrollView>
       </TouchableWithoutFeedback>
     );
   }

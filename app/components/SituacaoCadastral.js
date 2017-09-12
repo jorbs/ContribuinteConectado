@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {View, Text, SectionList, StyleSheet, Alert} from 'react-native';
+import {View, ScrollView, Text, SectionList, StyleSheet, Alert} from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 import Styles from '../common/Styles';
@@ -69,14 +69,14 @@ export default class SituacaoCadastral extends Component {
   render() {
     return (this.state.pendingRequest ?
       <MyActivityIndicator/> :
-      <View style={Styles.mainContainer}>
+      <ScrollView style={Styles.mainContainer}>
         <SectionList
           sections={this.state.sections}
           renderSectionHeader={({section}) => this.renderSectionHeader(section)}
           renderItem={({item}) => this.renderSectionItem(item)}
           style={Styles.sectionList}
         />
-      </View>
+      </ScrollView>
     );
   }
 }
