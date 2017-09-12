@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text, TextInput, TouchableWithoutFeedback} from 'react-native';
+import {View, ScrollView, Text, TextInput, TouchableWithoutFeedback} from 'react-native';
 import dismissKeyboard from 'dismissKeyboard';
 
 import Styles from '../common/Styles';
@@ -18,166 +18,202 @@ export default class SimuladorST extends Component {
     super(props);
 
     this.state = {
-      valorTotalProduto: 0,
-      frete: 0,
-      seguro: 0,
-      outrasDespesas: 0,
-      ipi: 0,
-      desconto: 0,
-      aliquota: 7,
-      mva: 85,
-      aliquotaIcmsSt: 17,
-      aliquotaFecoep: 1
+      valorProduto: '0,00',
+      frete: '0,00',
+      seguro: '0,00',
+      outrasDespesas: '0,00',
+      ipi: '0,00',
+      desconto: '0,00',
+      aliquota: '7',
+      mva: '85',
+      aliquotaIcmsSt: '17',
+      aliquotaFecoep: '1'
     };
   }
 
+  toF(number) {
+    if (number == null) {
+      number = '0';
+    }
+
+    return parseFloat(number.replace(/,/g, '.'));
+  }
+
   subtotal() {
-    return new Number(this.state.valorTotalProduto + this.state.frete + this.state.seguro + this.state.outrasDespesas + this.state.ipi - this.state.desconto).toFixed(2);
+    return this.toF(this.state.valorProduto) + this.toF(this.state.frete) + this.toF(this.state.seguro) + this.toF(this.state.outrasDespesas) + this.toF(this.state.ipi) - this.toF(this.state.desconto);
   }
 
   baseCalculoSt() {
-    return new Number(this.subtotal() * this.state.mva / 100.0 + this.subtotal()).toFixed(2);
+    return this.subtotal() * this.toF(this.state.mva) / 100.0 + this.subtotal();
   }
 
   valorSt() {
-    return new Number(this.baseCalculoSt() * this.state.aliquotaIcmsSt / 100.0 - this.subtotal() * this.state.aliquota / 100.0).toFixed(2);
+    return this.baseCalculoSt() * this.toF(this.state.aliquotaIcmsSt) / 100.0 - this.subtotal() * this.toF(this.state.aliquota) / 100.0;
   }
 
   valorFecoep() {
-    return new Number(this.state.aliquotaFecoep * this.baseCalculoSt() / 100.0).toFixed(2);
+    return this.toF(this.state.aliquotaFecoep) * this.baseCalculoSt() / 100.0;
   }
 
   valorTotalSt() {
-    return new Number(this.valorFecoep() + this.valorSt()).toFixed(2);
+    return this.valorFecoep() + this.valorSt();
   }
 
   totalOperacao() {
-    return new Number(this.valorTotalSt() + this.subtotal()).toFixed(2);
+    return this.valorTotalSt() + this.subtotal();
   }
 
   render() {
     return (
       <TouchableWithoutFeedback onPress={dismissKeyboard}>
-        <View style={Styles.mainContainer}>
+        <ScrollView style={Styles.mainContainer}>
+          <Text style={Styles.h2}>Entre com os valores abaixo:</Text>
+          <View style={Styles.stContainer}>
+            <View style={Styles.stRow}>
+              <View style={Styles.stColFirst}>
+                <Text style={Styles.stLabel}>Valor do produto (R$)</Text>
+                <TextInput
+                  keyboardType="numeric"
+                  returnKeyType="next"
+                  style={[Styles.inputTextMd, Styles.textRight, Styles.stInput]}
+                  onSubmitEditing={(event) => this.refs.frete.focus()}
+                  onChangeText={(number) => this.setState({valorProduto: number})} />
+              </View>
+              <View style={Styles.stCol}>
+                <Text style={Styles.stLabel}>Frete (R$)</Text>
+                <TextInput
+                  ref="frete"
+                  keyboardType="numeric"
+                  returnKeyType="next"
+                  defaultValue={this.state.frete}
+                  style={[Styles.inputTextMd, Styles.textRight, Styles.stInput]}
+                  onSubmitEditing={(event) => this.refs.seguro.focus()}
+                  onChangeText={(number) => this.setState({frete: number})} />
+              </View>
+            </View>
+            <View style={Styles.stRow}>
+              <View style={Styles.stColFirst}>
+                <Text style={Styles.stLabel}>Seguro (R$)</Text>
+                <TextInput
+                  ref="seguro"
+                  keyboardType="numeric"
+                  returnKeyType="next"
+                  defaultValue={this.state.seguro}
+                  style={[Styles.inputTextMd, Styles.textRight, Styles.stInput]}
+                  onSubmitEditing={(event) => this.refs.outrasDespesas.focus()}
+                  onChangeText={(number) => this.setState({seguro: number})} />
+              </View>
+              <View style={Styles.stCol}>
+                <Text style={Styles.stLabel}>Outras despesas (R$)</Text>
+                <TextInput
+                  ref="outrasDespesas"
+                  keyboardType="numeric"
+                  returnKeyType="next"
+                  defaultValue={this.state.outrasDespesas}
+                  style={[Styles.inputTextMd, Styles.textRight, Styles.stInput]}
+                  onSubmitEditing={(event) => this.refs.ipi.focus()}
+                  onChangeText={(number) => this.setState({outrasDespesas: number})} />
+              </View>
+            </View>
+            <View style={Styles.stRow}>
+              <View style={Styles.stColFirst}>
+                <Text style={Styles.stLabel}>IPI (R$)</Text>
+                <TextInput
+                  ref="ipi"
+                  keyboardType="numeric"
+                  returnKeyType="next"
+                  defaultValue={this.state.ipi}
+                  style={[Styles.inputTextMd, Styles.textRight, Styles.stInput]}
+                  onSubmitEditing={(event) => this.refs.desconto.focus()}
+                  onChangeText={(number) => this.setState({ipi: number})} />
+              </View>
+              <View style={Styles.stCol}>
+                <Text style={Styles.stLabel}>Desconto (- R$)</Text>
+                <TextInput
+                  ref="desconto"
+                  keyboardType="numeric"
+                  defaultValue={this.state.desconto}
+                  returnKeyType="next"
+                  style={[Styles.inputTextMd, Styles.textRight, Styles.stInput]}
+                  onSubmitEditing={(event) => this.refs.aliquota.focus()}
+                  onChangeText={(number) => this.setState({desconto: number})} />
+              </View>
+            </View>
+            <View style={Styles.stRow}>
+              <View style={Styles.stColFirst}>
+                <Text style={Styles.stLabel}>Alíquota (%)</Text>
+                <TextInput
+                  ref="aliquota"
+                  keyboardType="numeric"
+                  returnKeyType="next"
+                  style={[Styles.inputTextMd, Styles.textRight, Styles.stInput]}
+                  onSubmitEditing={(event) => this.refs.mva.focus()}
+                  onChangeText={(number) => this.setState({aliquota: number})} />
+              </View>
+              <View style={Styles.stCol}>
+                <Text style={Styles.stLabel}>MVA (%)</Text>
+                <TextInput
+                  ref="mva"
+                  keyboardType="numeric"
+                  returnKeyType="next"
+                  style={[Styles.inputTextMd, Styles.textRight, Styles.stInput]}
+                  onSubmitEditing={(event) => this.refs.aliquotaIcmsSt.focus()}
+                  onChangeText={(number) => this.setState({mva: number})} />
+              </View>
+            </View>
+            <View style={Styles.stRow}>
+              <View style={Styles.stColFirst}>
+                <Text style={Styles.stLabel}>Alíquota ICMS ST (%)</Text>
+                <TextInput
+                  ref="aliquotaIcmsSt"
+                  keyboardType="numeric"
+                  returnKeyType="next"
+                  style={[Styles.inputTextMd, Styles.textRight, Styles.stInput]}
+                  onSubmitEditing={(event) => this.refs.aliquotaFecoep.focus()}
+                  onChangeText={(number) => this.setState({aliquotaIcmsSt: number})} />
+              </View>
+              <View style={Styles.stCol}>
+                <Text style={Styles.stLabel}>Alíquota FECOEP (%)</Text>
+                <TextInput
+                  ref="aliquotaFecoep"
+                  keyboardType="numeric"
+                  returnKeyType="done"
+                  style={[Styles.inputTextMd, Styles.textRight, Styles.stInput]}
+                  onChangeText={(number) => this.setState({aliquotaFecoep: number})} />
+              </View>
+            </View>
+          </View>
           <View style={Styles.centerContainer}>
-            <TextInput
-              keyboardType="numeric"
-              returnKeyType="next"
-              placeholder="Valor total do produto (R$)"
-              style={[Styles.inputTextLg, Styles.textCenter]}
-              onSubmitEditing={(event) => this.refs.frete.focus()}
-              onChange={(e) => this.setState({valorTotalProduto: Number(e.target.value)})} />
+            <View style={Styles.stRow}>
+              <Text style={Styles.st50}>Subtotal</Text>
+              <Text style={[Styles.st50, Styles.stResult]}>R$ {this.subtotal().toFixed(2).replace(/\./g, ',')}</Text>
+            </View>
+            <View style={Styles.stRow}>
+              <Text style={Styles.st50}>Base de Cálc. ICMS</Text>
+              <Text style={[Styles.st50, Styles.stResult]}>R$ {this.subtotal().toFixed(2).replace(/\./g, ',')}</Text>
+            </View>
+            <View style={Styles.stRow}>
+              <Text style={Styles.st50}>Base de cálculo ST</Text>
+              <Text style={[Styles.st50, Styles.stResult]}>R$ {this.baseCalculoSt().toFixed(2).replace(/\./g, ',')}</Text>
+            </View>
+            <View style={Styles.stRow}>
+              <Text style={Styles.st50}>Valor da ST</Text>
+              <Text style={[Styles.st50, Styles.stResult]}>R$ {this.valorSt().toFixed(2).replace(/\./g, ',')}</Text>
+            </View>
+            <View style={Styles.stRow}>
+              <Text style={Styles.st50}>Valor FECOEP</Text>
+              <Text style={[Styles.st50, Styles.stResult]}>R$ {this.valorFecoep().toFixed(2).replace(/\./g, ',')}</Text>
+            </View>
+            <View style={Styles.stRow}>
+              <Text style={Styles.st50}>Valor Total ST</Text>
+              <Text style={[Styles.st50, Styles.stResult]}>R$ {this.valorTotalSt().toFixed(2).replace(/\./g, ',')}</Text>
+            </View>
+            <View style={[Styles.stRow, Styles.stTotal]}>
+              <Text style={[Styles.textBold, Styles.st50]}>Total da operação</Text>
+              <Text style={[Styles.textBold, Styles.st50, Styles.stResult]}>R$ {this.totalOperacao().toFixed(2).replace(/\./g, ',')}</Text>
+            </View>
           </View>
-          <View style={Styles.row}>
-            <TextInput
-              ref="frete"
-              keyboardType="numeric"
-              returnKeyType="next"
-              placeholder="Frete (R$)"
-              style={[Styles.inputTextMd, Styles.textRight]}
-              onSubmitEditing={(event) => this.refs.seguro.focus()}
-              onChange={(e) => this.setState({frete: Number(e.target.value)})} />
-            <TextInput
-              ref="seguro"
-              keyboardType="numeric"
-              returnKeyType="next"
-              placeholder="Seguro (R$)"
-              style={[Styles.inputTextMd, Styles.textRight]}
-              onSubmitEditing={(event) => this.refs.outrasDespesas.focus()}
-              onChange={(e) => this.setState({seguro: Number(e.target.value)})} />
-          </View>
-          <View style={Styles.row}>
-            <TextInput
-              ref="outrasDespesas"
-              keyboardType="numeric"
-              returnKeyType="next"
-              placeholder="Outras despesas (R$)"
-              style={[Styles.inputTextMd, Styles.textRight]}
-              onSubmitEditing={(event) => this.refs.ipi.focus()}
-              onChange={(e) => this.setState({outrasDespesas: Number(e.target.value)})} />
-            <TextInput
-              ref="ipi"
-              keyboardType="numeric"
-              returnKeyType="next"
-              placeholder="IPI (R$)"
-              style={[Styles.inputTextMd, Styles.textRight]}
-              onSubmitEditing={(event) => this.refs.desconto.focus()}
-              onChange={(e) => this.setState({ipi: Number(e.target.value)})} />
-          </View>
-          <View style={Styles.row}>
-            <TextInput
-              ref="desconto"
-              keyboardType="numeric"
-              returnKeyType="next"
-              placeholder="Desconto (R$)"
-              style={[Styles.inputTextMd, Styles.textRight]}
-              onSubmitEditing={(event) => this.refs.aliquota.focus()}
-              onChange={(e) => this.setState({desconto: Number(e.target.value)})} />
-          </View>
-          <View style={Styles.row}>
-            <TextInput
-              ref="aliquota"
-              keyboardType="numeric"
-              returnKeyType="next"
-              placeholder="Alíquota (%)"
-              style={[Styles.inputTextMd, Styles.textRight]}
-              onSubmitEditing={(event) => this.refs.mva.focus()}
-              onChange={(e) => this.setState({aliquota: Number(e.target.value)})} />
-            <TextInput
-              ref="mva"
-              keyboardType="numeric"
-              returnKeyType="next"
-              placeholder="MVA (%)"
-              style={[Styles.inputTextMd, Styles.textRight]}
-              onSubmitEditing={(event) => this.refs.aliquotaIcmsSt.focus()}
-              onChange={(e) => this.setState({mva: Number(e.target.value)})} />
-          </View>
-          <View style={Styles.row}>
-            <TextInput
-              ref="aliquotaIcmsSt"
-              keyboardType="numeric"
-              returnKeyType="next"
-              placeholder="Alíquota ICMS ST (%)"
-              style={[Styles.inputTextMd, Styles.textRight]}
-              onSubmitEditing={(event) => this.refs.aliquotaFecoep.focus()}
-              onChange={(e) => this.setState({aliquotaIcmsSt: Number(e.target.value)})} />
-            <TextInput
-              ref="aliquotaFecoep"
-              keyboardType="numeric"
-              returnKeyType="done"
-              placeholder="Alíquota FECOEP (%)"
-              style={[Styles.inputTextMd, Styles.textRight]}
-              onChange={(e) => this.setState({aliquotaFecoep: Number(e.target.value)})} />
-          </View>
-          <View style={Styles.row}>
-            <Text>Subtotal (R$)</Text>
-            <Text>{this.subtotal()}</Text>
-          </View>
-          <View style={Styles.row}>
-            <Text>Base de Cálc. ICMS (R$)</Text>
-            <Text>{this.subtotal()}</Text>
-          </View>
-          <View style={Styles.row}>
-            <Text>Base de cálculo ST (R$)</Text>
-            <Text>{this.baseCalculoSt()}</Text>
-          </View>
-          <View style={Styles.row}>
-            <Text>Valor da ST (R$)</Text>
-            <Text>{this.valorSt()}</Text>
-          </View>
-          <View style={Styles.row}>
-            <Text>Valor FECOEP (R$)</Text>
-            <Text>{this.valorFecoep()}</Text>
-          </View>
-          <View style={Styles.row}>
-            <Text>Valor Total ST (R$)</Text>
-            <Text>{this.valorTotalSt()}</Text>
-          </View>
-          <View style={Styles.row}>
-            <Text style={Styles.textBold}>Total da operação (R$)</Text>
-            <Text style={Styles.textBold}>{this.totalOperacao()}</Text>
-          </View>
-        </View>
+        </ScrollView>
       </TouchableWithoutFeedback>
     );
   }

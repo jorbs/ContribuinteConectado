@@ -61,6 +61,12 @@ const Styles = StyleSheet.create({
     borderBottomColor: colors.lightGray,
     borderBottomWidth: 1,
   },
+  h2: {
+    fontSize: 18,
+    color: colors.red,
+    marginLeft: 15,
+    marginTop: 10,
+  },
   sectionList: {
     padding: 20,
   },
@@ -195,6 +201,41 @@ const Styles = StyleSheet.create({
   modalPhone: {
     marginLeft: 20,
     color: colors.darkBlue,
+  },
+  stContainer: {
+    marginTop: 20,
+    alignItems: 'center',
+  },
+  stRow: {
+    flexDirection: 'row',
+    marginBottom: 5,
+  },
+  stColFirst: {
+    marginLeft: 0,
+  },
+  stCol: {
+    marginLeft: 40,
+  },
+  stLabel: {
+    color: colors.darkBlue,
+    padding: 0,
+    margin: 0
+  },
+  stInput: {
+    paddingTop: 0,
+  },
+  st50: {
+    flex: 0.4,
+    color: colors.black,
+  },
+  stResult: {
+    flex: 0.3,
+    color: colors.red,
+    marginLeft: 30,
+    textAlign: 'right'
+  },
+  stTotal: {
+    marginTop: 10,
   }
 });
 
