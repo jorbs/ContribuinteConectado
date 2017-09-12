@@ -54,7 +54,7 @@ export default class Home extends Component {
             <FontAwesome name="calculator" color="#fff" size={48}/>
             <Text style={Styles.menuItemLabel}>Simulador ST</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => this.navigate('CallCenter')} style={Styles.menuCol}>
+          <TouchableOpacity style={Styles.menuCol}>
             <FontAwesome name="phone" color="#fff" size={48}/>
             <Text style={Styles.menuItemLabel}>Call Center</Text>
           </TouchableOpacity>
