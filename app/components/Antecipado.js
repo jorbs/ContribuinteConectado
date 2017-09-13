@@ -24,12 +24,9 @@ export default class Antecipado extends Component {
   constructor(props) {
     super(props);
 
-    const previousMonth = moment().subtract(1, 'month').format('MM');
-    const currentYear = moment().year();
-
     this.state = {
       pendingRequest: false,
-      monthYear: `${previousMonth}/${currentYear}`
+      monthYear: moment().subtract(1, 'month').format('MM/YYYY')
     };
   }
 
@@ -111,7 +108,7 @@ export default class Antecipado extends Component {
                 <Text style={Styles.modalParagraph}>Competência: {record.competencia.toString().substring(4) + '/' + record.competencia.toString().substring(0, 4)}</Text>
                 <Text style={Styles.modalParagraph}>Emissão: {moment(record.dataEmissao).utc().format(Constants.DATETIME_FORMAT)}</Text>
                 <Text style={Styles.modalParagraph}>Vencimento: {moment(record.dataVencimento).utc().format(Constants.DATETIME_FORMAT)}</Text>
-                <Text style={Styles.modalParagraph}>Pagamento: {record.dataPagamento ? moment(record.dataPagamento).utc().format(Constants.DATETIME_FORMAT) : '-'}</Text>
+                {record.dataPagamento && <Text style={Styles.modalParagraph}>Pagamento: {moment(record.dataPagamento).utc().format(Constants.DATETIME_FORMAT)}</Text>}
                 <Text style={Styles.modalParagraph}>Valor Principal: R$ {record.valorPrincipal.toFixed(2)}</Text>
                 <Text style={Styles.modalParagraph}>Valor Principal: R$ {record.valorTotal.toFixed(2)}</Text>
                 {!record.dataPagamento && <Text style={Styles.modalParagraph}>Código de Barras: {barcode}</Text>}
