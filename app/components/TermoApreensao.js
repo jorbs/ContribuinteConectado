@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
-import {View, ScrollView, Text, TextInput, SectionList, TouchableOpacity, TouchableWithoutFeedback, Alert, Linking} from 'react-native';
+import {View, ScrollView, Text, TextInput, SectionList, TouchableOpacity, TouchableWithoutFeedback, Alert, Linking, findNodeHandle} from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import TextInputState from 'react-native/lib/TextInputState'
 import TextInputMask from 'react-native-text-input-mask';
 import dismissKeyboard from 'dismissKeyboard';
 import Modal from 'react-native-modal';
@@ -24,6 +25,8 @@ export default class TermoApreensao extends Component {
 
   constructor(props) {
     super(props);
+
+    this.searchButton = null;
     this.state = {
       pendingRequest: false,
       isModalVisible: false,
@@ -162,6 +165,9 @@ export default class TermoApreensao extends Component {
                   placeholder="DD/MM/YYYY"
                   keyboardType="numeric"
                   defaultValue={this.state.startDate}
+                  returnKeyType="next"
+                  blurOnSubmit={true}
+                  onSubmitEditing={event => TextInputState.focusTextInput(findNodeHandle(this.refs.endDate))}
                   onChangeText={startDate => this.setState({startDate})}
                   style={[Styles.inputTextMd, Styles.searchInputText]} />
                 <FontAwesome name="calendar" style={Styles.searchFieldIcon} />
@@ -171,10 +177,14 @@ export default class TermoApreensao extends Component {
               <Text style={Styles.searchLabel}>Data término</Text>
               <View style={Styles.searchInputGroup}>
                 <TextInputMask
+                  ref="endDate"
                   mask={"[00]/[00]/[0000]"}
                   placeholder="DD/MM/YYYY"
                   keyboardType="numeric"
                   defaultValue={this.state.endDate}
+                  returnKeyType="done"
+                  blurOnSubmit={true}
+                  onSubmitEditing={event => this.onSearch()}
                   onChangeText={endDate => this.setState({endDate})}
                   style={[Styles.inputTextMd, Styles.searchInputText]} />
                 <FontAwesome name="calendar" style={Styles.searchFieldIcon} />

@@ -75,6 +75,7 @@ export default class SimuladorST extends Component {
                 <TextInput
                   keyboardType="numeric"
                   returnKeyType="next"
+                  blurOnSubmit={true}
                   style={[Styles.inputTextMd, Styles.textRight, Styles.stInput]}
                   onSubmitEditing={(event) => this.refs.frete.focus()}
                   onChangeText={(number) => this.setState({valorProduto: number})} />
@@ -85,6 +86,7 @@ export default class SimuladorST extends Component {
                   ref="frete"
                   keyboardType="numeric"
                   returnKeyType="next"
+                  blurOnSubmit={true}
                   defaultValue={this.state.frete}
                   style={[Styles.inputTextMd, Styles.textRight, Styles.stInput]}
                   onSubmitEditing={(event) => this.refs.seguro.focus()}
@@ -98,6 +100,7 @@ export default class SimuladorST extends Component {
                   ref="seguro"
                   keyboardType="numeric"
                   returnKeyType="next"
+                  blurOnSubmit={true}
                   defaultValue={this.state.seguro}
                   style={[Styles.inputTextMd, Styles.textRight, Styles.stInput]}
                   onSubmitEditing={(event) => this.refs.outrasDespesas.focus()}
@@ -109,6 +112,7 @@ export default class SimuladorST extends Component {
                   ref="outrasDespesas"
                   keyboardType="numeric"
                   returnKeyType="next"
+                  blurOnSubmit={true}
                   defaultValue={this.state.outrasDespesas}
                   style={[Styles.inputTextMd, Styles.textRight, Styles.stInput]}
                   onSubmitEditing={(event) => this.refs.ipi.focus()}
@@ -122,6 +126,7 @@ export default class SimuladorST extends Component {
                   ref="ipi"
                   keyboardType="numeric"
                   returnKeyType="next"
+                  blurOnSubmit={true}
                   defaultValue={this.state.ipi}
                   style={[Styles.inputTextMd, Styles.textRight, Styles.stInput]}
                   onSubmitEditing={(event) => this.refs.desconto.focus()}
@@ -134,6 +139,7 @@ export default class SimuladorST extends Component {
                   keyboardType="numeric"
                   defaultValue={this.state.desconto}
                   returnKeyType="next"
+                  blurOnSubmit={true}
                   style={[Styles.inputTextMd, Styles.textRight, Styles.stInput]}
                   onSubmitEditing={(event) => this.refs.aliquota.focus()}
                   onChangeText={(number) => this.setState({desconto: number})} />
@@ -146,6 +152,7 @@ export default class SimuladorST extends Component {
                   ref="aliquota"
                   keyboardType="numeric"
                   returnKeyType="next"
+                  blurOnSubmit={true}
                   defaultValue={this.state.aliquota}
                   style={[Styles.inputTextMd, Styles.textRight, Styles.stInput]}
                   onSubmitEditing={(event) => this.refs.mva.focus()}
@@ -157,6 +164,7 @@ export default class SimuladorST extends Component {
                   ref="mva"
                   keyboardType="numeric"
                   returnKeyType="next"
+                  blurOnSubmit={true}
                   defaultValue={this.state.mva}
                   style={[Styles.inputTextMd, Styles.textRight, Styles.stInput]}
                   onSubmitEditing={(event) => this.refs.aliquotaIcmsSt.focus()}
@@ -170,6 +178,7 @@ export default class SimuladorST extends Component {
                   ref="aliquotaIcmsSt"
                   keyboardType="numeric"
                   returnKeyType="next"
+                  blurOnSubmit={true}
                   defaultValue={this.state.aliquotaIcmsSt}
                   style={[Styles.inputTextMd, Styles.textRight, Styles.stInput]}
                   onSubmitEditing={(event) => this.refs.aliquotaFecoep.focus()}
@@ -181,6 +190,7 @@ export default class SimuladorST extends Component {
                   ref="aliquotaFecoep"
                   keyboardType="numeric"
                   returnKeyType="done"
+                  blurOnSubmit={true}
                   defaultValue={this.state.aliquotaFecoep}
                   style={[Styles.inputTextMd, Styles.textRight, Styles.stInput]}
                   onChangeText={(number) => this.setState({aliquotaFecoep: number})} />

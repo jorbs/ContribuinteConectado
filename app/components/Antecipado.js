@@ -189,7 +189,10 @@ export default class Antecipado extends Component {
                   mask={"[00]/[0000]"}
                   placeholder="MM/AAAA"
                   keyboardType="numeric"
+                  returnKeyType="done"
+                  blurOnSubmit={true}
                   defaultValue={this.state.monthYear}
+                  onSubmitEditing={event => this.onSearch()}
                   onChangeText={monthYear => this.setState({monthYear})}
                   style={[Styles.inputTextMd, Styles.searchInputText]} />
                 <FontAwesome name="calendar" style={Styles.searchFieldIcon} />

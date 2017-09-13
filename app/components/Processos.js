@@ -91,8 +91,11 @@ export default class Processos extends Component {
             <View style={Styles.centerContainer}>
               <TextInput
                 value={this.state.processNumber}
+                blurOnSubmit={true}
+                returnKeyType="done"
                 style={[Styles.inputTextMd, Styles.searchInputText]}
-                onChangeText={(processNumber) => this.setState({processNumber})} />
+                onSubmitEditing={event => this.onSearch()}
+                onChangeText={processNumber => this.setState({processNumber})} />
             </View>
             <TouchableOpacity style={Styles.searchButton} onPress={() => this.onSearch()}>
               <Text style={Styles.searchButtonCenter}>Consultar</Text>
