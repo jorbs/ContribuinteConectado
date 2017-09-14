@@ -32,6 +32,34 @@ export default class Home extends Component {
     this.notifyProcesses();
   }
 
+  async isNotificationScheduled(notificationId) {
+    const result = await AsyncStorage.getItem(Constants.NOTIFICATIONS_PARENT_KEY);
+    const notifications = JSON.parse(result) || [];
+
+    return notifications.indexOf(notificationId) != -1;
+  }
+
+  async scheduleNotification(notificationId) {
+    const result = await AsyncStorage.getItem(Constants.NOTIFICATIONS_PARENT_KEY);
+    const notifications = JSON.parse(result) || [];
+
+    notifications.push(notificationId);
+
+    await AsyncStorage.setItem(Constants.NOTIFICATIONS_PARENT_KEY, JSON.stringify(notifications));
+  }
+
+  async unscheduleNotification(notificationId) {
+    const result = await AsyncStorage.getItem(Constants.NOTIFICATIONS_PARENT_KEY);
+    const notifications = JSON.parse(result) || [];
+    const notificationIndex = notifications.indexOf(notificationId);
+
+    if (notificationIndex != -1) {
+      notifications.splice(notificationIndex, 1);
+    }
+
+    await AsyncStorage.setItem(Constants.NOTIFICATIONS_PARENT_KEY, JSON.stringify(notifications));
+  }
+
   async notifyExpirationDAR() {
     const {params} = this.props.navigation.state;
     const currentTime = moment();
@@ -47,12 +75,14 @@ export default class Home extends Component {
         }
 
         records.map(async record => {
-          const notificationId = record.sequencialAntecipacao;
+          const notificationPrefix = record.sequencialAntecipacao;
           
           if (record.dataPagamento) {
             ['01', '02', '03'].map(async suffix => {
-              await AsyncStorage.removeItem(notificationId + suffix);
-              PushNotification.cancelLocalNotifications({id: notificationId + suffix});              
+              const notificationId = notificationPrefix + suffix;
+
+              this.unscheduleNotification(notificationId);
+              PushNotification.cancelLocalNotifications({id: notificationId});
             });
 
             return;
@@ -62,15 +92,16 @@ export default class Home extends Component {
           const expirationDate = moment(record.dataVencimento).hour(22).minute(0);
           
           if (expirationDate.isBefore(currentTime)) {
-            const isNotificationPending = await AsyncStorage.getItem(notificationId + '01');
+            const notificationId = notificationPrefix + '01';
+            const isScheduled = await this.isNotificationScheduled(notificationId);
 
-            if (!isNotificationPending) {
+            if (!isScheduled) {
               const notificationTime = moment(currentTime).hour(10).minute(0);
               
-              await AsyncStorage.setItem(notificationId + '01', 'pending');
-            
+              await this.scheduleNotification(notificationId);
+
               PushNotification.localNotificationSchedule({
-                id: notificationId + '01',
+                id: notificationId,
                 title: 'Antecipado e FECOEP',
                 message: `O ${documentType} de competência ${previousMonth} venceu em ${expirationDate.format(Constants.DATE_FORMAT)}. Toque para ver detalhes.`,
                 date: notificationTime.toDate(),
@@ -86,15 +117,16 @@ export default class Home extends Component {
             const fromDate = moment(expirationDate).subtract(Constants.DAR_NOTIFICATION_7_DAYS, 'days').hour(0).minute(0);
             
             if (currentTime.isBefore(fromDate)) {
-              const isNotificationPending = await AsyncStorage.getItem(notificationId + '02');
+              const notificationId = notificationPrefix + '02';
+              const isScheduled = await this.isNotificationScheduled(notificationId);
   
-              if (!isNotificationPending) {
+              if (!isScheduled) {
                 const notificationTime = moment(expirationDate).subtract(Constants.DAR_NOTIFICATION_7_DAYS, 'days').hour(10).minute(0);
 
-                await AsyncStorage.setItem(notificationId + '02', 'pending');
+                await this.scheduleNotification(notificationId);
 
                 PushNotification.localNotificationSchedule({
-                  id: notificationId + '02',
+                  id: notificationId,
                   title: 'Antecipado e FECOEP',
                   message: `Vencimento de ${documentType} em ${expirationDate.format(Constants.DATE_FORMAT)} (competência ${previousMonth}).`,
                   date: notificationTime.toDate(),
@@ -108,15 +140,16 @@ export default class Home extends Component {
             }
   
             if (currentTime.isAfter(fromDate)) {
-              const isNotificationPending = await AsyncStorage.getItem(notificationId + '03');
+              const notificationId = notificationPrefix + '03';
+              const isScheduled = await this.isNotificationScheduled(notificationId);
   
-              if (!isNotificationPending) {
+              if (!isScheduled) {
                 const notificationTime = moment(expirationDate).subtract(Constants.DAR_NOTIFICATION_1_DAY, 'day').hour(16).minute(0);
 
-                await AsyncStorage.setItem(notificationId + '03', 'pending');
+                await this.scheduleNotification(notificationId);
 
                 PushNotification.localNotificationSchedule({
-                  id: notificationId + '03',
+                  id: notificationId,
                   title: 'Antecipado e FECOEP',
                   message: `Vencimento de ${documentType} em ${expirationDate.format(Constants.DATE_FORMAT)} (competência ${previousMonth}).`,
                   date: notificationTime.toDate(),
@@ -211,9 +244,30 @@ export default class Home extends Component {
     }
   }
 
+  async logout() {
+    const result = await AsyncStorage.getItem(Constants.NOTIFICATIONS_PARENT_KEY);
+    const notificationIds = JSON.parse(result) || [];
+
+    notificationIds.map(notificationId => PushNotification.cancelLocalNotifications({id: notificationId}));
+
+    await AsyncStorage.multiRemove([
+      Constants.REMEMBER_ME_KEY,
+      Constants.REQUEST_TOKEN_KEY,
+      Constants.CN_STATUS_KEY,
+      Constants.RESTRICTIONS_COUNT_KEY,
+      Constants.WATCHED_PROCESSES_KEY,
+      Constants.NOTIFICATIONS_PARENT_KEY
+    ]);
+
+    this.navigate('Login');
+  }
+
   render() {
     return (
       <View style={Styles.menu}>
+        <TouchableOpacity onPress={() => this.logout()}>
+          <Text>Sair</Text>
+        </TouchableOpacity>
         <View style={Styles.menuRow}>
           <TouchableOpacity onPress={() => this.navigate('SituacaoCadastral')} style={[Styles.menuCol, Styles.menuColFirst]}>
             <FontAwesome name="vcard-o" color="white" size={48} />
