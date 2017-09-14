@@ -14,12 +14,18 @@ export default class Home extends Component {
     header: null,
   };
 
-  navigate(path) {
+  navigate(path, screenParam = null) {
     const {params} = this.props.navigation.state;
-    this.props.navigation.navigate(path, params);
+    this.props.navigation.navigate(path, {...params, screenParam});
   }
 
   async componentDidMount() {
+    PushNotification.configure({
+      onNotification: (notification) => {
+        this.navigate(notification.data.screen, notification.data.screenParam);
+      },
+    });
+
     this.notifyExpirationDAR();
     this.notifyCNStatusChange();
     this.notifyRestrictions();
@@ -69,7 +75,11 @@ export default class Home extends Component {
                 message: `O ${documentType} de competência ${previousMonth} venceu em ${expirationDate.format(Constants.DATE_FORMAT)}. Toque para ver detalhes.`,
                 date: notificationTime.toDate(),
                 repeatType: 'day',
-                playSound: true
+                playSound: true,
+                data: {
+                  screen: 'Antecipado',
+                  screenParam: previousMonth
+                }
               });
             }
           } else {
@@ -88,7 +98,11 @@ export default class Home extends Component {
                   title: 'Antecipado e FECOEP',
                   message: `Vencimento de ${documentType} em ${expirationDate.format(Constants.DATE_FORMAT)} (competência ${previousMonth}).`,
                   date: notificationTime.toDate(),
-                  playSound: true
+                  playSound: true,
+                  data: {
+                    screen: 'Antecipado',
+                    screenParam: previousMonth
+                  }
                 });
               }
             }
@@ -106,7 +120,11 @@ export default class Home extends Component {
                   title: 'Antecipado e FECOEP',
                   message: `Vencimento de ${documentType} em ${expirationDate.format(Constants.DATE_FORMAT)} (competência ${previousMonth}).`,
                   date: notificationTime.toDate(),
-                  playSound: true
+                  playSound: true,
+                  data: {
+                    screen: 'Antecipado',
+                    screenParam: previousMonth
+                  }
                 });
               }
             }
@@ -130,7 +148,10 @@ export default class Home extends Component {
       if (cnStatus != null && cnStatus !== response.tipoCertidao) {
         PushNotification.localNotification({
           title: 'Certidões',
-          message: 'Houve mudança no status da sua certidão.'
+          message: 'Houve mudança no status da sua certidão.',
+          data: {
+            screen: 'Certidao'
+          }
         });
       }
     } catch(e) {
@@ -150,7 +171,10 @@ export default class Home extends Component {
       if (restrictionsCount != null && parseInt(restrictionsCount) != response.length) {
         PushNotification.localNotification({
           title: 'Restrições',
-          message: 'Houve mudança no número de restrições.'
+          message: 'Houve mudança no número de restrições.',
+          data: {
+            screen: 'RestricoesPendencias'
+          }
         });
       }
     } catch(e) {
@@ -173,7 +197,11 @@ export default class Home extends Component {
           if (process != null && processStatus !== process.situacao) {
             PushNotification.localNotification({
               title: 'Processos',
-              message: `Houve mudança na situação do processo ${processNumber}.`
+              message: `Houve mudança na situação do processo ${processNumber}.`,
+              data: {
+                screen: 'Processos',
+                screenParam: processNumber
+              }
             });
           }
         });

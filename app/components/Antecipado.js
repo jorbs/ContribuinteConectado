@@ -26,8 +26,13 @@ export default class Antecipado extends Component {
 
     this.state = {
       pendingRequest: false,
-      monthYear: moment().subtract(1, 'month').format('MM/YYYY')
+      month: moment().subtract(1, 'month').format('MM/YYYY')
     };
+  }
+
+  componentDidMount() {
+    const {params} = this.props.navigation.state;
+    params.screenParam && this.setState({month: params.screenParam});
   }
 
   onSchedule() {
@@ -46,7 +51,7 @@ export default class Antecipado extends Component {
   }
 
   onSearch() {
-    if (this.state.monthYear == null || this.state.monthYear.length == 0 || !moment(this.state.monthYear, 'MM/YYYY').isValid()) {
+    if (this.state.month == null || this.state.month.length == 0 || !moment(this.state.month, 'MM/YYYY').isValid()) {
       Alert.alert('Competência inválida.');
       return;
     }
@@ -56,7 +61,7 @@ export default class Antecipado extends Component {
     
     this.setState({pendingRequest: true});
 
-    SefazAPI.consultarValoresAntecipados(params.requestToken, params.login, this.state.monthYear).then(response => {
+    SefazAPI.consultarValoresAntecipados(params.requestToken, params.login, this.state.month).then(response => {
       const records = response.map(record => {
         return {
           key: record.sequencialAntecipacao,
@@ -202,9 +207,9 @@ export default class Antecipado extends Component {
                   keyboardType="numeric"
                   returnKeyType="done"
                   blurOnSubmit={true}
-                  defaultValue={this.state.monthYear}
+                  defaultValue={this.state.month}
                   onSubmitEditing={event => this.onSearch()}
-                  onChangeText={monthYear => this.setState({monthYear})}
+                  onChangeText={month => this.setState({month})}
                   style={[Styles.inputTextMd, Styles.searchInputText]} />
                 <FontAwesome name="calendar" style={Styles.searchFieldIcon} />
               </View>

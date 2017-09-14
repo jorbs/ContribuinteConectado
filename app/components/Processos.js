@@ -23,6 +23,11 @@ export default class Processos extends Component {
     this.state = {pendingRequest: false};
   }
 
+  componentDidMount() {
+    const {params} = this.props.navigation.state;
+    params.screenParam && this.setState({processNumber: params.screenParam});
+  }
+
   async onSearch() {
     if (this.state.processNumber == null || this.state.processNumber.length == 0) {
       Alert.alert('Número de processo inválido.');
@@ -84,8 +89,6 @@ export default class Processos extends Component {
         watched = false;
         processes.splice(processIndex, 1);
       }
-
-      console.log(processes);
 
       await AsyncStorage.setItem(Constants.WATCHED_PROCESSES_KEY, JSON.stringify(processes));
       this.setState({watched});
