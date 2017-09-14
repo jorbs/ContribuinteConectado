@@ -242,6 +242,29 @@ const Styles = StyleSheet.create({
     marginLeft: 15,
     color: colors.darkBlue,
     fontSize: 24,
+  },
+  processAction: {
+    marginTop: 10,
+    alignItems: 'center',
+  },
+  processActionButton: {
+    alignItems: 'center',
+    backgroundColor: colors.lightGray,
+    flexDirection: 'row',
+    paddingLeft: 15,
+    paddingRight: 15,
+    paddingTop: 8,
+    paddingBottom: 8,
+    borderRadius: 5,
+  },
+  processActionIcon: {
+    marginRight: 12,
+    fontSize: 26,
+    color: colors.darkBlue
+  },
+  processActionLabel: {
+    color: colors.black,
+    fontSize: 16
   }
 });
 

@@ -4,6 +4,7 @@ const Constants = {
   REMEMBER_ME_KEY: 'ContribuinteConectado:login',
   REQUEST_TOKEN_KEY: 'ContribuinteConectado:requestToken',
   CN_STATUS_KEY: 'ContribuinteConectado:cnStatus',
+  WATCHED_PROCESSES_KEY: 'ContribuinteConectado:watchedProcesses',
   DATE_FORMAT: 'DD/MM/YYYY',
   DATETIME_FORMAT: 'DD/MM/YYYY HH:mm:ss',
   ANTECIPADO: 15423,

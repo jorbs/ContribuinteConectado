@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
-import {View, ScrollView, Text, SectionList, TouchableOpacity, TextInput, Alert, TouchableWithoutFeedback} from 'react-native';
+import {View, ScrollView, Text, SectionList, TouchableOpacity, TextInput, Alert, TouchableWithoutFeedback, AsyncStorage} from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import dismissKeyboard from 'dismissKeyboard';
 
 import Styles from '../common/Styles';
+import Constants from '../common/Constants';
 import * as SefazAPI from '../api/SefazAPI';
 import MyActivityIndicator from './MyActivityIndicator';
 
@@ -22,7 +23,7 @@ export default class Processos extends Component {
     this.state = {pendingRequest: false};
   }
 
-  onSearch() {
+  async onSearch() {
     if (this.state.processNumber == null || this.state.processNumber.length == 0) {
       Alert.alert('Número de processo inválido.');
       return;
@@ -33,9 +34,12 @@ export default class Processos extends Component {
     const {goBack} = this.props.navigation;
     const {params} = this.props.navigation.state;
 
-    SefazAPI.consultarPorNumeroProcesso(params.requestToken, this.state.processNumber).then(process => {
+    try {
+      const watched = await this.isProcessWatched(this.state.processNumber);
+      const process = await SefazAPI.consultarPorNumeroProcesso(params.requestToken, this.state.processNumber);
       const processDetails = [{
         title: process.descricaoAssunto,
+        status: process.situacao,
         icon: 'archive',
         data: [
           {key: 'Interessado', data: process.nomeInteressado},
@@ -47,9 +51,59 @@ export default class Processos extends Component {
         ]
       }];
 
-      this.setState({processDetails});
-    }).catch(e => Alert.alert('Erro na solicitação', e.message, [{text: 'OK', onPress: () => goBack()}]))
-      .then(() => this.setState({pendingRequest: false}));
+      this.setState({processDetails, watched});
+    } catch(e) {
+      Alert.alert('Erro na solicitação', e.message, [{text: 'OK', onPress: () => goBack()}]);
+    } finally {
+      this.setState({pendingRequest: false});
+    }
+  }
+
+  async onWatchProcess(processNumber, processStatus) {
+    try {
+      const result = await AsyncStorage.getItem(Constants.WATCHED_PROCESSES_KEY);
+      const processes = JSON.parse(result) || [];
+      let processIndex = -1;
+
+      for (const i in processes) {
+        const process = processes[i];
+
+        if (process.number == processNumber) {
+          processIndex = i;
+          break;
+        }
+      }
+
+      let message = 'Processo adicionado à lista de notificações.';
+      let watched = true;
+
+      if (processIndex == -1) {
+        processes.push({number: processNumber, status: processStatus});
+      } else {
+        message = 'Processo removido da lista de notificações.';
+        watched = false;
+        processes.splice(processIndex, 1);
+      }
+
+      await AsyncStorage.setItem(Constants.WATCHED_PROCESSES_KEY, JSON.stringify(processes));
+      this.setState({watched});
+      Alert.alert(message);
+    } catch (e) {
+      console.warn('Unable to use AsyncStorage in processes screen: ', e.message);
+    }
+  }
+
+  async isProcessWatched(processNumber) {
+    try {
+      const result = await AsyncStorage.getItem(Constants.WATCHED_PROCESSES_KEY);
+      const processes = JSON.parse(result) || [];
+      const processIndex = processes.indexOf(processNumber);
+
+      return processIndex != -1;
+    } catch (e) {
+      console.warn('Unable to use AsyncStorage in processes screen: ', e.message);
+      return false;
+    }
   }
 
   renderSectionHeader(section) {
@@ -70,11 +124,23 @@ export default class Processos extends Component {
     );
   }
 
+  renderSectionFooter(section) {
+    return (
+      <View style={Styles.processAction}>
+        <TouchableOpacity onPress={() => this.onWatchProcess(this.state.processNumber, section.status)} style={Styles.processActionButton}>
+          <Entypo name={this.state.watched ? 'eye-with-line' : 'eye'} style={Styles.processActionIcon}/>
+          <Text style={Styles.processActionLabel}>{this.state.watched ? 'Esquecer processo' : 'Acompanhar processo'}</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+
   renderProcessDetails() {
     if (this.state.processDetails) {
       return <SectionList
         sections={this.state.processDetails}
         renderSectionHeader={({section}) => this.renderSectionHeader(section)}
+        renderSectionFooter={({section}) => this.renderSectionFooter(section)}
         renderItem={({item}) => this.renderSectionItem(item)}
         style={Styles.sectionList}
       />;
