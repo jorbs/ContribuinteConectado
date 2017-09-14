@@ -85,6 +85,8 @@ export default class Processos extends Component {
         processes.splice(processIndex, 1);
       }
 
+      console.log(processes);
+
       await AsyncStorage.setItem(Constants.WATCHED_PROCESSES_KEY, JSON.stringify(processes));
       this.setState({watched});
       Alert.alert(message);
@@ -97,13 +99,17 @@ export default class Processos extends Component {
     try {
       const result = await AsyncStorage.getItem(Constants.WATCHED_PROCESSES_KEY);
       const processes = JSON.parse(result) || [];
-      const processIndex = processes.indexOf(processNumber);
-
-      return processIndex != -1;
+      
+      for (const i in processes) {
+        if (processes[i].number === processNumber) {
+          return true;
+        }
+      }
     } catch (e) {
       console.warn('Unable to use AsyncStorage in processes screen: ', e.message);
-      return false;
     }
+
+    return false;
   }
 
   renderSectionHeader(section) {

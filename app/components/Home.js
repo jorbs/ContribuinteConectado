@@ -22,6 +22,8 @@ export default class Home extends Component {
   async componentDidMount() {
     this.notifyExpirationDAR();
     this.notifyCNStatusChange();
+    this.notifyRestrictions();
+    this.notifyProcesses();
   }
 
   async notifyExpirationDAR() {
@@ -121,22 +123,63 @@ export default class Home extends Component {
 
     try {
       const response = await SefazAPI.consultarCnd(params.requestToken, params.login);
-      let cnStatus = await AsyncStorage.getItem(Constants.CN_STATUS_KEY);
+      const cnStatus = await AsyncStorage.getItem(Constants.CN_STATUS_KEY);
 
-      if (!cnStatus) {
-        await AsyncStorage.setItem(Constants.CN_STATUS_KEY, response.tipoCertidao);
-      } else {
-        if (cnStatus !== response.tipoCertidao) {
-          PushNotification.localNotification({
-            title: 'Certidão Negativa',
-            message: 'Houve mudança no status da sua certidão.'
-          });
-        }
+      await AsyncStorage.setItem(Constants.CN_STATUS_KEY, response.tipoCertidao);
 
-        await AsyncStorage.setItem(Constants.CN_STATUS_KEY, response.tipoCertidao);
+      if (cnStatus != null && cnStatus !== response.tipoCertidao) {
+        PushNotification.localNotification({
+          title: 'Certidões',
+          message: 'Houve mudança no status da sua certidão.'
+        });
       }
     } catch(e) {
       console.warn(`Unable to notify CN status change: `, e);
+    }
+  }
+
+  async notifyRestrictions() {
+    const {params} = this.props.navigation.state;
+
+    try {
+      const response = await SefazAPI.obterRestricoes(params.requestToken, params.login);
+      const restrictionsCount = await AsyncStorage.getItem(Constants.RESTRICTIONS_COUNT_KEY);
+
+      await AsyncStorage.setItem(Constants.RESTRICTIONS_COUNT_KEY, response.length.toString());
+      
+      if (restrictionsCount != null && parseInt(restrictionsCount) != response.length) {
+        PushNotification.localNotification({
+          title: 'Restrições',
+          message: 'Houve mudança no número de restrições.'
+        });
+      }
+    } catch(e) {
+      console.warn(`Unable to notify restrictions change: `, e.message);
+    }
+  }
+
+  async notifyProcesses() {
+    const {params} = this.props.navigation.state;
+    
+    try {
+      const result = await AsyncStorage.getItem(Constants.WATCHED_PROCESSES_KEY);
+      const processes = JSON.parse(result) || [];
+
+      for (const i in processes) {
+        const processNumber = processes[i].number;
+        const processStatus = processes[i].status;
+        
+        SefazAPI.consultarPorNumeroProcesso(params.requestToken, processNumber).then(process => {
+          if (process != null && processStatus !== process.situacao) {
+            PushNotification.localNotification({
+              title: 'Processos',
+              message: `Houve mudança na situação do processo ${processNumber}.`
+            });
+          }
+        });
+      }
+    } catch(e) {
+      console.warn(`Unable to notify restrictions change: `, e.message);
     }
   }
 
