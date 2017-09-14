@@ -66,7 +66,6 @@ export default class Antecipado extends Component {
             {key: 'Tributo', data: record.codigoTributo === Constants.ANTECIPADO ? 'Antecipado' : 'Fecoep'},
             {key: 'Valor', data: 'R$ ' + Number(record.valorAntecipado).toFixed(2).replace('.', ',')},
             {key: 'Vencimento', data: moment(record.dataVencimento).utc().format(Constants.DATE_FORMAT)},
-            {key: 'Detalhes', data: record.sequencialAntecipacao},
           ]
         };
       });
@@ -113,9 +112,12 @@ export default class Antecipado extends Component {
                 <Text style={Styles.modalParagraph}>Valor Principal: R$ {record.valorTotal.toFixed(2)}</Text>
                 {!record.dataPagamento && <Text style={Styles.modalParagraph}>Código de Barras: {barcode}</Text>}
                 {!record.dataPagamento && (
-                  <TouchableOpacity onPress={() => this.onCopyBarCode(record.codigoBarras)} accessibilityLabel="Copiar código de barras">
-                    <FontAwesome name="copy" style={Styles.iconBarcode} />
-                  </TouchableOpacity>
+                  <View style={Styles.action}>
+                    <TouchableOpacity onPress={() => this.onCopyBarCode(record.codigoBarras)} accessibilityLabel="Copiar código de barras" style={Styles.actionButton}>
+                      <FontAwesome name="barcode" style={Styles.actionIcon} />
+                      <Text style={Styles.actionLabel}>Copiar código de barras</Text>
+                    </TouchableOpacity>
+                  </View>
                 )}
               </View>
             );
@@ -152,6 +154,17 @@ export default class Antecipado extends Component {
     );
   }
 
+  renderSectionFooter(section) {
+    return (
+      <View style={Styles.action}>
+        <TouchableOpacity style={Styles.actionButton} onPress={() => this.onViewRecordDetails(section.key)}>
+          <FontAwesome name="search" size={18} style={Styles.actionIcon}/>
+          <Text style={Styles.actionLabel}>Visualizar detalhes</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+
   renderRecords() {
     if (this.state.records == null) {
       return null;
@@ -168,6 +181,7 @@ export default class Antecipado extends Component {
     return <SectionList
       sections={this.state.records}
       renderSectionHeader={({section}) => this.renderSectionHeader(section)}
+      renderSectionFooter={({section}) => this.renderSectionFooter(section)}
       renderItem={({item}) => this.renderSectionItem(item)}
       style={Styles.sectionList}
     />;

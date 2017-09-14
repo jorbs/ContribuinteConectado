@@ -243,11 +243,11 @@ const Styles = StyleSheet.create({
     color: colors.darkBlue,
     fontSize: 24,
   },
-  processAction: {
-    marginTop: 10,
+  action: {
+    margin: 10,
     alignItems: 'center',
   },
-  processActionButton: {
+  actionButton: {
     alignItems: 'center',
     backgroundColor: colors.lightGray,
     flexDirection: 'row',
@@ -257,12 +257,12 @@ const Styles = StyleSheet.create({
     paddingBottom: 8,
     borderRadius: 5,
   },
-  processActionIcon: {
+  actionIcon: {
     marginRight: 12,
-    fontSize: 26,
+    fontSize: 24,
     color: colors.darkBlue
   },
-  processActionLabel: {
+  actionLabel: {
     color: colors.black,
     fontSize: 16
   }

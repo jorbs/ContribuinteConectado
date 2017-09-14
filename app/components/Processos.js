@@ -132,10 +132,10 @@ export default class Processos extends Component {
 
   renderSectionFooter(section) {
     return (
-      <View style={Styles.processAction}>
-        <TouchableOpacity onPress={() => this.onWatchProcess(this.state.processNumber, section.status)} style={Styles.processActionButton}>
-          <Entypo name={this.state.watched ? 'eye-with-line' : 'eye'} style={Styles.processActionIcon}/>
-          <Text style={Styles.processActionLabel}>{this.state.watched ? 'Esquecer processo' : 'Acompanhar processo'}</Text>
+      <View style={Styles.action}>
+        <TouchableOpacity onPress={() => this.onWatchProcess(this.state.processNumber, section.status)} style={Styles.actionButton}>
+          <Entypo name={this.state.watched ? 'eye-with-line' : 'eye'} style={Styles.actionIcon}/>
+          <Text style={Styles.actionLabel}>{this.state.watched ? 'Esquecer processo' : 'Acompanhar processo'}</Text>
         </TouchableOpacity>
       </View>
     );

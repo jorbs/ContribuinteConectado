@@ -54,12 +54,13 @@ export default class TermoApreensao extends Component {
       const terms = response.map(term => {
         return {
           title: `Termo ${term.numeroTermo}`,
+          action: Postos[term.posto],
           icon: 'file-text-o',
           data: [
             {key: 'Status', data: term.status},
             {key: 'Emissão', data: term.dataEmissao && moment(term.dataEmissao).utc().format(Constants.DATETIME_FORMAT)},
             {key: 'Papel', data: term.papel},
-            {key: 'Posto', data: Postos[term.posto]},
+            {key: 'Posto', data: Postos[term.posto].name},
           ]
         }
       });
@@ -91,6 +92,7 @@ export default class TermoApreensao extends Component {
           sections={this.state.terms}
           renderSectionHeader={({section}) => this.renderSectionHeader(section)}
           renderItem={({item}) => this.renderSectionItem(item)}
+          renderSectionFooter={({section}) => this.renderSectionFooter(section)}
           style={Styles.sectionList} />
       </View>
     );
@@ -115,10 +117,12 @@ export default class TermoApreensao extends Component {
             <Text style={Styles.modalParagraph}>Telefones:</Text>
             {this.state.posto.phones.map(phone => {
               return (
-                <TouchableOpacity key={phone} style={Styles.row} onPress={() => Linking.openURL(`tel:${phone.replace(/[\(\ \)\-]/g, '')}`)}>
-                  <Text style={[Styles.modalParagraph, Styles.modalPhone]}>{phone}</Text>
-                  <FontAwesome name="phone" size={18} style={Styles.modalPhone}/>
-                </TouchableOpacity>
+                <View key={phone} style={Styles.action}>
+                  <TouchableOpacity style={Styles.actionButton} onPress={() => Linking.openURL(`tel:${phone.replace(/[\(\ \)\-]/g, '')}`)}>
+                    <FontAwesome name="phone" size={18} style={Styles.actionIcon}/>
+                    <Text style={Styles.actionLabel}>{phone}</Text>
+                  </TouchableOpacity>
+                </View>
               );
             })}
           </View>
@@ -127,26 +131,22 @@ export default class TermoApreensao extends Component {
     }
   }
 
-  renderSectionItemData(item) {
-    if (item.key === 'Posto') {
-      return (
-        <View style={{flexDirection: 'row'}}>
-          <Text style={Styles.itemBody}>{item.data.name}</Text>
-          <TouchableOpacity onPress={() => this.setState({isModalVisible: true, posto: item.data})}>
-            <FontAwesome name="search" style={Styles.recordDetails} />
-          </TouchableOpacity>
-        </View>
-      );
-    }
-
-    return <Text style={Styles.itemBody}>{item.data}</Text>;
+  renderSectionFooter(section) {
+    return (
+      <View style={Styles.action}>
+        <TouchableOpacity onPress={() => this.setState({isModalVisible: true, posto: section.action})} style={Styles.actionButton}>
+          <FontAwesome name="search" style={Styles.actionIcon} />
+          <Text style={Styles.actionLabel}>Visualizar detalhes</Text>
+        </TouchableOpacity>
+      </View>
+    );
   }
 
   renderSectionItem(item) {
     return (
       <View style={Styles.itemContainer}>
         <Text style={Styles.itemHeader}>{item.key}</Text>
-        {this.renderSectionItemData(item)}
+        <Text style={Styles.itemBody}>{item.data}</Text>
       </View>
     );
   }
