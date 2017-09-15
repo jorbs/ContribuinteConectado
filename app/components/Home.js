@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, TouchableOpacity, AsyncStorage } from 'react-native';
+import { Text, View, TouchableOpacity, AsyncStorage, Alert } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import PushNotification from 'react-native-push-notification';
 import Entypo from 'react-native-vector-icons/Entypo';
@@ -245,21 +245,29 @@ export default class Home extends Component {
   }
 
   async logout() {
-    const result = await AsyncStorage.getItem(Constants.NOTIFICATIONS_PARENT_KEY);
-    const notificationIds = JSON.parse(result) || [];
+    Alert.alert('Contribuinte Conectado', 'Deseja realmente sair?', [
+      {
+        text: 'Sim',
+        onPress: async () => {
+          const result = await AsyncStorage.getItem(Constants.NOTIFICATIONS_PARENT_KEY);
+          const notificationIds = JSON.parse(result) || [];
+      
+          notificationIds.map(notificationId => PushNotification.cancelLocalNotifications({id: notificationId}));
+      
+          await AsyncStorage.multiRemove([
+            Constants.REMEMBER_ME_KEY,
+            Constants.REQUEST_TOKEN_KEY,
+            Constants.CN_STATUS_KEY,
+            Constants.RESTRICTIONS_COUNT_KEY,
+            Constants.WATCHED_PROCESSES_KEY,
+            Constants.NOTIFICATIONS_PARENT_KEY
+          ]);
 
-    notificationIds.map(notificationId => PushNotification.cancelLocalNotifications({id: notificationId}));
-
-    await AsyncStorage.multiRemove([
-      Constants.REMEMBER_ME_KEY,
-      Constants.REQUEST_TOKEN_KEY,
-      Constants.CN_STATUS_KEY,
-      Constants.RESTRICTIONS_COUNT_KEY,
-      Constants.WATCHED_PROCESSES_KEY,
-      Constants.NOTIFICATIONS_PARENT_KEY
+          this.navigate('Login');
+        }
+      },
+      {text: 'Não'}
     ]);
-
-    this.navigate('Login');
   }
 
   render() {
@@ -310,7 +318,7 @@ export default class Home extends Component {
             <Entypo name="price-ribbon" color="#fff" size={48}/>
             <Text style={Styles.menuItemLabel}>Ações Fiscais</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={this.logout} style={[Styles.menuCol, Styles.menuColFirst]}>
+          <TouchableOpacity onPress={() => this.logout()} style={[Styles.menuCol, Styles.menuColFirst]}>
             <FontAwesome name="sign-out" color="white" size={48} />
             <Text style={Styles.menuItemLabel}>Sair</Text>
           </TouchableOpacity>

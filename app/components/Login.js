@@ -140,7 +140,7 @@ export default class Login extends Component {
           </View>
           <View style={{flexDirection: 'row'}}>
             <Switch value={this.state.rememberMe} onValueChange={rememberMe => this.setState({rememberMe})}/>
-            <Text style={{lineHeight: 23, marginLeft: 4, color: 'white'}}>Lembrar acesso</Text>
+            <Text style={{lineHeight: 23, marginLeft: 4, color: 'white'}} onPress={() => this.setState({rememberMe: !this.state.rememberMe})}>Lembrar acesso</Text>
           </View>
         </View>
       </TouchableWithoutFeedback>
