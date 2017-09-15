@@ -197,7 +197,7 @@ export default class SimuladorST extends Component {
               </View>
             </View>
           </View>
-          <View style={Styles.centerContainer}>
+          <View style={Styles.stResultContainer}>
             <View style={Styles.stRow}>
               <Text style={Styles.st50}>Subtotal</Text>
               <Text style={[Styles.st50, Styles.stResult]}>R$ {this.subtotal().toFixed(2).replace(/\./g, ',')}</Text>

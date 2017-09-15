@@ -227,7 +227,7 @@ export default class Home extends Component {
         const processStatus = processes[i].status;
         
         SefazAPI.consultarPorNumeroProcesso(params.requestToken, processNumber).then(process => {
-          if (process != null && processStatus !== process.situacao) {
+          if (process != null && Object.keys(process).length > 0 && processStatus !== process.situacao) {
             PushNotification.localNotification({
               title: 'Processos',
               message: `Houve mudança na situação do processo ${processNumber}.`,
@@ -265,9 +265,6 @@ export default class Home extends Component {
   render() {
     return (
       <View style={Styles.menu}>
-        <TouchableOpacity onPress={() => this.logout()}>
-          <Text>Sair</Text>
-        </TouchableOpacity>
         <View style={Styles.menuRow}>
           <TouchableOpacity onPress={() => this.navigate('SituacaoCadastral')} style={[Styles.menuCol, Styles.menuColFirst]}>
             <FontAwesome name="vcard-o" color="white" size={48} />
@@ -303,9 +300,19 @@ export default class Home extends Component {
             <FontAwesome name="calculator" color="#fff" size={48}/>
             <Text style={Styles.menuItemLabel}>Simulador ST</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={Styles.menuCol}>
-            <FontAwesome name="phone" color="#fff" size={48}/>
-            <Text style={Styles.menuItemLabel}>Call Center</Text>
+          <TouchableOpacity onPress={() => this.navigate('Certidao')} style={[Styles.menuCol, Styles.menuColFirst]}>
+            <Entypo name="price-ribbon" color="white" size={48} />
+            <Text style={Styles.menuItemLabel}>NCM</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={Styles.menuRow}>
+          <TouchableOpacity onPress={() => this.navigate('Certidao')} style={Styles.menuCol}>
+            <Entypo name="price-ribbon" color="#fff" size={48}/>
+            <Text style={Styles.menuItemLabel}>Ações Fiscais</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={this.logout} style={[Styles.menuCol, Styles.menuColFirst]}>
+            <FontAwesome name="sign-out" color="white" size={48} />
+            <Text style={Styles.menuItemLabel}>Sair</Text>
           </TouchableOpacity>
         </View>
       </View>

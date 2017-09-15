@@ -142,15 +142,6 @@ export default class Antecipado extends Component {
   }
 
   renderSectionItem(item) {
-    if (item.key === 'Detalhes') {
-      return (
-        <TouchableOpacity onPress={() => this.onViewRecordDetails(item.data)}>
-          <Text style={Styles.itemHeader}>{item.key}</Text>
-          <Text style={Styles.itemBody}>{item.data}</Text>
-        </TouchableOpacity>
-      );
-    }
-
     return (
       <View style={Styles.itemContainer}>
         <Text style={Styles.itemHeader}>{item.key}</Text>
@@ -177,8 +168,11 @@ export default class Antecipado extends Component {
 
     if (this.state.records.length === 0) {
       return (
-        <View>
-          <Text style={Styles.searchResultLabel}>Nenhum resultado foi encontrado no período.</Text>
+        <View style={Styles.centerContainer}>
+          <View style={[Styles.row, Styles.searchResult]}>
+            <FontAwesome style={Styles.searchResultIcon} name="warning" />
+            <Text style={Styles.searchResultLabel}>Nenhum resultado foi encontrado no período.</Text>
+          </View>
         </View>
       );
     }

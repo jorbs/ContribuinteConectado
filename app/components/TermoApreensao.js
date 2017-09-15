@@ -26,7 +26,6 @@ export default class TermoApreensao extends Component {
   constructor(props) {
     super(props);
 
-    this.searchButton = null;
     this.state = {
       pendingRequest: false,
       isModalVisible: false,
@@ -77,17 +76,24 @@ export default class TermoApreensao extends Component {
 
     if (this.state.terms.length === 0) {
       return (
-        <View>
-          <Text style={Styles.searchResultLabel}>Nenhum resultado foi encontrado no período.</Text>
+        <View style={Styles.centerContainer}>
+          <View style={[Styles.row, Styles.searchResult]}>
+            <FontAwesome style={Styles.searchResultIcon} name="warning" />
+            <Text style={Styles.searchResultLabel}>Nenhum resultado foi encontrado no período.</Text>
+          </View>
         </View>
       );
     }
 
     return (
       <View>
-        <Text style={Styles.searchResultLabel}>
-          {this.state.terms.length} {this.state.terms.length === 1 ? 'resultado foi encontrado.' : 'resultados foram encontrados.'}
-        </Text>
+        <View style={Styles.centerContainer}>
+          <View style={[Styles.row, Styles.searchResult]}>
+            <Text style={Styles.searchResultLabel}>
+              {this.state.terms.length} {this.state.terms.length === 1 ? 'resultado foi encontrado.' : 'resultados foram encontrados.'}
+            </Text>
+          </View>
+        </View>
         <SectionList
           sections={this.state.terms}
           renderSectionHeader={({section}) => this.renderSectionHeader(section)}
@@ -103,6 +109,26 @@ export default class TermoApreensao extends Component {
       <View style={Styles.sectionHeaderContainer}>
         <FontAwesome name={section.icon} size={24} style={Styles.sectionHeaderIcon} />
         <Text style={Styles.sectionHeader}>{section.title}</Text>
+      </View>
+    );
+  }
+
+  renderSectionFooter(section) {
+    return (
+      <View style={Styles.action}>
+        <TouchableOpacity onPress={() => this.setState({isModalVisible: true, posto: section.action})} style={Styles.actionButton}>
+          <FontAwesome name="search" style={Styles.actionIcon} />
+          <Text style={Styles.actionLabel}>Visualizar detalhes</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+
+  renderSectionItem(item) {
+    return (
+      <View style={Styles.itemContainer}>
+        <Text style={Styles.itemHeader}>{item.key}</Text>
+        <Text style={Styles.itemBody}>{item.data}</Text>
       </View>
     );
   }
@@ -129,26 +155,6 @@ export default class TermoApreensao extends Component {
         </Modal>
       );
     }
-  }
-
-  renderSectionFooter(section) {
-    return (
-      <View style={Styles.action}>
-        <TouchableOpacity onPress={() => this.setState({isModalVisible: true, posto: section.action})} style={Styles.actionButton}>
-          <FontAwesome name="search" style={Styles.actionIcon} />
-          <Text style={Styles.actionLabel}>Visualizar detalhes</Text>
-        </TouchableOpacity>
-      </View>
-    );
-  }
-
-  renderSectionItem(item) {
-    return (
-      <View style={Styles.itemContainer}>
-        <Text style={Styles.itemHeader}>{item.key}</Text>
-        <Text style={Styles.itemBody}>{item.data}</Text>
-      </View>
-    );
   }
 
   render() {
@@ -195,8 +201,8 @@ export default class TermoApreensao extends Component {
                 <Text style={Styles.searchButtonCenter}>Buscar termos</Text>
               </TouchableOpacity>
             </View>
-            {this.renderTerms()}
           </View>
+          {this.renderTerms()}
           {this.renderDetailsModal()}
         </ScrollView>
       </TouchableWithoutFeedback>

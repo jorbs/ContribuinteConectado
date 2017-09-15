@@ -43,21 +43,26 @@ export default class Processos extends Component {
     try {
       const watched = await this.isProcessWatched(this.state.processNumber);
       const process = await SefazAPI.consultarPorNumeroProcesso(params.requestToken, this.state.processNumber);
-      const processDetails = [{
-        title: process.descricaoAssunto,
-        status: process.situacao,
-        icon: 'archive',
-        data: [
-          {key: 'Interessado', data: process.nomeInteressado},
-          {key: 'Acatado em', data: process.dataAcatamento},
-          {key: 'Protocolado em', data: process.dataProtocolo},
-          {key: 'Situação', data: process.situacao},
-          {key: 'Setor', data: process.setor},
-          {key: 'Última movimentação', data: process.ultimaMovimentacao},
-        ]
-      }];
 
-      this.setState({processDetails, watched});
+      if (process == null || Object.keys(process).length == 0) {
+        this.setState({processNotFound: true});
+      } else {
+        const processDetails = [{
+          title: process.descricaoAssunto,
+          status: process.situacao,
+          icon: 'archive',
+          data: [
+            {key: 'Interessado', data: process.nomeInteressado},
+            {key: 'Acatado em', data: process.dataAcatamento},
+            {key: 'Protocolado em', data: process.dataProtocolo},
+            {key: 'Situação', data: process.situacao},
+            {key: 'Setor', data: process.setor},
+            {key: 'Última movimentação', data: process.ultimaMovimentacao},
+          ]
+        }];
+
+        this.setState({processDetails, watched, processNotFound: false});
+      }
     } catch(e) {
       Alert.alert('Erro na solicitação', e.message, [{text: 'OK', onPress: () => goBack()}]);
     } finally {
@@ -146,7 +151,16 @@ export default class Processos extends Component {
   }
 
   renderProcessDetails() {
-    if (this.state.processDetails) {
+    if (this.state.processNotFound) {
+      return (
+        <View style={Styles.centerContainer}>
+          <View style={[Styles.row, Styles.searchResult]}>
+            <FontAwesome style={Styles.searchResultIcon} name="warning" />
+            <Text style={Styles.searchResultLabel}>Processo não encontrado.</Text>
+          </View>
+        </View>
+      );
+    } else if (this.state.processDetails) {
       return <SectionList
         sections={this.state.processDetails}
         renderSectionHeader={({section}) => this.renderSectionHeader(section)}
