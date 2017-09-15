@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {View, ScrollView, Text, SectionList, TouchableOpacity, TextInput, Alert, TouchableWithoutFeedback, AsyncStorage} from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import dismissKeyboard from 'dismissKeyboard';
 
 import Styles from '../common/Styles';
@@ -137,7 +138,7 @@ export default class Processos extends Component {
     return (
       <View style={Styles.action}>
         <TouchableOpacity onPress={() => this.onWatchProcess(this.state.processNumber, section.status)} style={Styles.actionButton}>
-          <Entypo name={this.state.watched ? 'eye-with-line' : 'eye'} style={Styles.actionIcon}/>
+          <FontAwesome name={this.state.watched ? 'eye-slash' : 'eye'} style={Styles.actionIcon}/>
           <Text style={Styles.actionLabel}>{this.state.watched ? 'Esquecer processo' : 'Acompanhar processo'}</Text>
         </TouchableOpacity>
       </View>
