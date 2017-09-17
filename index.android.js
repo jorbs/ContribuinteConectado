@@ -11,6 +11,7 @@ import RestricoesPendencias from './app/components/RestricoesPendencias';
 import Antecipado from './app/components/Antecipado';
 import Processos from './app/components/Processos';
 import CallCenter from './app/components/CallCenter';
+import AcaoFiscal from './app/components/AcaoFiscal';
 import SimuladorST from './app/components/SimuladorST';
 
 const ContribuinteConectado = StackNavigator({
@@ -55,6 +56,10 @@ const ContribuinteConectado = StackNavigator({
   SimuladorST: {
     path: 'simulador',
     screen: SimuladorST
+  },
+  AcaoFiscal: {
+    path: 'acaoFiscal',
+    screen: AcaoFiscal
   }
 })
 

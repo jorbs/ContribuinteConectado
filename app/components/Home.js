@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Text, View, TouchableOpacity, AsyncStorage, Alert } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import PushNotification from 'react-native-push-notification';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Entypo from 'react-native-vector-icons/Entypo';
 import moment from 'moment';
 
@@ -309,13 +310,13 @@ export default class Home extends Component {
             <Text style={Styles.menuItemLabel}>Simulador ST</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => this.navigate('Certidao')} style={[Styles.menuCol, Styles.menuColFirst]}>
-            <Entypo name="price-ribbon" color="white" size={48} />
+            <MaterialCommunityIcons name="numeric" color="white" size={48} />
             <Text style={Styles.menuItemLabel}>NCM</Text>
           </TouchableOpacity>
         </View>
         <View style={Styles.menuRow}>
-          <TouchableOpacity onPress={() => this.navigate('Certidao')} style={Styles.menuCol}>
-            <Entypo name="price-ribbon" color="#fff" size={48}/>
+          <TouchableOpacity onPress={() => this.navigate('AcaoFiscal')} style={Styles.menuCol}>
+            <FontAwesome name="flag" color="#fff" size={48}/>
             <Text style={Styles.menuItemLabel}>Ações Fiscais</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => this.logout()} style={[Styles.menuCol, Styles.menuColFirst]}>
