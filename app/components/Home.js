@@ -309,7 +309,7 @@ export default class Home extends Component {
             <FontAwesome name="calculator" color="#fff" size={48}/>
             <Text style={Styles.menuItemLabel}>Simulador ST</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => this.navigate('Certidao')} style={[Styles.menuCol, Styles.menuColFirst]}>
+          <TouchableOpacity onPress={() => this.navigate('NCM')} style={[Styles.menuCol, Styles.menuColFirst]}>
             <MaterialCommunityIcons name="numeric" color="white" size={48} />
             <Text style={Styles.menuItemLabel}>NCM</Text>
           </TouchableOpacity>

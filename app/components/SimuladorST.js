@@ -30,6 +30,11 @@ export default class SimuladorST extends Component {
       aliquotaFecoep: '1'
     };
   }
+  
+  componentDidMount() {
+    const {params} = this.props.navigation.state;
+    params.mva && this.setState({mva: params.mva});
+  }
 
   toF(number) {
     if (number == null) {
