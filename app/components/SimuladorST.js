@@ -72,7 +72,6 @@ export default class SimuladorST extends Component {
     return (
       <TouchableWithoutFeedback onPress={dismissKeyboard}>
         <ScrollView style={Styles.mainContainer}>
-          <Text style={Styles.h2}>Entre com os valores abaixo:</Text>
           <View style={Styles.stContainer}>
             <View style={Styles.stRow}>
               <View style={Styles.stColFirst}>
@@ -81,6 +80,7 @@ export default class SimuladorST extends Component {
                   keyboardType="numeric"
                   returnKeyType="next"
                   blurOnSubmit={true}
+                  selectTextOnFocus
                   style={[Styles.inputTextMd, Styles.textRight, Styles.stInput]}
                   onSubmitEditing={(event) => this.refs.frete.focus()}
                   onChangeText={(number) => this.setState({valorProduto: number})} />
@@ -93,6 +93,7 @@ export default class SimuladorST extends Component {
                   returnKeyType="next"
                   blurOnSubmit={true}
                   defaultValue={this.state.frete}
+                  selectTextOnFocus
                   style={[Styles.inputTextMd, Styles.textRight, Styles.stInput]}
                   onSubmitEditing={(event) => this.refs.seguro.focus()}
                   onChangeText={(number) => this.setState({frete: number})} />
@@ -107,6 +108,7 @@ export default class SimuladorST extends Component {
                   returnKeyType="next"
                   blurOnSubmit={true}
                   defaultValue={this.state.seguro}
+                  selectTextOnFocus
                   style={[Styles.inputTextMd, Styles.textRight, Styles.stInput]}
                   onSubmitEditing={(event) => this.refs.outrasDespesas.focus()}
                   onChangeText={(number) => this.setState({seguro: number})} />
@@ -119,6 +121,7 @@ export default class SimuladorST extends Component {
                   returnKeyType="next"
                   blurOnSubmit={true}
                   defaultValue={this.state.outrasDespesas}
+                  selectTextOnFocus
                   style={[Styles.inputTextMd, Styles.textRight, Styles.stInput]}
                   onSubmitEditing={(event) => this.refs.ipi.focus()}
                   onChangeText={(number) => this.setState({outrasDespesas: number})} />
@@ -133,6 +136,7 @@ export default class SimuladorST extends Component {
                   returnKeyType="next"
                   blurOnSubmit={true}
                   defaultValue={this.state.ipi}
+                  selectTextOnFocus
                   style={[Styles.inputTextMd, Styles.textRight, Styles.stInput]}
                   onSubmitEditing={(event) => this.refs.desconto.focus()}
                   onChangeText={(number) => this.setState({ipi: number})} />
@@ -145,6 +149,7 @@ export default class SimuladorST extends Component {
                   defaultValue={this.state.desconto}
                   returnKeyType="next"
                   blurOnSubmit={true}
+                  selectTextOnFocus
                   style={[Styles.inputTextMd, Styles.textRight, Styles.stInput]}
                   onSubmitEditing={(event) => this.refs.aliquota.focus()}
                   onChangeText={(number) => this.setState({desconto: number})} />
@@ -159,6 +164,7 @@ export default class SimuladorST extends Component {
                   returnKeyType="next"
                   blurOnSubmit={true}
                   defaultValue={this.state.aliquota}
+                  selectTextOnFocus
                   style={[Styles.inputTextMd, Styles.textRight, Styles.stInput]}
                   onSubmitEditing={(event) => this.refs.mva.focus()}
                   onChangeText={(number) => this.setState({aliquota: number})} />
@@ -171,6 +177,7 @@ export default class SimuladorST extends Component {
                   returnKeyType="next"
                   blurOnSubmit={true}
                   defaultValue={this.state.mva}
+                  selectTextOnFocus
                   style={[Styles.inputTextMd, Styles.textRight, Styles.stInput]}
                   onSubmitEditing={(event) => this.refs.aliquotaIcmsSt.focus()}
                   onChangeText={(number) => this.setState({mva: number})} />
@@ -185,6 +192,7 @@ export default class SimuladorST extends Component {
                   returnKeyType="next"
                   blurOnSubmit={true}
                   defaultValue={this.state.aliquotaIcmsSt}
+                  selectTextOnFocus
                   style={[Styles.inputTextMd, Styles.textRight, Styles.stInput]}
                   onSubmitEditing={(event) => this.refs.aliquotaFecoep.focus()}
                   onChangeText={(number) => this.setState({aliquotaIcmsSt: number})} />
@@ -197,6 +205,7 @@ export default class SimuladorST extends Component {
                   returnKeyType="done"
                   blurOnSubmit={true}
                   defaultValue={this.state.aliquotaFecoep}
+                  selectTextOnFocus
                   style={[Styles.inputTextMd, Styles.textRight, Styles.stInput]}
                   onChangeText={(number) => this.setState({aliquotaFecoep: number})} />
               </View>

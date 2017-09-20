@@ -218,7 +218,7 @@ const Styles = StyleSheet.create({
   },
   stResultContainer: {
     alignItems: 'center',
-    marginTop: 10,    
+    marginTop: 20,    
   },
   stRow: {
     flexDirection: 'row',
