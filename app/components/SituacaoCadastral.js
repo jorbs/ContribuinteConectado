@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {View, ScrollView, Text, SectionList, StyleSheet, Alert} from 'react-native';
+import {View, ScrollView, Text, FlatList, StyleSheet, Alert} from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 import Styles from '../common/Styles';
@@ -26,42 +26,34 @@ export default class SituacaoCadastral extends Component {
     const {params} = this.props.navigation.state;
 
     SefazAPI.obterContribuinte(params.requestToken, params.login).then(response => {
-      const dadosGerais = [
-        {key: 'Razão Social', data: response.razaoSocial},
+      const items = [
+        {key: 'Dados Gerais', subheading: true},
+        {key: 'Razão Social', data: response.razaoSocial, icon: 'file-text-o'},
         {key: 'Nome Fantasia', data: response.nomeFantasia},
         {key: 'CNPJ', data: response.cnpj},
         {key: 'Natureza Jurídica', data: response.descricao},
         {key: 'Situação', data: response.descricaoSituacaoCadastral},
-      ];
-      const endereco = [
-        {key: 'Logradouro', data: response.endereco},
+        {key: 'Logradouro', data: response.endereco, icon: 'map-marker'},
         {key: 'Telefone', data: response.numeroTelefone},
       ];
 
-      this.setState({
-        sections: [
-          {title: 'Dados Gerais', icon: 'file-text-o', data: dadosGerais},
-          {title: 'Endereço', icon: 'map-marker', data: endereco}
-        ]
-      });
+      this.setState({items});
     }).catch(e => Alert.alert('Erro na solicitação', e.message, [{text: 'OK', onPress: () => goBack()}]))
       .then(() => this.setState({pendingRequest: false}));
   }
 
-  renderSectionHeader(section) {
+  renderItem(item) {
+    if (item.subheading) {
+      return <Text style={Styles.subheading}>{item.key}</Text>
+    }
+    
     return (
-      <View style={Styles.sectionHeaderContainer}>
-        <FontAwesome name={section.icon} size={24} style={Styles.sectionHeaderIcon} />
-        <Text style={Styles.sectionHeader}>{section.title}</Text>
-      </View>
-    );
-  }
-
-  renderSectionItem(item) {
-    return (
-      <View style={Styles.itemContainer}>
-        <Text style={Styles.itemHeader}>{item.key}</Text>
-        <Text style={Styles.itemBody}>{item.data}</Text>
+      <View style={Styles.itemRow}>
+        {item.icon != null ? <FontAwesome name={item.icon} style={Styles.itemIcon} /> : <Text style={Styles.itemIcon} />}
+        <View style={Styles.itemTextContainer}>
+          <Text style={Styles.itemPrimaryText}>{item.key}</Text>
+          <Text style={Styles.itemSecondaryText}>{item.data}</Text>
+        </View>
       </View>
     );
   }
@@ -70,12 +62,7 @@ export default class SituacaoCadastral extends Component {
     return (this.state.pendingRequest ?
       <MyActivityIndicator/> :
       <ScrollView style={Styles.mainContainer}>
-        <SectionList
-          sections={this.state.sections}
-          renderSectionHeader={({section}) => this.renderSectionHeader(section)}
-          renderItem={({item}) => this.renderSectionItem(item)}
-          style={Styles.sectionList}
-        />
+        <FlatList data={this.state.items} renderItem={({item}) => this.renderItem(item)} style={Styles.listContainer} />
       </ScrollView>
     );
   }

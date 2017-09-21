@@ -14,11 +14,11 @@ const Styles = StyleSheet.create({
   },
   headerTitleStyle: {
     color: colors.white,
-    fontSize: 24
+    fontSize: 20,
+    fontFamily: 'Roboto-Medium'
   },
   mainContainer: {
     flex: 1,
-    padding: 10,
     backgroundColor: colors.white,
   },
   menu: {
@@ -69,10 +69,6 @@ const Styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 5
   },
-  sectionList: {
-    paddingLeft: 10,
-    paddingRight: 10,
-  },
   sectionHeaderContainer: {
     flex: 1,
     flexDirection: 'row',
@@ -83,24 +79,9 @@ const Styles = StyleSheet.create({
     borderBottomWidth: 1,
     alignItems: 'center',
   },
-  sectionHeader: {
-    fontSize: 24,
-    color: colors.red,
-  },
   sectionHeaderIcon: {
     marginRight: 6,
     color: colors.red,
-  },
-  itemContainer: {
-    marginBottom: 12,
-  },
-  itemHeader: {
-    color: colors.darkBlue,
-    fontSize: 16,
-  },
-  itemBody: {
-    color: colors.black,
-    fontSize: 18,
   },
   searchContainer: {
     padding: 10,
@@ -279,6 +260,49 @@ const Styles = StyleSheet.create({
   actionLabel: {
     color: colors.black,
     fontSize: 16
+  },
+  subheading: {
+    fontSize: 14,
+    fontFamily: 'Roboto-Medium',
+    color: colors.black,
+    opacity: 0.54,
+    height: 48,
+  },
+  listContainer: {
+    paddingTop: 8,
+    paddingRight: 16,
+    paddingBottom: 8,
+    paddingLeft: 16,
+  },
+  itemTextContainer: {
+    height: 36,
+  },
+  itemRow: {
+    flexDirection: 'row',
+    height: 72,
+    minHeight: 48,
+  },
+  itemIcon: {
+    marginRight: 16,
+    height: 40,
+    width: 40,
+    fontSize: 40,
+    color: colors.darkBlue,
+    alignSelf: 'flex-start',
+  },
+  itemPrimaryText: {
+    lineHeight: 20,
+    opacity: 0.87,
+    fontSize: 16,
+    fontFamily: 'Roboto-Regular',
+    color: colors.black
+  },
+  itemSecondaryText: {
+    lineHeight: 18,
+    opacity: 0.54,
+    fontSize: 14,
+    fontFamily: 'Roboto-Regular',
+    color: colors.black    
   }
 });
 
