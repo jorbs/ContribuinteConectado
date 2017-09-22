@@ -11,6 +11,7 @@ const Constants = {
   DATETIME_FORMAT: 'DD/MM/YYYY HH:mm:ss',
   ANTECIPADO: 15423,
   FECOEP: 50008,
+  NCM_LIMIT: 10,
 };
 
 export default Constants;
