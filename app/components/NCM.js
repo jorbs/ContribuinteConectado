@@ -98,6 +98,7 @@ export default class NCM extends Component {
         data: [
           {key: 'Descrição', data: selectedItem.description},
           {key: `NCM${selectedItem.ncm.length > 1 ? 's' : ''}`, data: selectedItem.ncm.join(', ')},
+          {key: 'Acordo Interestadual', data: selectedItem.legal || 'Não existe'},
           {key: 'MVA Original', data: (selectedItem.mva[0] * 100).toFixed(2) + '%'},
           {key: 'MVA - Operação Interestadual a 12%', data: (selectedItem.mva[1] * 100).toFixed(2) + '%'},
           {key: 'MVA - Operação Interestadual a 7%', data: (selectedItem.mva[2] * 100).toFixed(2) + '%'},
