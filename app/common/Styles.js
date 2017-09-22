@@ -279,6 +279,9 @@ const Styles = StyleSheet.create({
   actionLabel: {
     color: colors.black,
     fontSize: 16
+  },
+  activityIndicator: {
+    marginRight: 5
   }
 });
 
