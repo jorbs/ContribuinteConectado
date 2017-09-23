@@ -5,7 +5,7 @@ const colors = {
   black: '#000',
   red: '#ad1125',
   darkBlue: '#113A7E',
-  lightGray: '#efefef',
+  lightGray: '#ffe0e7',
 };
 
 const Styles = StyleSheet.create({
@@ -23,6 +23,10 @@ const Styles = StyleSheet.create({
   },
   homeContainer: {
     backgroundColor: colors.darkBlue,
+  },
+  menu: {
+    backgroundColor: colors.white,
+    paddingTop: 16
   },
   menuRow: {
     marginLeft: 32,
@@ -278,23 +282,25 @@ const Styles = StyleSheet.create({
   },
   listContainer: {
     paddingTop: 8,
-    paddingRight: 16,
     paddingBottom: 8,
     paddingLeft: 16,
   },
   itemTextContainer: {
-    height: 36,
+    flex: 1,
+    marginBottom: 16,
+    borderBottomColor: colors.lightGray,
+    borderBottomWidth: 1
   },
   itemRow: {
     flexDirection: 'row',
     height: 72,
-    minHeight: 48,
+    minHeight: 48
   },
   itemIcon: {
     marginRight: 16,
     height: 40,
     width: 40,
-    fontSize: 40,
+    fontSize: 32,
     color: colors.darkBlue,
     alignSelf: 'flex-start',
   },

@@ -3,9 +3,9 @@ import { Text, View, TouchableOpacity, AsyncStorage, Alert } from 'react-native'
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import PushNotification from 'react-native-push-notification';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { Col, Row, Grid } from 'react-native-easy-grid';
 import Entypo from 'react-native-vector-icons/Entypo';
 import moment from 'moment';
-import { Col, Row, Grid } from "react-native-easy-grid";
 
 import * as SefazAPI from '../api/SefazAPI';
 import Constants from '../common/Constants';
@@ -287,7 +287,7 @@ export default class Home extends Component {
             </TouchableOpacity>
           </View>
         </Row>
-        <Row size={75} style={{backgroundColor: 'white', paddingTop: 16}}>
+        <Row size={75} style={Styles.menu}>
           <Grid>
             <Row style={Styles.menuRow}>
               <Col>
