@@ -1,8 +1,10 @@
 import React, {Component} from 'react';
 import {View, ScrollView, Text, TextInput, SectionList, TouchableOpacity, TouchableWithoutFeedback, Alert, Linking, findNodeHandle} from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import TextInputState from 'react-native/lib/TextInputState'
 import TextInputMask from 'react-native-text-input-mask';
+import {Col, Row, Grid} from 'react-native-easy-grid';
 import dismissKeyboard from 'dismissKeyboard';
 import Modal from 'react-native-modal';
 import moment from 'moment';
@@ -162,48 +164,55 @@ export default class TermoApreensao extends Component {
       <MyActivityIndicator/> :
       <TouchableWithoutFeedback onPress={dismissKeyboard}>
         <ScrollView style={Styles.mainContainer}>
-          <View style={Styles.searchContainer}>
-            <View style={Styles.searchRow}>
-              <Text style={Styles.searchLabel}>Data início</Text>
-              <View style={Styles.searchInputGroup}>
-                <TextInputMask
-                  mask={"[00]/[00]/[0000]"}
-                  placeholder="DD/MM/YYYY"
-                  keyboardType="numeric"
-                  defaultValue={this.state.startDate}
-                  returnKeyType="next"
-                  blurOnSubmit={true}
-                  onSubmitEditing={event => TextInputState.focusTextInput(findNodeHandle(this.refs.endDate))}
-                  onChangeText={startDate => this.setState({startDate})}
-                  style={[Styles.inputTextMd, Styles.searchInputText]} />
-                <FontAwesome name="calendar" style={Styles.searchFieldIcon} />
-              </View>
-            </View>
-            <View style={Styles.searchRow}>
-              <Text style={Styles.searchLabel}>Data término</Text>
-              <View style={Styles.searchInputGroup}>
-                <TextInputMask
-                  ref="endDate"
-                  mask={"[00]/[00]/[0000]"}
-                  placeholder="DD/MM/YYYY"
-                  keyboardType="numeric"
-                  defaultValue={this.state.endDate}
-                  returnKeyType="done"
-                  blurOnSubmit={true}
-                  onSubmitEditing={event => this.onSearch()}
-                  onChangeText={endDate => this.setState({endDate})}
-                  style={[Styles.inputTextMd, Styles.searchInputText]} />
-                <FontAwesome name="calendar" style={Styles.searchFieldIcon} />
-              </View>
-            </View>
-            <View style={Styles.searchButton}>
-              <TouchableOpacity onPress={() => this.onSearch()}>
-                <Text style={Styles.searchButtonCenter}>Buscar termos</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-          {this.renderTerms()}
-          {this.renderDetailsModal()}
+          <Grid>
+            <Row size={25}>
+              <Col style={Styles.searchContainer}>
+                <View style={Styles.row}>
+                  <View style={[Styles.row, {marginRight: 32}]}>
+                    <MaterialCommunityIcons name="calendar" style={Styles.formInputIcon} />
+                    <View>
+                      <Text style={Styles.formFieldLabel}>Data início</Text>
+                      <TextInputMask
+                        mask="[00]/[00]/[0000]"
+                        placeholder="DD/MM/YYYY"
+                        keyboardType="numeric"
+                        defaultValue={this.state.startDate}
+                        returnKeyType="next"
+                        blurOnSubmit={true}
+                        onSubmitEditing={event => TextInputState.focusTextInput(findNodeHandle(this.refs.endDate))}
+                        onChangeText={startDate => this.setState({startDate})}
+                        style={[Styles.inputTextDate, Styles.textCenter, Styles.formInputText]} />
+                      </View>
+                  </View>
+                  <View style={Styles.row}>
+                    <MaterialCommunityIcons name="calendar" style={Styles.formInputIcon} />
+                    <View>
+                      <Text style={Styles.formFieldLabel}>Data término</Text>
+                      <TextInputMask
+                        ref="endDate"
+                        mask={"[00]/[00]/[0000]"}
+                        placeholder="DD/MM/YYYY"
+                        keyboardType="numeric"
+                        defaultValue={this.state.endDate}
+                        returnKeyType="done"
+                        blurOnSubmit={true}
+                        onSubmitEditing={event => this.onSearch()}
+                        onChangeText={endDate => this.setState({endDate})}
+                        style={[Styles.inputTextDate, Styles.textCenter, Styles.formInputText]} />
+                      </View>
+                  </View>
+                </View>
+                <TouchableOpacity onPress={() => this.onSearch()} style={[Styles.row, Styles.searchButtonContainer]} disable={this.state.pendingRequest}>
+                  {this.state.pendingRequest ? <ActivityIndicator /> : <MaterialCommunityIcons name="magnify" style={Styles.searchButtonIcon} />}
+                  <Text style={Styles.searchButton}>{this.state.pendingRequest ? 'Buscando termos...' : 'Buscar termos'}</Text>
+                </TouchableOpacity>
+              </Col>
+            </Row>
+            <Row size={75}>
+              {this.renderTerms()}
+              {this.renderDetailsModal()}
+            </Row>
+          </Grid>
         </ScrollView>
       </TouchableWithoutFeedback>
     );

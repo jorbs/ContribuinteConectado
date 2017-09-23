@@ -96,12 +96,8 @@ const Styles = StyleSheet.create({
     color: colors.red,
   },
   searchContainer: {
-    padding: 10,
-  },
-  searchRow: {
-    flexDirection: 'row',
-    padding: 10,
-    marginTop: 5,
+    backgroundColor: '#ffe0e7',
+    alignItems: 'center'
   },
   searchLabel: {
     color: colors.black,
@@ -113,27 +109,44 @@ const Styles = StyleSheet.create({
     position: 'absolute',
     right: 10
   },
-  searchInputText: {
-    fontSize: 18,
+  formFieldLabel: {
+    color: colors.darkBlue,
+    fontSize: 12,
+    paddingTop: 16,
+    paddingBottom: 8,
+  },
+  formInputText: {
+    padding: 0,
+    margin: 0,
+    paddingBottom: 8,
+    fontSize: 16,
     color: colors.black,
   },
-  searchFieldIcon: {
-    marginTop: 12,
-    marginLeft: 8,
-    fontSize: 26,
+  formInputIcon: {
+    fontSize: 24,
+    width: 24,
+    marginRight: 4,
+    marginBottom: 4,
     color: colors.red,
+    alignSelf: 'flex-end',
+  },
+  searchButtonContainer: {
+    alignItems: 'center',
+    marginTop: 16,
+    marginBottom: 16,
+    paddingTop: 5,
+    paddingRight: 10,
+    paddingBottom: 5,
+    paddingLeft: 10,
+    backgroundColor: colors.darkBlue,
   },
   searchButton: {
-    alignItems: 'center',
-    marginTop: 15,
-  },
-  searchButtonCenter: {
     color: colors.white,
-    backgroundColor: colors.darkBlue,
-    paddingTop: 5,
-    paddingRight: 15,
-    paddingBottom: 5,
-    paddingLeft: 15,
+  },
+  searchButtonIcon: {
+    color: colors.white,
+    marginRight: 8,
+    fontSize: 18    
   },
   searchResult: {
     marginTop: 8,
@@ -159,11 +172,12 @@ const Styles = StyleSheet.create({
   },
   inputTextMd: {
     width: 150,
-    textAlign: 'center',
+  },
+  inputTextDate: {
+    width: 120
   },
   inputTextSm: {
     width: 100,
-    textAlign: 'center',
   },
   textRight: {
     textAlign: 'right',
@@ -222,11 +236,6 @@ const Styles = StyleSheet.create({
   },
   stCol: {
     marginLeft: 40,
-  },
-  stLabel: {
-    color: colors.darkBlue,
-    padding: 0,
-    margin: 0
   },
   stInput: {
     paddingTop: 0,

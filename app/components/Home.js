@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
-import { Text, View, TouchableOpacity, AsyncStorage, Alert } from 'react-native';
+import React, {Component} from 'react';
+import {Text, View, TouchableOpacity, AsyncStorage, Alert} from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import PushNotification from 'react-native-push-notification';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { Col, Row, Grid } from 'react-native-easy-grid';
+import {Col, Row, Grid} from 'react-native-easy-grid';
 import Entypo from 'react-native-vector-icons/Entypo';
 import moment from 'moment';
 
@@ -354,7 +354,7 @@ export default class Home extends Component {
               </Col>
               <Col>
               <TouchableOpacity style={Styles.menuItem}>
-                <FontAwesome name="phone" style={Styles.menuItemIcon} />
+                <MaterialCommunityIcons name="phone" style={Styles.menuItemIcon} />
                 <Text style={Styles.menuItemLabel}>Call Center</Text>
               </TouchableOpacity>
               </Col>
