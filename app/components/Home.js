@@ -287,17 +287,17 @@ export default class Home extends Component {
             </TouchableOpacity>
           </View>
         </Row>
-        <Row size={75}>
+        <Row size={75} style={{backgroundColor: 'white', paddingTop: 16}}>
           <Grid>
             <Row style={Styles.menuRow}>
               <Col>
-                <TouchableOpacity onPress={() => this.navigate('SituacaoCadastral')} style={[Styles.menuCol, Styles.menuColFirst]}>
+                <TouchableOpacity onPress={() => this.navigate('SituacaoCadastral')} style={Styles.menuItem}>
                   <FontAwesome name="vcard-o" style={Styles.menuItemIcon} />
                   <Text style={Styles.menuItemLabel}>Cadastro</Text>
                 </TouchableOpacity>
               </Col>
               <Col>
-                <TouchableOpacity onPress={() => this.navigate('Certidao')} style={Styles.menuCol}>
+                <TouchableOpacity onPress={() => this.navigate('Certidao')} style={Styles.menuItem}>
                   <MaterialCommunityIcons name="certificate" style={Styles.menuItemIcon}/>
                   <Text style={Styles.menuItemLabel}>Certidões</Text>
                 </TouchableOpacity>
@@ -305,13 +305,13 @@ export default class Home extends Component {
             </Row>
             <Row style={Styles.menuRow}>
               <Col>
-                <TouchableOpacity onPress={() => this.navigate('TermoApreensao')} style={[Styles.menuCol, Styles.menuColFirst]}>
+                <TouchableOpacity onPress={() => this.navigate('TermoApreensao')} style={Styles.menuItem}>
                   <FontAwesome name="truck" style={Styles.menuItemIcon} />
                   <Text style={Styles.menuItemLabel}>Termos</Text>
                 </TouchableOpacity>
               </Col>
               <Col>
-                <TouchableOpacity onPress={() => this.navigate('RestricoesPendencias')} style={Styles.menuCol}>
+                <TouchableOpacity onPress={() => this.navigate('RestricoesPendencias')} style={Styles.menuItem}>
                   <FontAwesome name="list-alt" style={Styles.menuItemIcon}/>
                   <Text style={Styles.menuItemLabel}>Restrições</Text>
                 </TouchableOpacity>
@@ -319,13 +319,13 @@ export default class Home extends Component {
             </Row>
             <Row style={Styles.menuRow}>
               <Col>
-                <TouchableOpacity onPress={() => this.navigate('Antecipado')} style={[Styles.menuCol, Styles.menuColFirst]}>
+                <TouchableOpacity onPress={() => this.navigate('Antecipado')} style={Styles.menuItem}>
                   <FontAwesome name="money" style={Styles.menuItemIcon}/>
                   <Text style={Styles.menuItemLabel}>Antecipados</Text>
                 </TouchableOpacity>
                 </Col>
               <Col>
-              <TouchableOpacity onPress={() => this.navigate('Processos')} style={Styles.menuCol}>
+              <TouchableOpacity onPress={() => this.navigate('Processos')} style={Styles.menuItem}>
                 <Entypo name="archive" style={Styles.menuItemIcon}/>
                 <Text style={Styles.menuItemLabel}>Processos</Text>
               </TouchableOpacity>
@@ -333,13 +333,13 @@ export default class Home extends Component {
             </Row>
             <Row style={Styles.menuRow}>
             <Col>
-              <TouchableOpacity onPress={() => this.navigate('SimuladorST')} style={[Styles.menuCol, Styles.menuColFirst]}>
+              <TouchableOpacity onPress={() => this.navigate('SimuladorST')} style={Styles.menuItem}>
                 <Entypo name="calculator" style={Styles.menuItemIcon}/>
                 <Text style={Styles.menuItemLabel}>Simulador ST</Text>
               </TouchableOpacity>
               </Col>
               <Col>
-              <TouchableOpacity onPress={() => this.navigate('NCM')} style={Styles.menuCol}>
+              <TouchableOpacity onPress={() => this.navigate('NCM')} style={Styles.menuItem}>
                 <Text style={Styles.menuItemNcm}>8581.30</Text>
                 <Text style={Styles.menuItemLabel}>NCM</Text>
               </TouchableOpacity>
@@ -347,13 +347,13 @@ export default class Home extends Component {
             </Row>
             <Row style={Styles.menuRow}>
             <Col>
-              <TouchableOpacity onPress={() => this.navigate('AcaoFiscal')} style={Styles.menuCol}>
+              <TouchableOpacity onPress={() => this.navigate('AcaoFiscal')} style={Styles.menuItem}>
                 <FontAwesome name="flag" style={Styles.menuItemIcon}/>
                 <Text style={Styles.menuItemLabel}>Ações Fiscais</Text>
               </TouchableOpacity>
               </Col>
               <Col>
-              <TouchableOpacity style={Styles.menuCol}>
+              <TouchableOpacity style={Styles.menuItem}>
                 <FontAwesome name="phone" style={Styles.menuItemIcon} />
                 <Text style={Styles.menuItemLabel}>Call Center</Text>
               </TouchableOpacity>
