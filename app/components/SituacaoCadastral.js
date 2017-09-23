@@ -49,10 +49,12 @@ export default class SituacaoCadastral extends Component {
     
     return (
       <View style={Styles.itemRow}>
-        {item.icon != null ? <FontAwesome name={item.icon} style={Styles.itemIcon} /> : <Text style={Styles.itemIcon} />}
-        <View style={Styles.itemTextContainer}>
-          <Text style={Styles.itemPrimaryText}>{item.key}</Text>
-          <Text style={Styles.itemSecondaryText}>{item.data}</Text>
+        {item.icon != null ? <FontAwesome name={item.icon} style={Styles.itemLeftIcon} /> : <Text style={Styles.itemLeftIcon} />}
+        <View style={Styles.itemContainer}>
+          <View style={Styles.itemTextContainer}>
+            <Text style={[Styles.itemPrimaryText, item.icon && {fontWeight: 'bold'}]}>{item.key}</Text>
+            <Text style={Styles.itemSecondaryText}>{item.data}</Text>
+          </View>
         </View>
       </View>
     );

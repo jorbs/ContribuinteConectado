@@ -97,7 +97,8 @@ const Styles = StyleSheet.create({
   },
   searchContainer: {
     backgroundColor: '#ffe0e7',
-    alignItems: 'center'
+    alignItems: 'center',
+    marginBottom: 16
   },
   searchLabel: {
     color: colors.black,
@@ -148,18 +149,19 @@ const Styles = StyleSheet.create({
     marginRight: 8,
     fontSize: 18    
   },
-  searchResult: {
-    marginTop: 8,
-    marginBottom: 10,
+  emptySearchContainer: {
+    alignItems: 'center',
+    flex: 1
   },
   searchResultLabel: {
     textAlign: 'center',
-    color: colors.black,
+    color: colors.red,
   },
   searchResultIcon: {
-    fontSize: 18,
+    fontSize: 16,
     color: colors.red,
-    marginRight: 10,
+    marginRight: 8,
+    marginTop: 2
   },
   row: {
     flexDirection: 'row',
@@ -294,24 +296,35 @@ const Styles = StyleSheet.create({
     paddingBottom: 8,
     paddingLeft: 16,
   },
+  itemContainer: {
+    flex: 1,
+    borderBottomColor: colors.lightGray,
+    borderBottomWidth: 1,
+    marginBottom: 16,
+    flexDirection: 'row',
+  },
   itemTextContainer: {
     flex: 1,
-    marginBottom: 16,
-    borderBottomColor: colors.lightGray,
-    borderBottomWidth: 1
   },
   itemRow: {
     flexDirection: 'row',
     height: 72,
     minHeight: 48
   },
-  itemIcon: {
+  itemLeftIcon: {
     marginRight: 16,
     height: 40,
     width: 40,
     fontSize: 32,
     color: colors.darkBlue,
     alignSelf: 'flex-start',
+  },
+  itemRightIcon: {
+    alignSelf: 'center',
+    paddingTop: 8,
+    paddingRight: 16,
+    fontSize: 20,
+    color: colors.darkBlue
   },
   itemPrimaryText: {
     lineHeight: 20,
@@ -360,6 +373,9 @@ const Styles = StyleSheet.create({
   homeLogo: {
     fontSize: 120,
     color: colors.white
+  },
+  activityIndicator: {
+    marginRight: 5
   }
 });
 

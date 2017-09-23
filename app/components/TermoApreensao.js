@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, ScrollView, Text, TextInput, SectionList, TouchableOpacity, TouchableWithoutFeedback, Alert, Linking, findNodeHandle} from 'react-native';
+import {View, ScrollView, Text, TextInput, FlatList, ActivityIndicator, TouchableOpacity, TouchableWithoutFeedback, Alert, Linking, findNodeHandle} from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import TextInputState from 'react-native/lib/TextInputState'
@@ -13,7 +13,6 @@ import * as SefazAPI from '../api/SefazAPI';
 import Styles from '../common/Styles';
 import Constants from '../common/Constants';
 import Postos from '../common/Postos';
-import MyActivityIndicator from './MyActivityIndicator';
 
 export default class TermoApreensao extends Component {
   static navigationOptions = {
@@ -51,19 +50,19 @@ export default class TermoApreensao extends Component {
     const {params} = this.props.navigation.state;
     const {startDate, endDate} = this.state;
 
+    this.setState({pendingRequest: true});
+
     SefazAPI.consultarTermosDeApreensao(params.requestToken, params.login, startDate, endDate).then(response => {
-      const terms = response.map(term => {
-        return {
-          title: `Termo ${term.numeroTermo}`,
-          action: Postos[term.posto],
-          icon: 'file-text-o',
-          data: [
-            {key: 'Status', data: term.status},
-            {key: 'Emissão', data: term.dataEmissao && moment(term.dataEmissao).utc().format(Constants.DATETIME_FORMAT)},
-            {key: 'Papel', data: term.papel},
-            {key: 'Posto', data: Postos[term.posto].name},
-          ]
-        }
+      let terms = [];
+
+      response.forEach(term => {
+        const phone = Postos[term.posto].phones[0].replace(/[\(\ \)\-]/g, '');
+        
+        terms.push({key: terms.length, title: 'Número do Termo', body: term.numeroTermo, icon: 'truck'});
+        terms.push({key: terms.length, title: 'Status', body: term.status});
+        terms.push({key: terms.length, title: 'Emissão', body: term.dataEmissao && moment(term.dataEmissao).utc().format(Constants.DATETIME_FORMAT)});
+        terms.push({key: terms.length, title: 'Papel', body: term.papel});
+        terms.push({key: terms.length, title: 'Posto', body: Postos[term.posto].name, phone});
       });
 
       this.setState({terms});
@@ -78,8 +77,8 @@ export default class TermoApreensao extends Component {
 
     if (this.state.terms.length === 0) {
       return (
-        <View style={Styles.centerContainer}>
-          <View style={[Styles.row, Styles.searchResult]}>
+        <View style={Styles.emptySearchContainer}>
+          <View style={Styles.row}>
             <FontAwesome style={Styles.searchResultIcon} name="warning" />
             <Text style={Styles.searchResultLabel}>Nenhum resultado foi encontrado no período.</Text>
           </View>
@@ -87,50 +86,22 @@ export default class TermoApreensao extends Component {
       );
     }
 
+    return <FlatList data={this.state.terms} renderItem={({item}) => this.renderItem(item)} style={Styles.listContainer} />;
+  }
+
+  renderItem(item) {
     return (
-      <View>
-        <View style={Styles.centerContainer}>
-          <View style={[Styles.row, Styles.searchResult]}>
-            <Text style={Styles.searchResultLabel}>
-              {this.state.terms.length} {this.state.terms.length === 1 ? 'resultado foi encontrado.' : 'resultados foram encontrados.'}
-            </Text>
+      <View style={Styles.itemRow}>
+        {item.icon != null ? <FontAwesome name={item.icon} style={Styles.itemLeftIcon} /> : <Text style={Styles.itemLeftIcon} />}
+        <View style={Styles.itemContainer}>
+          <View style={Styles.itemTextContainer}>
+            <Text style={[Styles.itemPrimaryText, item.icon && {fontWeight: 'bold'}]}>{item.title}</Text>
+            <Text style={Styles.itemSecondaryText}>{item.body}</Text>
           </View>
+          {item.phone && <TouchableOpacity onPress={() => Linking.openURL(`tel:${item.phone}`)}>
+            <MaterialCommunityIcons name="phone" style={Styles.itemRightIcon} />
+          </TouchableOpacity>}
         </View>
-        <SectionList
-          sections={this.state.terms}
-          renderSectionHeader={({section}) => this.renderSectionHeader(section)}
-          renderItem={({item}) => this.renderSectionItem(item)}
-          renderSectionFooter={({section}) => this.renderSectionFooter(section)}
-          style={Styles.sectionList} />
-      </View>
-    );
-  }
-
-  renderSectionHeader(section) {
-    return (
-      <View style={Styles.sectionHeaderContainer}>
-        <FontAwesome name={section.icon} size={24} style={Styles.sectionHeaderIcon} />
-        <Text style={Styles.sectionHeader}>{section.title}</Text>
-      </View>
-    );
-  }
-
-  renderSectionFooter(section) {
-    return (
-      <View style={Styles.action}>
-        <TouchableOpacity onPress={() => this.setState({isModalVisible: true, posto: section.action})} style={Styles.actionButton}>
-          <FontAwesome name="search" style={Styles.actionIcon} />
-          <Text style={Styles.actionLabel}>Visualizar detalhes</Text>
-        </TouchableOpacity>
-      </View>
-    );
-  }
-
-  renderSectionItem(item) {
-    return (
-      <View style={Styles.itemContainer}>
-        <Text style={Styles.itemHeader}>{item.key}</Text>
-        <Text style={Styles.itemBody}>{item.data}</Text>
       </View>
     );
   }
@@ -160,8 +131,7 @@ export default class TermoApreensao extends Component {
   }
 
   render() {
-    return (this.state.pendingRequest ?
-      <MyActivityIndicator/> :
+    return (
       <TouchableWithoutFeedback onPress={dismissKeyboard}>
         <ScrollView style={Styles.mainContainer}>
           <Grid>
@@ -203,7 +173,7 @@ export default class TermoApreensao extends Component {
                   </View>
                 </View>
                 <TouchableOpacity onPress={() => this.onSearch()} style={[Styles.row, Styles.searchButtonContainer]} disable={this.state.pendingRequest}>
-                  {this.state.pendingRequest ? <ActivityIndicator /> : <MaterialCommunityIcons name="magnify" style={Styles.searchButtonIcon} />}
+                  {this.state.pendingRequest ? <ActivityIndicator style={Styles.activityIndicator} /> : <MaterialCommunityIcons name="magnify" style={Styles.searchButtonIcon} />}
                   <Text style={Styles.searchButton}>{this.state.pendingRequest ? 'Buscando termos...' : 'Buscar termos'}</Text>
                 </TouchableOpacity>
               </Col>

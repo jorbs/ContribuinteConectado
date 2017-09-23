@@ -257,8 +257,6 @@ export default class Home extends Component {
           notificationIds.map(notificationId => PushNotification.cancelLocalNotifications({id: notificationId}));
       
           await AsyncStorage.multiRemove([
-            Constants.REMEMBER_ME_KEY,
-            Constants.REQUEST_TOKEN_KEY,
             Constants.CN_STATUS_KEY,
             Constants.RESTRICTIONS_COUNT_KEY,
             Constants.WATCHED_PROCESSES_KEY,
@@ -306,7 +304,7 @@ export default class Home extends Component {
             <Row style={Styles.menuRow}>
               <Col>
                 <TouchableOpacity onPress={() => this.navigate('TermoApreensao')} style={Styles.menuItem}>
-                  <FontAwesome name="truck" style={Styles.menuItemIcon} />
+                  <MaterialCommunityIcons name="truck" style={Styles.menuItemIcon} />
                   <Text style={Styles.menuItemLabel}>Termos</Text>
                 </TouchableOpacity>
               </Col>

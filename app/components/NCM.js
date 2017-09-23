@@ -6,6 +6,7 @@ import dismissKeyboard from 'dismissKeyboard';
 import Modal from 'react-native-modal';
 
 import Styles from '../common/Styles';
+import Constants from '../common/Constants';
 import Aliquotas from '../common/Aliquotas';
 
 export default class NCM extends Component {
@@ -24,8 +25,9 @@ export default class NCM extends Component {
   }
 
   onSearch(term) {
-    const items = term.length > 0 ? (
-      Aliquotas.filter(aliquota => aliquota.description.indexOf(term) != -1)
+    const items = term.length > 2 ? (
+      Aliquotas.filter((aliquota, i, array) => aliquota.description.toLowerCase().indexOf(term.toLowerCase()) != -1)
+        .slice(0, Constants.NCM_LIMIT)
         .map(item => ({key: item.description, ...item}))
     ) : [];
     this.setState({items});
@@ -95,7 +97,8 @@ export default class NCM extends Component {
         icon: 'numeric',
         data: [
           {key: 'Descrição', data: selectedItem.description},
-          {key: 'NCMs', data: selectedItem.ncm.join(', ')},
+          {key: `NCM${selectedItem.ncm.length > 1 ? 's' : ''}`, data: selectedItem.ncm.join(', ')},
+          {key: 'Acordo Interestadual', data: selectedItem.legal || 'Não existe'},
           {key: 'MVA Original', data: (selectedItem.mva[0] * 100).toFixed(2) + '%'},
           {key: 'MVA - Operação Interestadual a 12%', data: (selectedItem.mva[1] * 100).toFixed(2) + '%'},
           {key: 'MVA - Operação Interestadual a 7%', data: (selectedItem.mva[2] * 100).toFixed(2) + '%'},

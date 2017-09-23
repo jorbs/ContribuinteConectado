@@ -25,20 +25,20 @@ export default class Certidao extends Component {
     if (documentType === 'CP') {
       return {
         type: 'Certidão Positiva de Débito',
-        icon: <FontAwesome name="times-circle" style={[Styles.itemIcon, {color: 'red'}]} />
+        icon: <FontAwesome name="times-circle" style={[Styles.itemLeftIcon, {color: 'red'}]} />
       };
     }
 
     if (documentType === 'CN') {
       return {
         type: 'Certidão Negativa de Débito',
-        icon: <FontAwesome name="check-circle" style={Styles.itemIcon} />
+        icon: <FontAwesome name="check-circle" style={Styles.itemLeftIcon} />
       };
     }
 
     return {
       type: 'Certidão Positiva com Efeito de Negativa',
-      icon: <FontAwesome name="times-circle" style={Styles.itemIcon} />
+      icon: <FontAwesome name="times-circle" style={Styles.itemLeftIcon} />
     };
   }
 
@@ -63,10 +63,12 @@ export default class Certidao extends Component {
   renderItem(item) {
     return (
       <View style={Styles.itemRow}>
-        {item.icon || <Text style={Styles.itemIcon} />}
-        <View style={Styles.itemTextContainer}>
-          <Text style={Styles.itemPrimaryText}>{item.key}</Text>
-          <Text style={Styles.itemSecondaryText}>{item.data}</Text>
+        {item.icon || <Text style={Styles.itemLeftIcon} />}
+        <View style={Styles.itemContainer}>
+          <View style={Styles.itemTextContainer}>
+            <Text style={Styles.itemPrimaryText}>{item.key}</Text>
+            <Text style={Styles.itemSecondaryText}>{item.data}</Text>
+          </View>
         </View>
       </View>
     );
