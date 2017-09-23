@@ -21,29 +21,34 @@ const Styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.white,
   },
-  menu: {
-    flex: 1,
-    flexDirection: 'column',
+  homeContainer: {
     backgroundColor: colors.darkBlue,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   menuRow: {
-    flexDirection: 'row',
-    padding: 5
+    marginLeft: 20,
+    marginRight: 20
   },
   menuCol: {
+    alignSelf: 'center',
     alignItems: 'center',
-    padding: 3,
-    marginLeft: 30,    
+    borderWidth: 1
   },
-  menuColFirst: {
-    marginLeft: 0,
+  menuItemIcon: {
+    color: colors.white,
+    fontSize: 48,
+    lineHeight: 48
+  },
+  menuItemNcm: {
+    color: colors.white,
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 4,
+    lineHeight: 46    
   },
   menuItemLabel: {
-    marginTop: 10,
+    marginTop: 3,
     color: colors.white,
-    fontSize: 18,    
+    fontSize: 16,
   },
   activityIndicatorContainer: {
     flex: 1,
@@ -294,15 +299,47 @@ const Styles = StyleSheet.create({
     lineHeight: 20,
     opacity: 0.87,
     fontSize: 16,
-    fontFamily: 'Roboto-Regular',
     color: colors.black
   },
   itemSecondaryText: {
     lineHeight: 18,
     opacity: 0.54,
     fontSize: 14,
-    fontFamily: 'Roboto-Regular',
-    color: colors.black    
+    color: colors.black
+  },
+  activityIndicator: {
+    marginRight: 5
+  },
+  logoContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    paddingLeft: 16
+  },
+  logoutIcon: {
+    fontSize: 16,
+    color: colors.white,
+    lineHeight: 18
+  },
+  logoutButton: {
+    flexDirection: 'row',
+    position: 'absolute',
+    right: 10,
+    top: 10
+  },
+  logoutLabel: {
+    marginLeft: 3,
+    color: colors.white,
+    fontWeight: 'bold'
+  },
+  appLabel: {
+    color: colors.white,
+    fontSize: 24,
+    alignSelf: 'center',
+    marginLeft: 8
+  },
+  homeLogo: {
+    fontSize: 120,
+    color: colors.white
   }
 });
 
