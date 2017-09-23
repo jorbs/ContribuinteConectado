@@ -6,7 +6,6 @@ import TextInputState from 'react-native/lib/TextInputState'
 import TextInputMask from 'react-native-text-input-mask';
 import {Col, Row, Grid} from 'react-native-easy-grid';
 import dismissKeyboard from 'dismissKeyboard';
-import Modal from 'react-native-modal';
 import moment from 'moment';
 
 import * as SefazAPI from '../api/SefazAPI';
@@ -92,7 +91,7 @@ export default class TermoApreensao extends Component {
   renderItem(item) {
     return (
       <View style={Styles.itemRow}>
-        {item.icon != null ? <FontAwesome name={item.icon} style={Styles.itemLeftIcon} /> : <Text style={Styles.itemLeftIcon} />}
+        {item.icon != null ? <MaterialCommunityIcons name={item.icon} style={Styles.itemLeftIcon} /> : <Text style={Styles.itemLeftIcon} />}
         <View style={Styles.itemContainer}>
           <View style={Styles.itemTextContainer}>
             <Text style={[Styles.itemPrimaryText, item.icon && {fontWeight: 'bold'}]}>{item.title}</Text>
@@ -104,30 +103,6 @@ export default class TermoApreensao extends Component {
         </View>
       </View>
     );
-  }
-
-  renderDetailsModal() {
-    if (this.state.posto) {
-      return (
-        <Modal isVisible={this.state.isModalVisible} onBackdropPress={() => this.setState({isModalVisible: false})}>
-          <View style={Styles.modal}>
-            <Text style={Styles.modalHeader}>{this.state.posto.name}</Text>
-            <Text style={Styles.modalParagraph}>Endereço: {this.state.posto.address}</Text>
-            <Text style={Styles.modalParagraph}>Telefones:</Text>
-            {this.state.posto.phones.map(phone => {
-              return (
-                <View key={phone} style={Styles.action}>
-                  <TouchableOpacity style={Styles.actionButton} onPress={() => Linking.openURL(`tel:${phone.replace(/[\(\ \)\-]/g, '')}`)}>
-                    <FontAwesome name="phone" size={18} style={Styles.actionIcon}/>
-                    <Text style={Styles.actionLabel}>{phone}</Text>
-                  </TouchableOpacity>
-                </View>
-              );
-            })}
-          </View>
-        </Modal>
-      );
-    }
   }
 
   render() {

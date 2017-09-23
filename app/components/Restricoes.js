@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, ScrollView, Text, SectionList, Alert} from 'react-native';
+import {View, ScrollView, Text, FlatList, Alert} from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import moment from 'moment';
 
@@ -29,15 +29,12 @@ export default class Restricoes extends Component {
     
     try {
       const response = await SefazAPI.obterRestricoes(params.requestToken, params.login);
-      const restrictions = response.map(restriction => {
-        return {
-          title: restriction.descricaoRestricao,
-          icon: 'warning',
-          data: [
-            {key: 'Competência', data: moment(restriction.dataCompetencia).utc().format(Constants.DATE_FORMAT)},
-            {key: 'Solução', data: restriction.solucao},
-          ]
-        };
+      const restrictions = [];
+      
+      response.forEach(restriction => {
+        restrictions.push({key: restrictions.length, title: 'Tipo', body: restriction.descricaoRestricao, icon: 'warning'});
+        restrictions.push({key: restrictions.length, title: 'Competência', body: moment(restriction.dataCompetencia).utc().format(Constants.DATE_FORMAT)});
+        restrictions.push({key: restrictions.length, title: 'Solução', body: restriction.solucao});
       });
 
       this.setState({restrictions});
@@ -48,20 +45,16 @@ export default class Restricoes extends Component {
     }
   }
 
-  renderSectionHeader(section) {
+  renderItem(item) {
     return (
-      <View style={Styles.sectionHeaderContainer}>
-        <FontAwesome name={section.icon} size={24} style={Styles.sectionHeaderIcon} />
-        <Text style={Styles.sectionHeader}>{section.title}</Text>
-      </View>
-    );
-  }
-
-  renderSectionItem(item) {
-    return (
-      <View style={Styles.itemContainer}>
-        <Text style={Styles.itemHeader}>{item.key}</Text>
-        <Text style={Styles.itemBody}>{item.data}</Text>
+      <View style={Styles.itemRow}>
+        {item.icon != null ? <FontAwesome name={item.icon} style={Styles.itemLeftIcon} /> : <Text style={Styles.itemLeftIcon} />}
+        <View style={Styles.itemContainer}>
+          <View style={Styles.itemTextContainer}>
+            <Text style={[Styles.itemPrimaryText, item.icon && {fontWeight: 'bold'}]}>{item.title}</Text>
+            <Text style={Styles.itemSecondaryText}>{item.body}</Text>
+          </View>
+        </View>
       </View>
     );
   }
@@ -70,12 +63,7 @@ export default class Restricoes extends Component {
     return (this.state.pendingRequest ?
       <MyActivityIndicator/> :
       <ScrollView style={Styles.mainContainer}>
-        <SectionList
-          sections={this.state.restrictions}
-          renderSectionHeader={({section}) => this.renderSectionHeader(section)}
-          renderItem={({item}) => this.renderSectionItem(item)}
-          style={Styles.sectionList}
-        />
+        <FlatList data={this.state.restrictions} renderItem={({item}) => this.renderItem(item)} style={Styles.listContainer} />
       </ScrollView>
     );
   }

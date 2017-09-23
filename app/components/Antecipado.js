@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
-import {View, ScrollView, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, Alert, SectionList, Clipboard} from 'react-native';
+import {View, ScrollView, Text, TextInput, ActivityIndicator, TouchableOpacity, TouchableWithoutFeedback, Alert, FlatList, Clipboard} from 'react-native';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import TextInputMask from 'react-native-text-input-mask';
+import {Col, Row, Grid} from 'react-native-easy-grid';
 import dismissKeyboard from 'dismissKeyboard';
 import Modal from 'react-native-modal';
 import moment from 'moment';
@@ -9,7 +11,6 @@ import moment from 'moment';
 import * as SefazAPI from '../api/SefazAPI';
 import Styles from '../common/Styles';
 import Constants from '../common/Constants';
-import MyActivityIndicator from './MyActivityIndicator';
 
 export default class Antecipado extends Component {
   static navigationOptions = {
@@ -62,17 +63,13 @@ export default class Antecipado extends Component {
     this.setState({pendingRequest: true});
 
     SefazAPI.consultarValoresAntecipados(params.requestToken, params.login, this.state.month).then(response => {
-      const records = response.map(record => {
-        return {
-          key: record.sequencialAntecipacao,
-          icon: 'money',
-          title: `Antecipado N\u00BA ${record.sequencialAntecipacao}`,
-          data: [
-            {key: 'Tributo', data: record.codigoTributo === Constants.ANTECIPADO ? 'Antecipado' : 'Fecoep'},
-            {key: 'Valor', data: 'R$ ' + Number(record.valorAntecipado).toFixed(2).replace('.', ',')},
-            {key: 'Vencimento', data: moment(record.dataVencimento).utc().format(Constants.DATE_FORMAT)},
-          ]
-        };
+      const records = [];
+      
+      response.forEach(record => {
+        records.push({key: records.length, title: "N\u00BA Antecipado", body: record.sequencialAntecipacao, icon: 'money'});
+        records.push({key: records.length, title: 'Tributo', body: record.codigoTributo === Constants.ANTECIPADO ? 'Antecipado' : 'Fecoep'});
+        records.push({key: records.length, title: 'Valor', body: 'R$ ' + Number(record.valorAntecipado).toFixed(2).replace('.', ',')});
+        records.push({key: records.length, title: 'Vencimento', body: moment(record.dataVencimento).utc().format(Constants.DATE_FORMAT), data: record.sequencialAntecipacao});
       });
 
       this.setState({records});
@@ -110,8 +107,8 @@ export default class Antecipado extends Component {
               <View key={record.codigoTributo} style={Styles.modal}>
                 <Text style={Styles.modalHeader}>{record.codigoTributo === Constants.ANTECIPADO ? 'Antecipado' : 'Fecoep'}</Text>
                 <Text style={Styles.modalParagraph}>Competência: {record.competencia.toString().substring(4) + '/' + record.competencia.toString().substring(0, 4)}</Text>
-                <Text style={Styles.modalParagraph}>Emissão: {moment(record.dataEmissao).utc().format(Constants.DATETIME_FORMAT)}</Text>
-                <Text style={Styles.modalParagraph}>Vencimento: {moment(record.dataVencimento).utc().format(Constants.DATETIME_FORMAT)}</Text>
+                <Text style={Styles.modalParagraph}>Emissão: {moment(record.dataEmissao).utc().format(Constants.DATE_FORMAT)}</Text>
+                <Text style={Styles.modalParagraph}>Vencimento: {moment(record.dataVencimento).utc().format(Constants.DATE_FORMAT)}</Text>
                 {record.dataPagamento && <Text style={Styles.modalParagraph}>Pagamento: {moment(record.dataPagamento).utc().format(Constants.DATETIME_FORMAT)}</Text>}
                 <Text style={Styles.modalParagraph}>Valor Principal: R$ {record.valorPrincipal.toFixed(2)}</Text>
                 <Text style={Styles.modalParagraph}>Valor Principal: R$ {record.valorTotal.toFixed(2)}</Text>
@@ -119,7 +116,7 @@ export default class Antecipado extends Component {
                 {!record.dataPagamento && (
                   <View style={Styles.action}>
                     <TouchableOpacity onPress={() => this.onCopyBarCode(record.codigoBarras)} accessibilityLabel="Copiar código de barras" style={Styles.actionButton}>
-                      <FontAwesome name="barcode" style={Styles.actionIcon} />
+                      <MaterialCommunityIcons name="barcode" style={Styles.actionIcon} />
                       <Text style={Styles.actionLabel}>Copiar código de barras</Text>
                     </TouchableOpacity>
                   </View>
@@ -132,90 +129,74 @@ export default class Antecipado extends Component {
     );
   }
 
-  renderSectionHeader(section) {
+  renderItem(item) {
     return (
-      <View style={Styles.sectionHeaderContainer}>
-        <FontAwesome name={section.icon} size={24} style={Styles.sectionHeaderIcon} />
-        <Text style={Styles.sectionHeader}>{section.title}</Text>
-      </View>
-    );
-  }
-
-  renderSectionItem(item) {
-    return (
-      <View style={Styles.itemContainer}>
-        <Text style={Styles.itemHeader}>{item.key}</Text>
-        <Text style={Styles.itemBody}>{item.data}</Text>
-      </View>
-    );
-  }
-
-  renderSectionFooter(section) {
-    return (
-      <View style={Styles.action}>
-        <TouchableOpacity style={Styles.actionButton} onPress={() => this.onViewRecordDetails(section.key)}>
-          <FontAwesome name="search" size={18} style={Styles.actionIcon}/>
-          <Text style={Styles.actionLabel}>Visualizar detalhes</Text>
-        </TouchableOpacity>
+      <View style={Styles.itemRow}>
+        {item.icon != null ? <FontAwesome name={item.icon} style={Styles.itemLeftIcon} /> : <Text style={Styles.itemLeftIcon} />}
+        <View style={Styles.itemContainer}>
+          <View style={Styles.itemTextContainer}>
+            <Text style={[Styles.itemPrimaryText, item.icon && {fontWeight: 'bold'}]}>{item.title}</Text>
+            <Text style={Styles.itemSecondaryText}>{item.body}</Text>
+          </View>
+          {item.data && <TouchableOpacity onPress={() => this.onViewRecordDetails(item.data)}>
+            <MaterialCommunityIcons name="information-outline" style={Styles.itemRightIcon} />
+          </TouchableOpacity>}
+        </View>
       </View>
     );
   }
 
   renderRecords() {
-    if (this.state.records == null) {
-      return null;
-    }
-
     if (this.state.records.length === 0) {
       return (
         <View style={Styles.centerContainer}>
           <View style={[Styles.row, Styles.searchResult]}>
-            <FontAwesome style={Styles.searchResultIcon} name="warning" />
+            <MaterialCommunityIcons style={Styles.searchResultIcon} name="warning" />
             <Text style={Styles.searchResultLabel}>Nenhum resultado foi encontrado no período.</Text>
           </View>
         </View>
       );
     }
 
-    return <SectionList
-      sections={this.state.records}
-      renderSectionHeader={({section}) => this.renderSectionHeader(section)}
-      renderSectionFooter={({section}) => this.renderSectionFooter(section)}
-      renderItem={({item}) => this.renderSectionItem(item)}
-      style={Styles.sectionList}
-    />;
+    return <FlatList data={this.state.records} renderItem={({item}) => this.renderItem(item)} style={Styles.listContainer} />;
   }
 
   render() {
-    return (this.state.pendingRequest ?
-      <MyActivityIndicator/> :
+    return (
       <TouchableWithoutFeedback onPress={dismissKeyboard}>
         <ScrollView style={Styles.mainContainer}>
-          <View style={Styles.searchContainer}>
-            <View style={Styles.searchRow}>
-              <Text style={Styles.searchLabel}>Competência</Text>
-              <View style={Styles.searchInputGroup}>
-                <TextInputMask
-                  mask={"[00]/[0000]"}
-                  placeholder="MM/AAAA"
-                  keyboardType="numeric"
-                  returnKeyType="done"
-                  blurOnSubmit={true}
-                  defaultValue={this.state.month}
-                  onSubmitEditing={event => this.onSearch()}
-                  onChangeText={month => this.setState({month})}
-                  style={[Styles.inputTextMd, Styles.searchInputText]} />
-                <FontAwesome name="calendar" style={Styles.searchFieldIcon} />
-              </View>
-            </View>
-            <View style={Styles.searchButton}>
-              <TouchableOpacity onPress={() => this.onSearch()}>
-                <Text style={Styles.searchButtonCenter}>Consultar</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-          {this.renderRecords()}
-          {this.state.isModalVisible && this.renderRecordDetailsModal()}
+          <Grid>
+            <Row size={25}>
+              <Col style={Styles.searchContainer}>
+                <View style={Styles.row}>
+                  <View style={[Styles.row, {marginRight: 32}]}>
+                    <MaterialCommunityIcons name="calendar" style={Styles.formInputIcon} />
+                    <View>
+                      <Text style={Styles.formFieldLabel}>Competência</Text>
+                      <TextInputMask
+                        mask={"[00]/[0000]"}
+                        placeholder="MM/AAAA"
+                        keyboardType="numeric"
+                        returnKeyType="done"
+                        blurOnSubmit={true}
+                        defaultValue={this.state.month}
+                        onSubmitEditing={event => this.onSearch()}
+                        onChangeText={month => this.setState({month})}
+                        style={[Styles.inputTextDate, Styles.textCenter, Styles.formInputText]} />
+                    </View>
+                  </View>
+                </View>
+                <TouchableOpacity onPress={() => this.onSearch()} style={[Styles.row, Styles.searchButtonContainer]} disable={this.state.pendingRequest}>
+                  {this.state.pendingRequest ? <ActivityIndicator style={Styles.activityIndicator} /> : <MaterialCommunityIcons name="magnify" style={Styles.searchButtonIcon} />}
+                  <Text style={Styles.searchButton}>{this.state.pendingRequest ? 'Consultando...' : 'Consultar'}</Text>
+                </TouchableOpacity>
+              </Col>
+            </Row>
+            <Row size={75}>
+              {this.state.records && this.renderRecords()}
+              {this.state.isModalVisible && this.renderRecordDetailsModal()}
+            </Row>
+          </Grid>
         </ScrollView>
       </TouchableWithoutFeedback>
     );
