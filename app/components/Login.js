@@ -6,7 +6,6 @@ import dismissKeyboard from 'dismissKeyboard';
 import Constants from '../common/Constants';
 import Styles from '../common/Styles';
 import * as SefazAPI from '../api/SefazAPI';
-import MyActivityIndicator from './MyActivityIndicator';
 
 export default class Login extends Component {
   static navigationOptions = {
