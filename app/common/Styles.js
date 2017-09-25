@@ -222,25 +222,15 @@ const Styles = StyleSheet.create({
     color: colors.darkBlue,
   },
   stContainer: {
-    marginTop: 20,
+    paddingLeft: 16,
     alignItems: 'center',
   },
   stResultContainer: {
     alignItems: 'center',
-    marginTop: 20,    
+    marginTop: 16,    
   },
-  stRow: {
-    flexDirection: 'row',
-    marginBottom: 5,
-  },
-  stColFirst: {
-    marginLeft: 0,
-  },
-  stCol: {
-    marginLeft: 40,
-  },
-  stInput: {
-    paddingTop: 0,
+  stRightCol: {
+    marginLeft: 24,
   },
   st50: {
     flex: 0.4,
@@ -376,6 +366,19 @@ const Styles = StyleSheet.create({
   },
   activityIndicator: {
     marginRight: 5
+  },
+  ncmSearchContainer: {
+    paddingLeft: 16,
+    paddingRight: 16
+  },
+  ncmSearchIcon: {
+    fontSize: 18,
+    color: colors.darkBlue,
+    lineHeight: 20
+  },
+  ncmSearchItem: {
+    marginBottom: 8,
+    color: colors.black
   }
 });
 

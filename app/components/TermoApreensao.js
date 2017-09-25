@@ -155,7 +155,6 @@ export default class TermoApreensao extends Component {
             </Row>
             <Row size={75}>
               {this.renderTerms()}
-              {this.renderDetailsModal()}
             </Row>
           </Grid>
         </ScrollView>

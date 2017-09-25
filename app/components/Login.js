@@ -115,14 +115,14 @@ export default class Login extends Component {
           </View>
           <View>
             <TextInput
-                keyboardType="numeric"
-                returnKeyType="done"
-                blurOnSubmit={true}
-                value={this.state.login}
-                style={{height: 50, width: 200, textAlign: 'center', fontSize: 20, color: 'white'}}
-                placeholder="Digite o seu Caceal"
-                onSubmitEditing={event => this.login()}
-                onChangeText={value => this.setState({login: value})}/>
+              keyboardType="numeric"
+              returnKeyType="done"
+              blurOnSubmit={true}
+              value={this.state.login}
+              style={{height: 50, width: 200, textAlign: 'center', fontSize: 20, color: 'white'}}
+              placeholder="Digite o seu Caceal"
+              onSubmitEditing={event => this.login()}
+              onChangeText={value => this.setState({login: value})}/>
           </View>
           <View>
             <TouchableOpacity style={[styles.loginButton, Styles.row]} accessibilityLabel="Acesse o Portal do Contribuinte" disabled={this.state.pendingRequest} onPress={() => this.login()}>

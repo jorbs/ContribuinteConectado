@@ -66,10 +66,10 @@ export default class Antecipado extends Component {
       const records = [];
       
       response.forEach(record => {
-        records.push({key: records.length, title: "N\u00BA Antecipado", body: record.sequencialAntecipacao, icon: 'money'});
+        records.push({key: records.length, title: "N\u00BA Antecipado", body: record.sequencialAntecipacao, icon: 'money', data: record.sequencialAntecipacao});
         records.push({key: records.length, title: 'Tributo', body: record.codigoTributo === Constants.ANTECIPADO ? 'Antecipado' : 'Fecoep'});
         records.push({key: records.length, title: 'Valor', body: 'R$ ' + Number(record.valorAntecipado).toFixed(2).replace('.', ',')});
-        records.push({key: records.length, title: 'Vencimento', body: moment(record.dataVencimento).utc().format(Constants.DATE_FORMAT), data: record.sequencialAntecipacao});
+        records.push({key: records.length, title: 'Vencimento', body: moment(record.dataVencimento).utc().format(Constants.DATE_FORMAT)});
       });
 
       this.setState({records});
@@ -168,22 +168,20 @@ export default class Antecipado extends Component {
           <Grid>
             <Row size={25}>
               <Col style={Styles.searchContainer}>
-                <View style={Styles.row}>
-                  <View style={[Styles.row, {marginRight: 32}]}>
-                    <MaterialCommunityIcons name="calendar" style={Styles.formInputIcon} />
-                    <View>
-                      <Text style={Styles.formFieldLabel}>Competência</Text>
-                      <TextInputMask
-                        mask={"[00]/[0000]"}
-                        placeholder="MM/AAAA"
-                        keyboardType="numeric"
-                        returnKeyType="done"
-                        blurOnSubmit={true}
-                        defaultValue={this.state.month}
-                        onSubmitEditing={event => this.onSearch()}
-                        onChangeText={month => this.setState({month})}
-                        style={[Styles.inputTextDate, Styles.textCenter, Styles.formInputText]} />
-                    </View>
+                <View style={[Styles.row, {marginRight: 32}]}>
+                  <MaterialCommunityIcons name="calendar" style={Styles.formInputIcon} />
+                  <View>
+                    <Text style={Styles.formFieldLabel}>Competência</Text>
+                    <TextInputMask
+                      mask={"[00]/[0000]"}
+                      placeholder="MM/AAAA"
+                      keyboardType="numeric"
+                      returnKeyType="done"
+                      blurOnSubmit={true}
+                      defaultValue={this.state.month}
+                      onSubmitEditing={event => this.onSearch()}
+                      onChangeText={month => this.setState({month})}
+                      style={[Styles.inputTextDate, Styles.textCenter, Styles.formInputText]} />
                   </View>
                 </View>
                 <TouchableOpacity onPress={() => this.onSearch()} style={[Styles.row, Styles.searchButtonContainer]} disable={this.state.pendingRequest}>
@@ -193,8 +191,10 @@ export default class Antecipado extends Component {
               </Col>
             </Row>
             <Row size={75}>
-              {this.state.records && this.renderRecords()}
-              {this.state.isModalVisible && this.renderRecordDetailsModal()}
+              <Col>
+                {this.state.records && this.renderRecords()}
+                {this.state.isModalVisible && this.renderRecordDetailsModal()}
+              </Col>
             </Row>
           </Grid>
         </ScrollView>
