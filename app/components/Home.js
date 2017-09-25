@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Text, View, TouchableOpacity, AsyncStorage, Alert} from 'react-native';
+import {Text, View, TouchableOpacity, AsyncStorage, Alert, Image} from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import PushNotification from 'react-native-push-notification';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -273,24 +273,24 @@ export default class Home extends Component {
   render() {
     return (
       <Grid style={Styles.homeContainer}>
-        <Row size={25}>
+        <Row size={15}>
           <View style={Styles.logoContainer}>
             <View style={Styles.row}>
-              <FontAwesome name="sign-out" style={Styles.homeLogo} />
+              <Image source={require('./../assets/images/home-logo.png')} style={Styles.appLogo} />
               <Text style={Styles.appLabel}>Contribuinte{"\n"}Conectado</Text>
             </View>
             <TouchableOpacity style={Styles.logoutButton} onPress={() => this.logout()}>
-              <FontAwesome name="sign-out" style={Styles.logoutIcon} />
+              <MaterialCommunityIcons name="logout" style={Styles.logoutIcon} />
               <Text style={Styles.logoutLabel}>Sair</Text>
             </TouchableOpacity>
           </View>
         </Row>
-        <Row size={75} style={Styles.menu}>
+        <Row size={85} style={Styles.menu}>
           <Grid>
             <Row style={Styles.menuRow}>
               <Col>
                 <TouchableOpacity onPress={() => this.navigate('SituacaoCadastral')} style={Styles.menuItem}>
-                  <FontAwesome name="vcard-o" style={Styles.menuItemIcon} />
+                  <MaterialCommunityIcons name="account-card-details" style={Styles.menuItemIcon} />
                   <Text style={Styles.menuItemLabel}>Cadastro</Text>
                 </TouchableOpacity>
               </Col>
@@ -310,7 +310,7 @@ export default class Home extends Component {
               </Col>
               <Col>
                 <TouchableOpacity onPress={() => this.navigate('RestricoesPendencias')} style={Styles.menuItem}>
-                  <FontAwesome name="list-alt" style={Styles.menuItemIcon}/>
+                  <MaterialCommunityIcons name="format-list-checks" style={Styles.menuItemIcon}/>
                   <Text style={Styles.menuItemLabel}>Restrições</Text>
                 </TouchableOpacity>
               </Col>
@@ -332,21 +332,21 @@ export default class Home extends Component {
             <Row style={Styles.menuRow}>
             <Col>
               <TouchableOpacity onPress={() => this.navigate('SimuladorST')} style={Styles.menuItem}>
-                <Entypo name="calculator" style={Styles.menuItemIcon}/>
+                <MaterialCommunityIcons name="calculator" style={Styles.menuItemIcon}/>
                 <Text style={Styles.menuItemLabel}>Simulador ST</Text>
               </TouchableOpacity>
               </Col>
               <Col>
-              <TouchableOpacity onPress={() => this.navigate('NCM')} style={Styles.menuItem}>
-                <Text style={Styles.menuItemNcm}>8581.30</Text>
-                <Text style={Styles.menuItemLabel}>NCM</Text>
-              </TouchableOpacity>
+                <TouchableOpacity onPress={() => this.navigate('NcmAliquotas')} style={Styles.menuItem}>
+                  <Text style={Styles.menuItemNcm}>8581.30</Text>
+                  <Text style={Styles.menuItemLabel}>NCM</Text>
+                </TouchableOpacity>
               </Col>
             </Row>
             <Row style={Styles.menuRow}>
             <Col>
               <TouchableOpacity onPress={() => this.navigate('AcaoFiscal')} style={Styles.menuItem}>
-                <FontAwesome name="flag" style={Styles.menuItemIcon}/>
+                <MaterialCommunityIcons name="flag" style={Styles.menuItemIcon}/>
                 <Text style={Styles.menuItemLabel}>Ações Fiscais</Text>
               </TouchableOpacity>
               </Col>

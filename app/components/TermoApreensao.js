@@ -149,7 +149,7 @@ export default class TermoApreensao extends Component {
                 </View>
                 <TouchableOpacity onPress={() => this.onSearch()} style={[Styles.row, Styles.searchButtonContainer]} disable={this.state.pendingRequest}>
                   {this.state.pendingRequest ? <ActivityIndicator style={Styles.activityIndicator} /> : <MaterialCommunityIcons name="magnify" style={Styles.searchButtonIcon} />}
-                  <Text style={Styles.searchButton}>{this.state.pendingRequest ? 'Buscando termos...' : 'Buscar termos'}</Text>
+                  <Text style={Styles.searchButton}>{this.state.pendingRequest ? 'Consultando...' : 'Consultar'}</Text>
                 </TouchableOpacity>
               </Col>
             </Row>

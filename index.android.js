@@ -13,7 +13,7 @@ import Processos from './app/components/Processos';
 import CallCenter from './app/components/CallCenter';
 import AcaoFiscal from './app/components/AcaoFiscal';
 import SimuladorST from './app/components/SimuladorST';
-import NCM from './app/components/NCM';
+import NcmAliquotas from './app/components/NcmAliquotas';
 
 const ContribuinteConectado = StackNavigator({
   Login: {
@@ -58,9 +58,9 @@ const ContribuinteConectado = StackNavigator({
     path: 'simulador',
     screen: SimuladorST
   },
-  NCM: {
-    path: 'ncm',
-    screen: NCM
+  NcmAliquotas: {
+    path: 'ncmAliquotas',
+    screen: NcmAliquotas
   },
   AcaoFiscal: {
     path: 'acaoFiscal',

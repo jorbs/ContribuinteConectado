@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import {View, ScrollView, Text, FlatList, ActivityIndicator, TouchableOpacity, TextInput, Alert, TouchableWithoutFeedback, AsyncStorage} from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {Col, Row, Grid} from 'react-native-easy-grid';
 import Entypo from 'react-native-vector-icons/Entypo';
 import dismissKeyboard from 'dismissKeyboard';
@@ -140,7 +139,7 @@ export default class Processos extends Component {
       return (
         <View style={Styles.centerContainer}>
           <View style={[Styles.row, Styles.searchResult]}>
-            <FontAwesome style={Styles.searchResultIcon} name="warning" />
+            <MaterialCommunityIcons style={Styles.searchResultIcon} name="alert-circle" />
             <Text style={Styles.searchResultLabel}>Processo não encontrado.</Text>
           </View>
         </View>
@@ -174,7 +173,9 @@ export default class Processos extends Component {
               </Col>
             </Row>
             <Row size={75}>
-              {this.renderProcessDetails()}
+              <Col>
+                {this.renderProcessDetails()}
+              </Col>
             </Row>
           </Grid>
         </ScrollView>

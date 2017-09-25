@@ -5,7 +5,7 @@ const colors = {
   black: '#000',
   red: '#ad1125',
   darkBlue: '#113A7E',
-  lightGray: '#ffe0e7',
+  lightGray: '#e1e2e1',
 };
 
 const Styles = StyleSheet.create({
@@ -36,7 +36,7 @@ const Styles = StyleSheet.create({
     alignSelf: 'center',
     alignItems: 'center',
     padding: 4,
-    backgroundColor: '#ffe0e7',
+    backgroundColor: colors.lightGray,
     borderRadius: 4,
     width: 120
   },
@@ -53,7 +53,6 @@ const Styles = StyleSheet.create({
     lineHeight: 46    
   },
   menuItemLabel: {
-    marginTop: 3,
     color: colors.darkBlue,
     fontSize: 16,
   },
@@ -96,7 +95,7 @@ const Styles = StyleSheet.create({
     color: colors.red,
   },
   searchContainer: {
-    backgroundColor: '#ffe0e7',
+    backgroundColor: colors.lightGray,
     alignItems: 'center',
     marginBottom: 16
   },
@@ -135,11 +134,12 @@ const Styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 16,
     marginBottom: 16,
-    paddingTop: 5,
-    paddingRight: 10,
-    paddingBottom: 5,
-    paddingLeft: 10,
+    paddingRight: 40,
+    paddingLeft: 40,
+    paddingTop: 10,
+    paddingBottom: 10,
     backgroundColor: colors.darkBlue,
+    borderRadius: 20
   },
   searchButton: {
     color: colors.white,
@@ -354,9 +354,13 @@ const Styles = StyleSheet.create({
     color: colors.white,
     fontWeight: 'bold'
   },
+  appLogo: {
+    height: 56,
+    width: 56
+  },
   appLabel: {
     color: colors.white,
-    fontSize: 24,
+    fontSize: 22,
     alignSelf: 'center',
     marginLeft: 8
   },

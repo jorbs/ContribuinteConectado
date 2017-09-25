@@ -76,6 +76,7 @@ export default class Login extends Component {
         Alert.alert('Não foi possível autorizar a aplicação.');
       }
     } catch(e) {
+      console.log(e);
       const {goBack} = this.props.navigation;
       Alert.alert('Erro na solicitação', e.message, [{text: 'OK', onPress: () => goBack()}]);
     } finally {
@@ -99,7 +100,8 @@ export default class Login extends Component {
       if (e.codigo === 1) {
         this.requestAuthorization();
       } else {
-        const {goBack} = this.props.navigation;
+      console.log(e);
+      const {goBack} = this.props.navigation;
         Alert.alert('Erro na solicitação', e.mensagem, [{text: 'OK', onPress: () => goBack()}]);
       }
     } finally {

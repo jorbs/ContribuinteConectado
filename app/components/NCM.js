@@ -6,7 +6,7 @@ import dismissKeyboard from 'dismissKeyboard';
 
 import Styles from '../common/Styles';
 import Constants from '../common/Constants';
-import Aliquotas from '../common/Aliquotas';
+import NcmMap from '../common/NcmMap';
 
 export default class NCM extends Component {
   static navigationOptions = {
@@ -27,11 +27,11 @@ export default class NCM extends Component {
     let items = [];
 
     if (isNaN(term[0])) {
-      items = Aliquotas.filter((aliquota, i, array) => aliquota.description.toLowerCase().indexOf(term.toLowerCase()) != -1)
+      items = NcmMap.filter((aliquota, i, array) => aliquota.description.toLowerCase().indexOf(term.toLowerCase()) != -1)
         .slice(0, Constants.NCM_LIMIT)
         .map(item => ({key: item.description, ...item}))
     } else {
-      items = Aliquotas.filter(aliquota => aliquota.ncm.filter(n => n.indexOf(term) != -1).length > 0)
+      items = NcmMap.filter(aliquota => aliquota.ncm.filter(n => n.indexOf(term) != -1).length > 0)
         .slice(0, Constants.NCM_LIMIT)
         .map(item => ({key: item.description, ...item}))
     }
@@ -68,9 +68,9 @@ export default class NCM extends Component {
       {key: `NCM${selectedItem.ncm.length > 1 ? 's' : ''}`, data: selectedItem.ncm.join(', ')},
       {key: 'Acordo Interestadual', data: selectedItem.legal || 'Não existe'},
       {key: 'MVA Original', data: (selectedItem.mva[0] * 100).toFixed(2) + '%'},
-      {key: 'MVA - Operação Interestadual a 12%', data: (selectedItem.mva[1] * 100).toFixed(2) + '%', mva: selectedItem.mva[1]},
-      {key: 'MVA - Operação Interestadual a 7%', data: (selectedItem.mva[2] * 100).toFixed(2) + '%', mva: selectedItem.mva[2]},
-      {key: 'MVA - Operação Interestadual a 4%', data: (selectedItem.mva[3] * 100).toFixed(2) + '%', mva: selectedItem.mva[3]},
+      {key: 'MVA  12%', data: (selectedItem.mva[1] * 100).toFixed(2) + '%', mva: selectedItem.mva[1]},
+      {key: 'MVA  7%', data: (selectedItem.mva[2] * 100).toFixed(2) + '%', mva: selectedItem.mva[2]},
+      {key: 'MVA  4%', data: (selectedItem.mva[3] * 100).toFixed(2) + '%', mva: selectedItem.mva[3]},
     ];
 
     return <FlatList data={selectedItemDetails} renderItem={({item}) => this.renderSelectedItem(item)} style={Styles.listContainer} />;
