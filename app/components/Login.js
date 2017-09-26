@@ -140,7 +140,7 @@ export default class Login extends Component {
           {this.state.pendingRequest && <ActivityIndicator style={Styles.activityIndicator} />}
           <Text style={{textAlign: 'center', color: 'white', fontSize: 18}}>{this.state.pendingRequest ? 'Entrando...' : 'Entrar'}</Text>
         </TouchableOpacity>
-        <View style={{flexDirection: 'row'}}>
+        <View style={Styles.row}>
           <Switch value={this.state.rememberMe} onValueChange={rememberMe => this.setState({rememberMe})}/>
           <Text style={{lineHeight: 23, marginLeft: 4, color: 'white'}} onPress={() => this.setState({rememberMe: !this.state.rememberMe})}>Lembrar acesso</Text>
         </View>
@@ -157,6 +157,14 @@ export default class Login extends Component {
           <Text style={Styles.appLabel}>Conectado</Text>
           {this.state.isLoadingScreen && <ActivityIndicator style={{marginTop: 16}}/>}
           {!this.state.isLoadingScreen && this.renderLoginForm()}
+          <View style={Styles.loginFooter}>
+            <View style={Styles.logoFooterContainer}>
+              <Image source={require('./../assets/images/logo-sefaz.png')} style={Styles.logoSefaz} />
+            </View>
+            <View style={Styles.logoFooterContainer}>
+              <Image source={require('./../assets/images/logo-governo.png')} style={Styles.logoGoverno} />
+            </View>
+          </View>
         </View>
       </TouchableWithoutFeedback>
     );

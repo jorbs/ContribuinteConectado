@@ -21,7 +21,7 @@ const Styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.darkBlue,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
   },
   mainContainer: {
     flex: 1,
@@ -369,27 +369,58 @@ const Styles = StyleSheet.create({
   loginLogo: {
     height: 160,
     width: 160,
+    marginTop: 24,
     marginBottom: 8
   },
   loginInput: {
     alignSelf: 'center',
-    // height: 50,
     width: 180,
     textAlign: 'center',
     fontSize: 16,
     color: colors.white,
-    marginTop: 48
+    marginTop: 32
   },
   loginButton: {
     alignSelf: 'center',
     marginTop: 8,
     marginBottom: 16,
-    paddingRight: 32,
-    paddingLeft: 32,
+    paddingRight: 48,
+    paddingLeft: 48,
     paddingTop: 8,
     paddingBottom: 8,
     backgroundColor: colors.red,
     borderRadius: 20
+  },
+  loginFooter: {
+    position: 'absolute',
+    bottom: 16,
+    left: 0,
+    right: 0,
+    flexDirection: 'row',
+    backgroundColor: colors.white,
+    padding: 12,
+    paddingLeft: 16,
+    paddingRight: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  logoFooterContainer: {
+    flex: 1,
+    height: 48,
+  },
+  logoSefaz: {
+    position: 'absolute',
+    top: 12,
+    left: 0,
+    height: 24,
+    width: 98
+  },
+  logoGoverno: {
+    position: 'absolute',
+    right: 0,
+    // top: 0,
+    height: 48,
+    width: 120
   },
   appLabel: {
     color: colors.white,
