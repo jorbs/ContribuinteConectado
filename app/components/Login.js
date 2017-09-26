@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import DeviceInfo from 'react-native-device-info';
-import {Text, TextInput, ActivityIndicator, View, Alert, Switch, TouchableOpacity, TouchableWithoutFeedback, AsyncStorage, StyleSheet} from 'react-native';
+import {Text, TextInput, Image, ActivityIndicator, View, Alert, Switch, TouchableOpacity, TouchableWithoutFeedback, AsyncStorage, StyleSheet} from 'react-native';
 import dismissKeyboard from 'dismissKeyboard';
 
 import Constants from '../common/Constants';
@@ -14,16 +14,27 @@ export default class Login extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {pendingRequest: false, rememberMe: true};
+    this.state = {
+      pendingRequest: false,
+      isLoadingScreen: true,
+      rememberMe: true
+    };
   }
 
   async componentDidMount() {
     try {
       const login = await AsyncStorage.getItem(Constants.REMEMBER_ME_KEY);
+      const requestToken = await AsyncStorage.getItem(Constants.REQUEST_TOKEN_KEY);
+      
+      if (requestToken && login) {
+        this.props.navigation.navigate('Home', {login: this.state.login, requestToken: this.state.requestToken});
+        return;
+      }
+
       const authorizationId = await AsyncStorage.getItem(Constants.AUTHORIZATION_ID_KEY);
       const rememberMe = login != null;
       
-      this.setState({login, authorizationId, rememberMe});
+      this.setState({login, authorizationId, rememberMe, isLoadingScreen: false});
     } catch (e) {
       console.warn('Unable to retrieve login and authorizationId from AsyncStorage: ', e);
     }
@@ -38,6 +49,7 @@ export default class Login extends Component {
       } else {
         await AsyncStorage.removeItem(Constants.AUTHORIZATION_ID_KEY);
         await AsyncStorage.removeItem(Constants.REMEMBER_ME_KEY);
+        await AsyncStorage.removeItem(Constants.REQUEST_TOKEN_KEY);
       }
     } catch (e) {
       console.warn('Unable to use AsyncStorage: ', e);
@@ -76,7 +88,6 @@ export default class Login extends Component {
         Alert.alert('Não foi possível autorizar a aplicação.');
       }
     } catch(e) {
-      console.log(e);
       const {goBack} = this.props.navigation;
       Alert.alert('Erro na solicitação', e.message, [{text: 'OK', onPress: () => goBack()}]);
     } finally {
@@ -91,6 +102,8 @@ export default class Login extends Component {
       const response = await SefazAPI.autenticar(this.state.login, this.state.authorizationId);
 
       if (response.id_token != null) {
+        await AsyncStorage.setItem(Constants.REQUEST_TOKEN_KEY, response.id_token);
+        
         this.setState({requestToken: response.id_token});
         this.props.navigation.navigate('Home', {login: this.state.login, requestToken: this.state.requestToken});
       } else {
@@ -109,54 +122,43 @@ export default class Login extends Component {
     }
   }
 
+  renderLoginForm() {
+    return (
+      <View>
+        <TextInput
+          keyboardType="numeric"
+          returnKeyType="done"
+          blurOnSubmit={true}
+          value={this.state.login}
+          style={Styles.loginInput}
+          placeholder="Digite o seu Caceal"
+          placeholderTextColor="#e1e2e1"
+          underlineColorAndroid="white"
+          onSubmitEditing={event => this.login()}
+          onChangeText={value => this.setState({login: value})}/>
+        <TouchableOpacity style={[Styles.loginButton, Styles.row]} accessibilityLabel="Acesse o Portal do Contribuinte" disabled={this.state.pendingRequest} onPress={() => this.login()}>
+          {this.state.pendingRequest && <ActivityIndicator style={Styles.activityIndicator} />}
+          <Text style={{textAlign: 'center', color: 'white', fontSize: 18}}>{this.state.pendingRequest ? 'Entrando...' : 'Entrar'}</Text>
+        </TouchableOpacity>
+        <View style={{flexDirection: 'row'}}>
+          <Switch value={this.state.rememberMe} onValueChange={rememberMe => this.setState({rememberMe})}/>
+          <Text style={{lineHeight: 23, marginLeft: 4, color: 'white'}} onPress={() => this.setState({rememberMe: !this.state.rememberMe})}>Lembrar acesso</Text>
+        </View>
+      </View>
+    );
+  }
+
   render() {
-    return (<TouchableWithoutFeedback onPress={dismissKeyboard}>
-        <View style={styles.container}>
-          <View>
-            <Text style={{fontSize: 32, width: 200, textAlign: 'center', marginBottom: 80, color: 'white'}}>Contribuinte Conectado</Text>
-          </View>
-          <View>
-            <TextInput
-              keyboardType="numeric"
-              returnKeyType="done"
-              blurOnSubmit={true}
-              value={this.state.login}
-              style={{height: 50, width: 200, textAlign: 'center', fontSize: 20, color: 'white'}}
-              placeholder="Digite o seu Caceal"
-              onSubmitEditing={event => this.login()}
-              onChangeText={value => this.setState({login: value})}/>
-          </View>
-          <View>
-            <TouchableOpacity style={[styles.loginButton, Styles.row]} accessibilityLabel="Acesse o Portal do Contribuinte" disabled={this.state.pendingRequest} onPress={() => this.login()}>
-              {this.state.pendingRequest && <ActivityIndicator style={Styles.activityIndicator} />}
-              <Text style={{textAlign: 'center', color: 'white', fontSize: 18}}>{this.state.pendingRequest ? 'Entrando...' : 'Entrar'}</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={{flexDirection: 'row'}}>
-            <Switch value={this.state.rememberMe} onValueChange={rememberMe => this.setState({rememberMe})}/>
-            <Text style={{lineHeight: 23, marginLeft: 4, color: 'white'}} onPress={() => this.setState({rememberMe: !this.state.rememberMe})}>Lembrar acesso</Text>
-          </View>
+    return (
+      <TouchableWithoutFeedback onPress={dismissKeyboard}>
+        <View style={Styles.loginContainer}>
+          <Image source={require('./../assets/images/home-logo.png')} style={Styles.loginLogo} />
+          <Text style={Styles.appLabel}>Contribuinte</Text>
+          <Text style={Styles.appLabel}>Conectado</Text>
+          {this.state.isLoadingScreen && <ActivityIndicator style={{marginTop: 16}}/>}
+          {!this.state.isLoadingScreen && this.renderLoginForm()}
         </View>
       </TouchableWithoutFeedback>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: 'column',
-    backgroundColor: '#113A7E',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  loginButton: {
-    backgroundColor: '#890f23',
-    marginTop: 15,
-    marginBottom: 10,
-    paddingTop: 6,
-    paddingBottom: 6,
-    paddingLeft: 12,
-    paddingRight: 12,
-  }
-});

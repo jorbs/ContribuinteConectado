@@ -2,6 +2,7 @@ const Constants = {
   DAR_NOTIFICATION_7_DAYS: 7,
   DAR_NOTIFICATION_1_DAY: 1,
   REMEMBER_ME_KEY: 'ContribuinteConectado:login',
+  REQUEST_TOKEN_KEY: 'ContribuinteConectado:requestToken',
   AUTHORIZATION_ID_KEY: 'ContribuinteConectado:authorizationId',
   CN_STATUS_KEY: 'ContribuinteConectado:cnStatus',
   RESTRICTIONS_COUNT_KEY: 'ContribuinteConectado:restrictionsCount',

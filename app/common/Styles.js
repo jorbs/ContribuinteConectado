@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 const colors = {
   white: '#fff',
   black: '#000',
-  red: '#ad1125',
+  red: '#890f23',
   darkBlue: '#113A7E',
   lightGray: '#e1e2e1',
 };
@@ -16,6 +16,12 @@ const Styles = StyleSheet.create({
     color: colors.white,
     fontSize: 20,
     fontFamily: 'Roboto-Medium'
+  },
+  loginContainer: {
+    flex: 1,
+    backgroundColor: colors.darkBlue,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   mainContainer: {
     flex: 1,
@@ -359,6 +365,31 @@ const Styles = StyleSheet.create({
   appLogo: {
     height: 56,
     width: 56
+  },
+  loginLogo: {
+    height: 160,
+    width: 160,
+    marginBottom: 8
+  },
+  loginInput: {
+    alignSelf: 'center',
+    // height: 50,
+    width: 180,
+    textAlign: 'center',
+    fontSize: 16,
+    color: colors.white,
+    marginTop: 48
+  },
+  loginButton: {
+    alignSelf: 'center',
+    marginTop: 8,
+    marginBottom: 16,
+    paddingRight: 32,
+    paddingLeft: 32,
+    paddingTop: 8,
+    paddingBottom: 8,
+    backgroundColor: colors.red,
+    borderRadius: 20
   },
   appLabel: {
     color: colors.white,
