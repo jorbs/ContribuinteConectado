@@ -119,6 +119,7 @@ const Styles = StyleSheet.create({
     padding: 0,
     margin: 0,
     paddingBottom: 8,
+    paddingRight: 8,
     fontSize: 16,
     color: colors.black,
   },
@@ -131,11 +132,11 @@ const Styles = StyleSheet.create({
     alignSelf: 'flex-end',
   },
   searchButtonContainer: {
-    alignItems: 'center',
-    marginTop: 16,
+    alignSelf: 'center',
+    marginTop: 8,
     marginBottom: 16,
-    paddingRight: 40,
-    paddingLeft: 40,
+    paddingRight: 32,
+    paddingLeft: 32,
     paddingTop: 10,
     paddingBottom: 10,
     backgroundColor: colors.darkBlue,
@@ -223,6 +224,7 @@ const Styles = StyleSheet.create({
   },
   stContainer: {
     paddingLeft: 16,
+    paddingRight: 16,
     alignItems: 'center',
   },
   stResultContainer: {

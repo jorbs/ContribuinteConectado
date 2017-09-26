@@ -25,10 +25,10 @@ export default class Aliquotas extends Component {
     
     AliquotasMap.forEach(aliquot => {
       const mainBody = aliquot.descricao + (aliquot.ncm ? ` (${aliquot.ncm})` : '');
+      const aliquotas = `${aliquot.aliquota}, ${aliquot.aliquota_efetiva} e ${aliquot.fecoep}`
+
       aliquots.push({key: aliquots.length, title: 'Descrição', body: mainBody, icon: 'percent'});
-      aliquots.push({key: aliquots.length, title: 'Alíquota', body: aliquot.aliquota});
-      aliquots.push({key: aliquots.length, title: 'Alíquota Efetiva', body: aliquot.aliquota_efetiva});
-      aliquots.push({key: aliquots.length, title: 'Fecoep', body: aliquot.fecoep});
+      aliquots.push({key: aliquots.length, title: 'Alíquota, Alíquota Efetiva e Fecoep', body: aliquotas});
     });
 
     this.setState({aliquots});

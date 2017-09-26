@@ -81,20 +81,33 @@ export default class Processos extends Component {
         }
       }
 
-      let message = 'Processo adicionado à lista de notificações.';
-      let watched = true;
+      let watched = processIndex == -1;
 
       if (processIndex == -1) {
-        processes.push({number: processNumber, status: processStatus});
+        Alert.alert('Contribuinte Conectado', 'Deseja ser notificado sobre a mudança de situação deste processo?', [
+          {
+            text: 'Sim',
+            onPress: async () => {
+              processes.push({number: processNumber, status: processStatus});
+              await AsyncStorage.setItem(Constants.WATCHED_PROCESSES_KEY, JSON.stringify(processes));
+              this.setState({watched});
+            }
+          },
+          {text: 'Não'}
+        ]);
       } else {
-        message = 'Processo removido da lista de notificações.';
-        watched = false;
-        processes.splice(processIndex, 1);
+        Alert.alert('Contribuinte Conectado', 'Deixar de ser notificado sobre a mudança de situação deste processo?', [
+          {
+            text: 'Sim',
+            onPress: async () => {
+              processes.splice(processIndex, 1);
+              await AsyncStorage.setItem(Constants.WATCHED_PROCESSES_KEY, JSON.stringify(processes));
+              this.setState({watched});
+            }
+          },
+          {text: 'Não'}
+        ]);
       }
-
-      await AsyncStorage.setItem(Constants.WATCHED_PROCESSES_KEY, JSON.stringify(processes));
-      this.setState({watched});
-      Alert.alert(message);
     } catch (e) {
       console.warn('Unable to use AsyncStorage in processes screen: ', e.message);
     }
@@ -127,7 +140,7 @@ export default class Processos extends Component {
             <Text style={Styles.itemSecondaryText}>{item.data}</Text>
           </View>
           {item.watch && <TouchableOpacity onPress={() => this.onWatchProcess(item.watch.processNumber, item.watch.status)}>
-            <MaterialCommunityIcons name={this.state.watched ? 'eye-off-outline' : 'eye-outline'} style={Styles.actionIcon}/>
+            <MaterialCommunityIcons name={this.state.watched ? 'eye-off' : 'eye'} style={Styles.actionIcon}/>
           </TouchableOpacity>}
         </View>
       </View>

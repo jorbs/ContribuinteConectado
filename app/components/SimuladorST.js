@@ -72,6 +72,12 @@ export default class SimuladorST extends Component {
     return (
       <TouchableWithoutFeedback onPress={dismissKeyboard}>
         <ScrollView style={Styles.mainContainer}>
+          <View style={[Styles.stResultContainer, {marginTop: 0}]}>
+            <View style={[Styles.row, Styles.stTotal]}>
+              <Text style={[Styles.textBold, Styles.st50]}>Total da operação</Text>
+              <Text style={[Styles.textBold, Styles.st50, Styles.stResult]}>R$ {this.totalOperacao().toFixed(2).replace(/\./g, ',')}</Text>
+            </View>
+          </View>
           <View style={Styles.stContainer}>
             <View style={Styles.row}>
               <View>
@@ -211,7 +217,7 @@ export default class SimuladorST extends Component {
               </View>
             </View>
           </View>
-          <View style={Styles.stResultContainer}>
+          <View style={[Styles.stResultContainer, {marginBottom: 16}]}>
             <View style={Styles.row}>
               <Text style={Styles.st50}>Subtotal</Text>
               <Text style={[Styles.st50, Styles.stResult]}>R$ {this.subtotal().toFixed(2).replace(/\./g, ',')}</Text>
@@ -236,10 +242,12 @@ export default class SimuladorST extends Component {
               <Text style={Styles.st50}>Valor Total ST</Text>
               <Text style={[Styles.st50, Styles.stResult]}>R$ {this.valorTotalSt().toFixed(2).replace(/\./g, ',')}</Text>
             </View>
+          <View style={[Styles.stResultContainer]}>
             <View style={[Styles.row, Styles.stTotal]}>
               <Text style={[Styles.textBold, Styles.st50]}>Total da operação</Text>
               <Text style={[Styles.textBold, Styles.st50, Styles.stResult]}>R$ {this.totalOperacao().toFixed(2).replace(/\./g, ',')}</Text>
             </View>
+          </View>
           </View>
         </ScrollView>
       </TouchableWithoutFeedback>

@@ -1,15 +1,21 @@
 const AliquotasMap = [
   {
-    aliquota: "17%",
-    fecoep: "1%",
-    aliquota_efetiva: "18%",
-    descricao: "Operações com demais bens e mercadorias, bem como prestações de serviço, para as quais não haja previsão de alíquota específica"
-  },
-  {
     aliquota: "12%",
     fecoep: "1%",
     aliquota_efetiva: "13%",
     descricao: "Serviços de transporte aéreo"
+  },
+  {
+    aliquota: "17%",
+    fecoep: "0%",
+    aliquota_efetiva: "17%",
+    descricao: "Material escolar, Cesta basica, Operações com medicamentos de uso humano, Fornecimento de energia elétrica até 150 quilowatts/horas mensais, para consumo domiciliar e de estabelecimento comercial, Prestação de serviço de transporte aquaviário, Prestação de serviço de transporte rodoviário intermunicipal de passageiro, Fornecimento de alimentação"
+  },
+  {
+    aliquota: "17%",
+    fecoep: "1%",
+    aliquota_efetiva: "18%",
+    descricao: "Operações com demais bens e mercadorias, bem como prestações de serviço, para as quais não haja previsão de alíquota específica"
   },
   {
     aliquota: "23%",
@@ -52,12 +58,6 @@ const AliquotasMap = [
     fecoep: "2%",
     aliquota_efetiva: "27%",
     descricao: "Rodas esportivas para autos"
-  },
-  {
-    aliquota: "28%",
-    fecoep: "2%",
-    aliquota_efetiva: "30%",
-    descricao: "Serviços de telecomunicação"
   },
   {
     aliquota: "25%",
@@ -130,6 +130,12 @@ const AliquotasMap = [
     descricao: "Gasolina"
   },
   {
+    aliquota: "28%",
+    fecoep: "2%",
+    aliquota_efetiva: "30%",
+    descricao: "Serviços de telecomunicação"
+  },
+  {
     aliquota: "29%",
     fecoep: "2%",
     aliquota_efetiva: "31%",
@@ -152,201 +158,6 @@ const AliquotasMap = [
     fecoep: "2%",
     aliquota_efetiva: "31%",
     descricao: "Aviões e helicópteros, para uso não comercial"
-  },
-  {
-    aliquota: "17%",
-    aliquota_efetiva: "17%",
-    descricao: "Fornecimento de alimentação"
-  },
-  {
-    aliquota: "17%",
-    aliquota_efetiva: "17%",
-    descricao: "Prestação de serviço de transporte rodoviário intermunicipal de passageiro"
-  },
-  {
-    aliquota: "17%",
-    aliquota_efetiva: "17%",
-    descricao: "Prestação de serviço de transporte aquaviário"
-  },
-  {
-    aliquota: "17%",
-    aliquota_efetiva: "17%",
-    descricao: "Fornecimento de energia elétrica até 150 quilowatts/horas mensais, para consumo domiciliar e de estabelecimento comercial"
-  },
-  {
-    aliquota: "17%",
-    aliquota_efetiva: "17%",
-    descricao: "Cesta básica: Açúcar cristal, em embalagem de até 2 quilogramas"
-  },
-  {
-    aliquota: "17%",
-    aliquota_efetiva: "17%",
-    descricao: "Cesta básica: Arroz"
-  },
-  {
-    aliquota: "17%",
-    aliquota_efetiva: "17%",
-    descricao: "Cesta básica: Biscoito e bolacha popular, excetuados os recheados, vitaminados e/ou aromatizados"
-  },
-  {
-    aliquota: "17%",
-    aliquota_efetiva: "17%",
-    descricao: "Cesta básica: Café torrado, moído ou solúvel"
-  },
-  {
-    aliquota: "17%",
-    aliquota_efetiva: "17%",
-    descricao: "Cesta básica: Colorau"
-  },
-  {
-    aliquota: "17%",
-    aliquota_efetiva: "17%",
-    descricao: "Cesta básica: Farinha de milho e fubá de milho"
-  },
-  {
-    aliquota: "17%",
-    aliquota_efetiva: "17%",
-    descricao: "Cesta básica: Farinha de mandioca"
-  },
-  {
-    aliquota: "17%",
-    aliquota_efetiva: "17%",
-    descricao: "Cesta básica: Feijão"
-  },
-  {
-    aliquota: "17%",
-    aliquota_efetiva: "17%",
-    descricao: "Cesta básica: Leite em pó, em embalagem de até 2 quilogramas"
-  },
-  {
-    aliquota: "17%",
-    aliquota_efetiva: "17%",
-    descricao: "Cesta básica: Leite pasteurizado, tipos B e C"
-  },
-  {
-    aliquota: "17%",
-    aliquota_efetiva: "17%",
-    descricao: "Cesta básica: Macarrão comum, ou apenas com sêmola, do tipo espaguete"
-  },
-  {
-    aliquota: "17%",
-    aliquota_efetiva: "17%",
-    descricao: "Cesta básica: Margarina ou creme vegetal, acondicionados em embalagem de até 500 gramas"
-  },
-  {
-    aliquota: "17%",
-    aliquota_efetiva: "17%",
-    descricao: "Cesta básica: Óleo comestível de soja"
-  },
-  {
-    aliquota: "17%",
-    aliquota_efetiva: "17%",
-    descricao: "Cesta básica: Sal de cozinha"
-  },
-  {
-    aliquota: "17%",
-    aliquota_efetiva: "17%",
-    descricao: "Cesta básica: Vinagre"
-  },
-  {
-    aliquota: "17%",
-    aliquota_efetiva: "17%",
-    descricao: "Cesta básica: Sardinha em lata"
-  },
-  {
-    aliquota: "17%",
-    aliquota_efetiva: "17%",
-    descricao: "Cesta básica: Flocos de milho pré-cozido"
-  },
-  {
-    aliquota: "17%",
-    aliquota_efetiva: "17%",
-    descricao: "Operações com medicamentos de uso humano"
-  },
-  {
-    aliquota: "17%",
-    aliquota_efetiva: "17%",
-    descricao: "Material escolar: Agenda escolar"
-  },
-  {
-    aliquota: "17%",
-    aliquota_efetiva: "17%",
-    descricao: "Material escolar: Apontador de lápis"
-  },
-  {
-    aliquota: "17%",
-    aliquota_efetiva: "17%",
-    descricao: "Material escolar: Borracha de apagar, inclusive caneta borracha e lápis borracha"
-  },
-  {
-    aliquota: "17%",
-    aliquota_efetiva: "17%",
-    descricao: "Material escolar: Caderno"
-  },
-  {
-    aliquota: "17%",
-    aliquota_efetiva: "17%",
-    descricao: "Material escolar: Caneta esferográfica"
-  },
-  {
-    aliquota: "17%",
-    aliquota_efetiva: "17%",
-    descricao: "Material escolar: Caneta esferográfica"
-  },
-  {
-    aliquota: "17%",
-    aliquota_efetiva: "17%",
-    descricao: "Material escolar: Classificador"
-  },
-  {
-    aliquota: "17%",
-    aliquota_efetiva: "17%",
-    descricao: "Material escolar: Cola escolar, branca e colorida, em bastão ou líquida"
-  },
-  {
-    aliquota: "17%",
-    aliquota_efetiva: "17%",
-    descricao: "Material escolar: Corretivo"
-  },
-  {
-    aliquota: "17%",
-    aliquota_efetiva: "17%",
-    descricao: "Material escolar: Estojo escolar, estojo para objetos de escrita"
-  },
-  {
-    aliquota: "17%",
-    aliquota_efetiva: "17%",
-    descricao: "Material escolar: Lápis"
-  },
-  {
-    aliquota: "17%",
-    aliquota_efetiva: "17%",
-    descricao: "Material escolar: Lapiseira"
-  },
-  {
-    aliquota: "17%",
-    aliquota_efetiva: "17%",
-    descricao: "Material escolar: Massa ou pasta para modelar, próprias para recreação de crianças"
-  },
-  {
-    aliquota: "17%",
-    aliquota_efetiva: "17%",
-    descricao: "Material escolar: Papel celofane"
-  },
-  {
-    aliquota: "17%",
-    aliquota_efetiva: "17%",
-    descricao: "Material escolar: Pincel de escrever e desenhar"
-  },
-  {
-    aliquota: "17%",
-    aliquota_efetiva: "17%",
-    descricao: "Material escolar: Régua"
-  },
-  {
-    aliquota: "17%",
-    aliquota_efetiva: "17%",
-    descricao: "Material escolar: Tinta guache"
   },
 ];
 
