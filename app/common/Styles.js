@@ -20,8 +20,7 @@ const Styles = StyleSheet.create({
   loginContainer: {
     flex: 1,
     backgroundColor: colors.darkBlue,
-    alignItems: 'center',
-    justifyContent: 'flex-start',
+    alignItems: 'center'
   },
   mainContainer: {
     flex: 1,
@@ -53,7 +52,7 @@ const Styles = StyleSheet.create({
   },
   menuItemNcm: {
     color: colors.darkBlue,
-    fontSize: 22,
+    fontSize: 26,
     fontWeight: 'bold',
     marginBottom: 4,
     lineHeight: 46    
@@ -309,6 +308,10 @@ const Styles = StyleSheet.create({
     height: 72,
     minHeight: 48
   },
+  itemRowAliquotas: {
+    flexDirection: 'row',
+    minHeight: 72
+  },
   itemLeftIcon: {
     marginRight: 16,
     height: 40,
@@ -370,7 +373,8 @@ const Styles = StyleSheet.create({
     height: 160,
     width: 160,
     marginTop: 24,
-    marginBottom: 8
+    marginBottom: 8,
+    alignSelf: 'center'
   },
   loginInput: {
     alignSelf: 'center',
@@ -382,7 +386,7 @@ const Styles = StyleSheet.create({
   },
   loginButton: {
     alignSelf: 'center',
-    marginTop: 8,
+    marginTop: 16,
     marginBottom: 16,
     paddingRight: 48,
     paddingLeft: 48,
@@ -391,34 +395,28 @@ const Styles = StyleSheet.create({
     backgroundColor: colors.red,
     borderRadius: 20
   },
+  loginBody: {
+    flex: 1
+  },
   loginFooter: {
-    position: 'absolute',
-    bottom: 16,
-    left: 0,
-    right: 0,
     flexDirection: 'row',
     backgroundColor: colors.white,
     padding: 12,
     paddingLeft: 16,
     paddingRight: 16,
-    justifyContent: 'center',
-    alignItems: 'center',
+    maxHeight: 72
   },
   logoFooterContainer: {
     flex: 1,
-    height: 48,
+    justifyContent: 'center'
   },
   logoSefaz: {
-    position: 'absolute',
-    top: 12,
-    left: 0,
+    alignSelf: 'flex-start',
     height: 24,
     width: 98
   },
   logoGoverno: {
-    position: 'absolute',
-    right: 0,
-    // top: 0,
+    alignSelf: 'flex-end',
     height: 48,
     width: 120
   },

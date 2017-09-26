@@ -151,7 +151,7 @@ export default class Antecipado extends Component {
       return (
         <View style={Styles.centerContainer}>
           <View style={[Styles.row, Styles.searchResult]}>
-            <MaterialCommunityIcons style={Styles.searchResultIcon} name="warning" />
+            <MaterialCommunityIcons style={Styles.searchResultIcon} name="alert-circle" />
             <Text style={Styles.searchResultLabel}>Nenhum resultado foi encontrado no período.</Text>
           </View>
         </View>

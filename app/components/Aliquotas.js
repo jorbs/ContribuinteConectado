@@ -36,7 +36,7 @@ export default class Aliquotas extends Component {
 
   renderItem(item) {
     return (
-      <View style={Styles.itemRow}>
+      <View style={Styles.itemRowAliquotas}>
         {item.icon != null ? <MaterialCommunityIcons name="percent" style={Styles.itemLeftIcon} /> : <Text style={Styles.itemLeftIcon} />}
         <View style={Styles.itemContainer}>
           <View style={Styles.itemTextContainer}>

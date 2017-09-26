@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import DeviceInfo from 'react-native-device-info';
-import {Text, TextInput, Image, ActivityIndicator, View, Alert, Switch, TouchableOpacity, TouchableWithoutFeedback, AsyncStorage, StyleSheet} from 'react-native';
+import {Text, TextInput, Keyboard, Image, ActivityIndicator, View, Alert, Switch, TouchableOpacity, TouchableWithoutFeedback, AsyncStorage, StyleSheet} from 'react-native';
 import dismissKeyboard from 'dismissKeyboard';
 
 import Constants from '../common/Constants';
@@ -17,8 +17,22 @@ export default class Login extends Component {
     this.state = {
       pendingRequest: false,
       isLoadingScreen: true,
-      rememberMe: true
+      rememberMe: true,
+      showFooter: true
     };
+  }
+
+  componentWillMount () {
+    this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => this._keyboardDidShow());
+    this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => this._keyboardDidHide());
+  }
+
+  _keyboardDidShow () {
+    this.setState({showFooter: false});
+  }
+
+  _keyboardDidHide () {
+    this.setState({showFooter: true});
   }
 
   async componentDidMount() {
@@ -27,16 +41,15 @@ export default class Login extends Component {
       const requestToken = await AsyncStorage.getItem(Constants.REQUEST_TOKEN_KEY);
       
       if (requestToken && login) {
-        this.props.navigation.navigate('Home', {login: this.state.login, requestToken: this.state.requestToken});
+        this.props.navigation.navigate('Home', {login, requestToken});
         return;
       }
 
-      const authorizationId = await AsyncStorage.getItem(Constants.AUTHORIZATION_ID_KEY);
       const rememberMe = login != null;
       
-      this.setState({login, authorizationId, rememberMe, isLoadingScreen: false});
+      this.setState({login, rememberMe, isLoadingScreen: false});
     } catch (e) {
-      console.warn('Unable to retrieve login and authorizationId from AsyncStorage: ', e);
+      console.warn('Unable to retrieve login from AsyncStorage: ', e);
     }
   }
 
@@ -47,7 +60,6 @@ export default class Login extends Component {
       if (this.state.rememberMe) {
         await AsyncStorage.setItem(Constants.REMEMBER_ME_KEY, this.state.login);
       } else {
-        await AsyncStorage.removeItem(Constants.AUTHORIZATION_ID_KEY);
         await AsyncStorage.removeItem(Constants.REMEMBER_ME_KEY);
         await AsyncStorage.removeItem(Constants.REQUEST_TOKEN_KEY);
       }
@@ -76,7 +88,6 @@ export default class Login extends Component {
       const response = await SefazAPI.solicitarAutorizacao(this.state.login, deviceId);
 
       if (response.idAutorizacao) {
-        await AsyncStorage.setItem(Constants.AUTHORIZATION_ID_KEY, response.idAutorizacao.toString());
         this.setState({
           authorizationId: response.idAutorizacao,
           authorizationUrl: response.urlAutorizacao
@@ -103,7 +114,7 @@ export default class Login extends Component {
 
       if (response.id_token != null) {
         await AsyncStorage.setItem(Constants.REQUEST_TOKEN_KEY, response.id_token);
-        
+
         this.setState({requestToken: response.id_token});
         this.props.navigation.navigate('Home', {login: this.state.login, requestToken: this.state.requestToken});
       } else {
@@ -113,8 +124,7 @@ export default class Login extends Component {
       if (e.codigo === 1) {
         this.requestAuthorization();
       } else {
-      console.log(e);
-      const {goBack} = this.props.navigation;
+        const {goBack} = this.props.navigation;
         Alert.alert('Erro na solicitação', e.mensagem, [{text: 'OK', onPress: () => goBack()}]);
       }
     } finally {
@@ -138,9 +148,9 @@ export default class Login extends Component {
           onChangeText={value => this.setState({login: value})}/>
         <TouchableOpacity style={[Styles.loginButton, Styles.row]} accessibilityLabel="Acesse o Portal do Contribuinte" disabled={this.state.pendingRequest} onPress={() => this.login()}>
           {this.state.pendingRequest && <ActivityIndicator style={Styles.activityIndicator} />}
-          <Text style={{textAlign: 'center', color: 'white', fontSize: 18}}>{this.state.pendingRequest ? 'Entrando...' : 'Entrar'}</Text>
+          <Text style={{textAlign: 'center', color: 'white', fontSize: 14}}>{this.state.pendingRequest ? 'Entrando...' : 'Entrar'}</Text>
         </TouchableOpacity>
-        <View style={Styles.row}>
+        <View style={[Styles.row, {alignSelf: 'center'}]}>
           <Switch value={this.state.rememberMe} onValueChange={rememberMe => this.setState({rememberMe})}/>
           <Text style={{lineHeight: 23, marginLeft: 4, color: 'white'}} onPress={() => this.setState({rememberMe: !this.state.rememberMe})}>Lembrar acesso</Text>
         </View>
@@ -152,19 +162,21 @@ export default class Login extends Component {
     return (
       <TouchableWithoutFeedback onPress={dismissKeyboard}>
         <View style={Styles.loginContainer}>
-          <Image source={require('./../assets/images/home-logo.png')} style={Styles.loginLogo} />
-          <Text style={Styles.appLabel}>Contribuinte</Text>
-          <Text style={Styles.appLabel}>Conectado</Text>
-          {this.state.isLoadingScreen && <ActivityIndicator style={{marginTop: 16}}/>}
-          {!this.state.isLoadingScreen && this.renderLoginForm()}
-          <View style={Styles.loginFooter}>
+          <View style={Styles.loginBody}>
+            <Image source={require('./../assets/images/home-logo.png')} style={Styles.loginLogo} />
+            <Text style={Styles.appLabel}>Contribuinte</Text>
+            <Text style={Styles.appLabel}>Conectado</Text>
+            {this.state.isLoadingScreen && <ActivityIndicator style={{marginTop: 16}}/>}
+            {!this.state.isLoadingScreen && this.renderLoginForm()}
+          </View>
+          {this.state.showFooter && <View style={Styles.loginFooter}>
             <View style={Styles.logoFooterContainer}>
               <Image source={require('./../assets/images/logo-sefaz.png')} style={Styles.logoSefaz} />
             </View>
             <View style={Styles.logoFooterContainer}>
               <Image source={require('./../assets/images/logo-governo.png')} style={Styles.logoGoverno} />
             </View>
-          </View>
+          </View>}
         </View>
       </TouchableWithoutFeedback>
     );

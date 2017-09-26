@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {View, ScrollView, Text, TextInput, FlatList, ActivityIndicator, TouchableOpacity, TouchableWithoutFeedback, Alert, Linking, findNodeHandle} from 'react-native';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import TextInputState from 'react-native/lib/TextInputState'
 import TextInputMask from 'react-native-text-input-mask';
@@ -78,7 +77,7 @@ export default class TermoApreensao extends Component {
       return (
         <View style={Styles.emptySearchContainer}>
           <View style={Styles.row}>
-            <FontAwesome style={Styles.searchResultIcon} name="warning" />
+            <MaterialCommunityIcons style={Styles.searchResultIcon} name="alert-circle" />
             <Text style={Styles.searchResultLabel}>Nenhum resultado foi encontrado no período.</Text>
           </View>
         </View>

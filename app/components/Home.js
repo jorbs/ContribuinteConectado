@@ -28,7 +28,7 @@ export default class Home extends Component {
       },
     });
 
-    this.notifyExpirationDAR();
+    this.notifyDarExpiration();
     this.notifyCNStatusChange();
     this.notifyRestrictions();
     this.notifyProcesses();
@@ -62,7 +62,7 @@ export default class Home extends Component {
     await AsyncStorage.setItem(Constants.NOTIFICATIONS_PARENT_KEY, JSON.stringify(notifications));
   }
 
-  async notifyExpirationDAR() {
+  async notifyDarExpiration() {
     const {params} = this.props.navigation.state;
     const currentTime = moment();
     
