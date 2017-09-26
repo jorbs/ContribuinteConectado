@@ -1,13 +1,12 @@
 import React, {Component} from 'react';
 import {View, Text, TouchableOpacity, TouchableWithoutFeedback, ScrollView, TextInput, SectionList, FlatList} from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import {Col, Row, Grid} from 'react-native-easy-grid';
 import dismissKeyboard from 'dismissKeyboard';
-import Modal from 'react-native-modal';
 
 import Styles from '../common/Styles';
 import Constants from '../common/Constants';
-import Aliquotas from '../common/Aliquotas';
+import NcmMap from '../common/NcmMap';
 
 export default class NCM extends Component {
   static navigationOptions = {
@@ -25,129 +24,94 @@ export default class NCM extends Component {
   }
 
   onSearch(term) {
-    const items = term.length > 2 ? (
-      Aliquotas.filter((aliquota, i, array) => aliquota.description.toLowerCase().indexOf(term.toLowerCase()) != -1)
+    let items = [];
+
+    if (isNaN(term[0])) {
+      items = NcmMap.filter((aliquota, i, array) => aliquota.description.toLowerCase().indexOf(term.toLowerCase()) != -1)
         .slice(0, Constants.NCM_LIMIT)
         .map(item => ({key: item.description, ...item}))
-    ) : [];
+    } else {
+      items = NcmMap.filter(aliquota => aliquota.ncm.filter(n => n.indexOf(term) != -1).length > 0)
+        .slice(0, Constants.NCM_LIMIT)
+        .map(item => ({key: item.description, ...item}))
+    }
+    
     this.setState({items});
   }
 
   onUseSimulator(mva) {
-    this.setState({mva: null});
-    this.props.navigation.navigate('SimuladorST', {mva});
-  }
-
-  renderSectionHeader(section) {
-    return (
-      <View style={Styles.sectionHeaderContainer}>
-        <MaterialCommunityIcons name={section.icon} size={24} style={Styles.sectionHeaderIcon} />
-        <Text style={Styles.sectionHeader}>{section.title}</Text>
-      </View>
-    );
-  }
-
-  renderSectionItem(item) {
-    return (
-      <View key={item.key} style={Styles.row}>
-        <View style={Styles.itemContainer}>
-          <Text style={Styles.itemHeader}>{item.key}</Text>
-          <Text style={Styles.itemBody}>{item.data}</Text>
-        </View>
-      </View>
-    );
+    const mvaPercentage = (mva * 100).toFixed(2).replace(/\./g, ',');
+    this.props.navigation.navigate('SimuladorST', {mva: mvaPercentage});
   }
   
-  renderSectionFooter(section) {
+  renderSelectedItem(item) {
     return (
-      <View style={Styles.action}>
-        <TouchableOpacity style={Styles.actionButton} onPress={() => this.setState({mva: section.mva})}>
-          <FontAwesome name="calculator" style={Styles.actionIcon}/>
-          <Text style={Styles.actionLabel}>Usar no Simulador</Text>
-        </TouchableOpacity>
+      <View style={Styles.itemRow}>
+        {item.icon != null ? <MaterialCommunityIcons name={item.icon} style={Styles.itemLeftIcon} /> : <Text style={Styles.itemLeftIcon} />}
+        <View style={Styles.itemContainer}>
+          <View style={Styles.itemTextContainer}>
+            <Text style={[Styles.itemPrimaryText, item.icon && {fontWeight: 'bold'}]}>{item.key}</Text>
+            <Text style={Styles.itemSecondaryText}>{item.data}</Text>
+          </View>
+          {item.mva && <TouchableOpacity onPress={() => this.onUseSimulator(item.mva)}>
+            <MaterialCommunityIcons name="calculator" style={Styles.itemRightIcon} />
+          </TouchableOpacity>}
+        </View>
       </View>
     );
   }
 
-  renderMvaModal() {
-    return (
-      <Modal isVisible={this.state.mva != null} onBackdropPress={() => this.setState({mva: null})}>
-        <View style={Styles.modal}>
-          <Text style={Styles.modalHeader}>Selecione o MVA a ser usado no Simulador ST</Text>
-          {this.state.mva.map(mva => {
-            const mvaPercentage = (mva * 100).toFixed(2).replace(/\./g, ',');
+  renderSelectedItemList() {
+    const {selectedItem} = this.state;
+    const selectedItemDetails = [
+      {key: 'Descrição', data: selectedItem.description, icon: 'numeric'},
+      {key: `NCM${selectedItem.ncm.length > 1 ? 's' : ''}`, data: selectedItem.ncm.join(', ')},
+      {key: 'Acordo Interestadual', data: selectedItem.legal || 'Não existe'},
+      {key: 'MVA Original', data: (selectedItem.mva[0] * 100).toFixed(2) + '%'},
+      {key: 'MVA 12%', data: (selectedItem.mva[1] * 100).toFixed(2) + '%', mva: selectedItem.mva[1]},
+      {key: 'MVA 7%', data: (selectedItem.mva[2] * 100).toFixed(2) + '%', mva: selectedItem.mva[2]},
+      {key: 'MVA 4%', data: (selectedItem.mva[3] * 100).toFixed(2) + '%', mva: selectedItem.mva[3]},
+    ];
 
-            return (
-              <TouchableOpacity key={mva} onPress={() => this.onUseSimulator(mvaPercentage)}>
-                <Text style={Styles.modalParagraph}>{mvaPercentage}%</Text>
-              </TouchableOpacity>
-            );
-          })}
-        </View>
-      </Modal>
-    );
-  }
-
-  renderSelectedItem() {
-    if (this.state.selectedItem) {
-      const {selectedItem} = this.state;
-      const sections = [{
-        title: 'Detalhes do produto',
-        mva: selectedItem.mva,
-        icon: 'numeric',
-        data: [
-          {key: 'Descrição', data: selectedItem.description},
-          {key: `NCM${selectedItem.ncm.length > 1 ? 's' : ''}`, data: selectedItem.ncm.join(', ')},
-          {key: 'Acordo Interestadual', data: selectedItem.legal || 'Não existe'},
-          {key: 'MVA Original', data: (selectedItem.mva[0] * 100).toFixed(2) + '%'},
-          {key: 'MVA - Operação Interestadual a 12%', data: (selectedItem.mva[1] * 100).toFixed(2) + '%'},
-          {key: 'MVA - Operação Interestadual a 7%', data: (selectedItem.mva[2] * 100).toFixed(2) + '%'},
-          {key: 'MVA - Operação Interestadual a 4%', data: (selectedItem.mva[3] * 100).toFixed(2) + '%'},
-        ]
-      }];
-
-      return (
-        <View>
-          <SectionList
-            sections={sections}
-            renderSectionHeader={({section}) => this.renderSectionHeader(section)}
-            renderSectionFooter={({section}) => this.renderSectionFooter(section)}
-            renderItem={({item}) => this.renderSectionItem(item)} />
-        </View>
-      );
-    }
+    return <FlatList data={selectedItemDetails} renderItem={({item}) => this.renderSelectedItem(item)} style={Styles.listContainer} />;
   }
 
   renderItem(item) {
     return (
+      <View>
       <TouchableOpacity key={item.description} onPress={() => this.setState({selectedItem: item, items: []})}>
-        <Text>{item.description}</Text>
+        <View style={Styles.row}>
+          <MaterialCommunityIcons name="menu-right" style={Styles.ncmSearchIcon} />
+          <Text style={Styles.ncmSearchItem}>{item.ncm.join(', ')} - {item.description}</Text>
+        </View>
       </TouchableOpacity>
+      </View>
     );
-  }
-
-  renderItems() {
-    return <FlatList data={this.state.items} renderItem={({item}) => this.renderItem(item)} />;
   }
 
   render() {
     return (
       <TouchableWithoutFeedback onPress={dismissKeyboard}>
         <ScrollView style={Styles.mainContainer}>
-          <View style={Styles.searchContainer}>
-            <Text style={Styles.h2}>Entre com a descrição do produto</Text>
-            <View style={Styles.centerContainer}>
-              <TextInput
-                blurOnSubmit={true}
-                returnKeyType="done"
-                style={[Styles.inputTextLg, Styles.searchInputText]}
-                onSubmitEditing={event => this.onSearch(event)}
-                onChangeText={ncm => this.onSearch(ncm)} />
-            </View>
-          </View>
-          {this.renderItems()}
-          {this.renderSelectedItem()}
-          {this.state.mva && this.renderMvaModal()}
+          <Grid>
+            <Row size={25}>
+              <Col style={[Styles.searchContainer, {paddingBottom: 16}]}>
+                <View>
+                  <Text style={Styles.formFieldLabel}>Descrição ou NCM do produto</Text>
+                  <TextInput
+                    returnKeyType="done"
+                    onChangeText={term => this.onSearch(term)}
+                    style={[Styles.inputTextLg, Styles.formInputText]} />
+                </View>
+              </Col>
+            </Row>
+            <Row size={75}>
+              <Col>
+                <FlatList data={this.state.items} renderItem={({item}) => this.renderItem(item)} style={Styles.ncmSearchContainer} />
+                {this.state.items.length === 0 && this.state.selectedItem && this.renderSelectedItemList()}
+              </Col>
+            </Row>
+          </Grid>
         </ScrollView>
       </TouchableWithoutFeedback>
     );

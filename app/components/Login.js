@@ -76,6 +76,7 @@ export default class Login extends Component {
         Alert.alert('Não foi possível autorizar a aplicação.');
       }
     } catch(e) {
+      console.log(e);
       const {goBack} = this.props.navigation;
       Alert.alert('Erro na solicitação', e.message, [{text: 'OK', onPress: () => goBack()}]);
     } finally {
@@ -99,7 +100,8 @@ export default class Login extends Component {
       if (e.codigo === 1) {
         this.requestAuthorization();
       } else {
-        const {goBack} = this.props.navigation;
+      console.log(e);
+      const {goBack} = this.props.navigation;
         Alert.alert('Erro na solicitação', e.mensagem, [{text: 'OK', onPress: () => goBack()}]);
       }
     } finally {
@@ -115,14 +117,14 @@ export default class Login extends Component {
           </View>
           <View>
             <TextInput
-                keyboardType="numeric"
-                returnKeyType="done"
-                blurOnSubmit={true}
-                value={this.state.login}
-                style={{height: 50, width: 200, textAlign: 'center', fontSize: 20, color: 'white'}}
-                placeholder="Digite o seu Caceal"
-                onSubmitEditing={event => this.login()}
-                onChangeText={value => this.setState({login: value})}/>
+              keyboardType="numeric"
+              returnKeyType="done"
+              blurOnSubmit={true}
+              value={this.state.login}
+              style={{height: 50, width: 200, textAlign: 'center', fontSize: 20, color: 'white'}}
+              placeholder="Digite o seu Caceal"
+              onSubmitEditing={event => this.login()}
+              onChangeText={value => this.setState({login: value})}/>
           </View>
           <View>
             <TouchableOpacity style={[styles.loginButton, Styles.row]} accessibilityLabel="Acesse o Portal do Contribuinte" disabled={this.state.pendingRequest} onPress={() => this.login()}>

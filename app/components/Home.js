@@ -1,8 +1,9 @@
-import React, { Component } from 'react';
-import { Text, View, TouchableOpacity, AsyncStorage, Alert } from 'react-native';
+import React, {Component} from 'react';
+import {Text, View, TouchableOpacity, AsyncStorage, Alert, Image} from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import PushNotification from 'react-native-push-notification';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import {Col, Row, Grid} from 'react-native-easy-grid';
 import Entypo from 'react-native-vector-icons/Entypo';
 import moment from 'moment';
 
@@ -271,58 +272,94 @@ export default class Home extends Component {
 
   render() {
     return (
-      <View style={Styles.menu}>
-        <View style={Styles.menuRow}>
-          <TouchableOpacity onPress={() => this.navigate('SituacaoCadastral')} style={[Styles.menuCol, Styles.menuColFirst]}>
-            <FontAwesome name="vcard-o" color="white" size={48} />
-            <Text style={Styles.menuItemLabel}>Situação{"\n"}Cadastral</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => this.navigate('Certidao')} style={Styles.menuCol}>
-            <Entypo name="price-ribbon" color="#fff" size={48}/>
-            <Text style={Styles.menuItemLabel}>Certidões</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={Styles.menuRow}>
-          <TouchableOpacity onPress={() => this.navigate('TermoApreensao')} style={[Styles.menuCol, Styles.menuColFirst]}>
-            <FontAwesome name="truck" color="white" size={48} />
-            <Text style={Styles.menuItemLabel}>Termos de{"\n"}Apreensão</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => this.navigate('RestricoesPendencias')} style={Styles.menuCol}>
-            <FontAwesome name="list-alt" color="#fff" size={48}/>
-            <Text style={Styles.menuItemLabel}>Restrições e{"\n"}Pendências</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={Styles.menuRow}>
-          <TouchableOpacity onPress={() => this.navigate('Antecipado')} style={[Styles.menuCol, Styles.menuColFirst]}>
-            <FontAwesome name="money" color="#fff" size={48}/>
-            <Text style={Styles.menuItemLabel}>Antecipados</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => this.navigate('Processos')} style={Styles.menuCol}>
-            <Entypo name="archive" color="#fff" size={48}/>
-            <Text style={Styles.menuItemLabel}>Processos</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={Styles.menuRow}>
-          <TouchableOpacity onPress={() => this.navigate('SimuladorST')} style={[Styles.menuCol, Styles.menuColFirst]}>
-            <FontAwesome name="calculator" color="#fff" size={48}/>
-            <Text style={Styles.menuItemLabel}>Simulador ST</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => this.navigate('NCM')} style={[Styles.menuCol, Styles.menuColFirst]}>
-            <MaterialCommunityIcons name="numeric" color="white" size={48} />
-            <Text style={Styles.menuItemLabel}>NCM</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={Styles.menuRow}>
-          <TouchableOpacity onPress={() => this.navigate('AcaoFiscal')} style={Styles.menuCol}>
-            <FontAwesome name="flag" color="#fff" size={48}/>
-            <Text style={Styles.menuItemLabel}>Ações Fiscais</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => this.logout()} style={[Styles.menuCol, Styles.menuColFirst]}>
-            <FontAwesome name="sign-out" color="white" size={48} />
-            <Text style={Styles.menuItemLabel}>Sair</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+      <Grid style={Styles.homeContainer}>
+        <Row size={15}>
+          <View style={Styles.logoContainer}>
+            <View style={Styles.row}>
+              <Image source={require('./../assets/images/home-logo.png')} style={Styles.appLogo} />
+              <Text style={Styles.appLabel}>Contribuinte{"\n"}Conectado</Text>
+            </View>
+            <TouchableOpacity style={Styles.logoutButton} onPress={() => this.logout()}>
+              <MaterialCommunityIcons name="logout" style={Styles.logoutIcon} />
+              <Text style={Styles.logoutLabel}>Sair</Text>
+            </TouchableOpacity>
+          </View>
+        </Row>
+        <Row size={85} style={Styles.menu}>
+          <Grid>
+            <Row style={Styles.menuRow}>
+              <Col>
+                <TouchableOpacity onPress={() => this.navigate('SituacaoCadastral')} style={Styles.menuItem}>
+                  <MaterialCommunityIcons name="account-card-details" style={Styles.menuItemIcon} />
+                  <Text style={Styles.menuItemLabel}>Cadastro</Text>
+                </TouchableOpacity>
+              </Col>
+              <Col>
+                <TouchableOpacity onPress={() => this.navigate('Certidao')} style={Styles.menuItem}>
+                  <MaterialCommunityIcons name="certificate" style={Styles.menuItemIcon}/>
+                  <Text style={Styles.menuItemLabel}>Certidões</Text>
+                </TouchableOpacity>
+              </Col>
+            </Row>
+            <Row style={Styles.menuRow}>
+              <Col>
+                <TouchableOpacity onPress={() => this.navigate('TermoApreensao')} style={Styles.menuItem}>
+                  <MaterialCommunityIcons name="truck" style={Styles.menuItemIcon} />
+                  <Text style={Styles.menuItemLabel}>Termos</Text>
+                </TouchableOpacity>
+              </Col>
+              <Col>
+                <TouchableOpacity onPress={() => this.navigate('RestricoesPendencias')} style={Styles.menuItem}>
+                  <MaterialCommunityIcons name="format-list-checks" style={Styles.menuItemIcon}/>
+                  <Text style={Styles.menuItemLabel}>Restrições</Text>
+                </TouchableOpacity>
+              </Col>
+            </Row>
+            <Row style={Styles.menuRow}>
+              <Col>
+                <TouchableOpacity onPress={() => this.navigate('Antecipado')} style={Styles.menuItem}>
+                  <FontAwesome name="money" style={Styles.menuItemIcon}/>
+                  <Text style={Styles.menuItemLabel}>Antecipados</Text>
+                </TouchableOpacity>
+                </Col>
+              <Col>
+              <TouchableOpacity onPress={() => this.navigate('Processos')} style={Styles.menuItem}>
+                <Entypo name="archive" style={Styles.menuItemIcon}/>
+                <Text style={Styles.menuItemLabel}>Processos</Text>
+              </TouchableOpacity>
+              </Col>
+            </Row>
+            <Row style={Styles.menuRow}>
+            <Col>
+              <TouchableOpacity onPress={() => this.navigate('SimuladorST')} style={Styles.menuItem}>
+                <MaterialCommunityIcons name="calculator" style={Styles.menuItemIcon}/>
+                <Text style={Styles.menuItemLabel}>Simulador ST</Text>
+              </TouchableOpacity>
+              </Col>
+              <Col>
+                <TouchableOpacity onPress={() => this.navigate('NcmAliquotas')} style={Styles.menuItem}>
+                  <Text style={Styles.menuItemNcm}>8581.30</Text>
+                  <Text style={Styles.menuItemLabel}>NCM</Text>
+                </TouchableOpacity>
+              </Col>
+            </Row>
+            <Row style={Styles.menuRow}>
+            <Col>
+              <TouchableOpacity onPress={() => this.navigate('AcaoFiscal')} style={Styles.menuItem}>
+                <MaterialCommunityIcons name="flag" style={Styles.menuItemIcon}/>
+                <Text style={Styles.menuItemLabel}>Ações Fiscais</Text>
+              </TouchableOpacity>
+              </Col>
+              <Col>
+              <TouchableOpacity style={Styles.menuItem}>
+                <MaterialCommunityIcons name="phone" style={Styles.menuItemIcon} />
+                <Text style={Styles.menuItemLabel}>Call Center</Text>
+              </TouchableOpacity>
+              </Col>
+            </Row>
+          </Grid>
+        </Row>
+      </Grid>
     );
   }
 }
