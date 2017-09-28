@@ -166,7 +166,7 @@ export default class Login extends Component {
             <Image source={require('./../assets/images/home-logo.png')} style={Styles.loginLogo} />
             <Text style={Styles.appLabel}>Contribuinte</Text>
             <Text style={Styles.appLabel}>Conectado</Text>
-            {this.state.isLoadingScreen && <ActivityIndicator style={{marginTop: 16}}/>}
+            {this.state.isLoadingScreen && <ActivityIndicator style={{marginTop: 64}}/>}
             {!this.state.isLoadingScreen && this.renderLoginForm()}
           </View>
           {this.state.showFooter && <View style={Styles.loginFooter}>

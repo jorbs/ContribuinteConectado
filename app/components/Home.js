@@ -116,8 +116,6 @@ export default class Home extends Component {
               });
             }
           } else {
-            // currentTime = 28/09/2017 13:30
-            // expirationDate = 30/09/2017
             const fromDate = moment(expirationDate).subtract(Constants.DAR_NOTIFICATION_7_DAYS, 'days').hour(0).minute(0);
             
             if (currentTime.isBefore(fromDate)) {
@@ -354,7 +352,7 @@ export default class Home extends Component {
               </TouchableOpacity>
               </Col>
               <Col>
-              <TouchableOpacity style={Styles.menuItem} allowFontScaling={false}>
+              <TouchableOpacity style={Styles.menuItem} allowFontScaling={false} onPress={() => Alert.alert('Em desenvolvimento.')}>
                 <MaterialCommunityIcons name="phone" style={Styles.menuItemIcon} />
                 <Text style={Styles.menuItemLabel}>Call Center</Text>
               </TouchableOpacity>

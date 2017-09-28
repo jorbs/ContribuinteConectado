@@ -341,9 +341,6 @@ const Styles = StyleSheet.create({
     fontFamily: 'Roboto-Regular',
     color: colors.black
   },
-  activityIndicator: {
-    marginRight: 5
-  },
   logoContainer: {
     flex: 1,
     justifyContent: 'center',
