@@ -8,6 +8,7 @@ import SituacaoCadastral from './app/components/SituacaoCadastral';
 import Certidao from './app/components/Certidao';
 import TermoApreensao from './app/components/TermoApreensao';
 import RestricoesPendencias from './app/components/RestricoesPendencias';
+import Restricoes from './app/components/Restricoes';
 import Antecipado from './app/components/Antecipado';
 import Processos from './app/components/Processos';
 import CallCenter from './app/components/CallCenter';
@@ -38,9 +39,9 @@ const ContribuinteConectado = StackNavigator({
     path: 'termoApreensao/:login/:requestToken',
     screen: TermoApreensao
   },
-  RestricoesPendencias: {
-    path: 'restricoesPendencias/:login/:requestToken',
-    screen: RestricoesPendencias
+  Restricoes: {
+    path: 'restricoes/:login/:requestToken',
+    screen: Restricoes
   },
   Antecipado: {
     path: 'antecipado/:login/:requestToken',
