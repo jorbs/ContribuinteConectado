@@ -67,7 +67,7 @@ export default class NCM extends Component {
       {key: 'Descrição', data: selectedItem.description, icon: 'numeric'},
       {key: `NCM${selectedItem.ncm.length > 1 ? 's' : ''}`, data: selectedItem.ncm.join(', ')},
       {key: 'Acordo Interestadual', data: selectedItem.legal || 'Não existe'},
-      {key: 'MVA Original', data: (selectedItem.mva[0] * 100).toFixed(2) + '%'},
+      {key: 'MVA Original', data: (selectedItem.mva[0] * 100).toFixed(2) + '%', mva: selectedItem.mva[0]},
       {key: 'MVA 12%', data: (selectedItem.mva[1] * 100).toFixed(2) + '%', mva: selectedItem.mva[1]},
       {key: 'MVA 7%', data: (selectedItem.mva[2] * 100).toFixed(2) + '%', mva: selectedItem.mva[2]},
       {key: 'MVA 4%', data: (selectedItem.mva[3] * 100).toFixed(2) + '%', mva: selectedItem.mva[3]},

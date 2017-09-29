@@ -1,4 +1,4 @@
-package com.contribuinteconectado;
+package com.github.jorbs.contribuinteconectado;
 
 import android.app.Application;
 
