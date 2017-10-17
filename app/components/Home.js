@@ -208,7 +208,7 @@ export default class Home extends Component {
           title: 'Restrições',
           message: 'Houve mudança no número de restrições.',
           data: {
-            screen: 'RestricoesPendencias'
+            screen: 'Restricoes'
           }
         });
       }
@@ -272,18 +272,27 @@ export default class Home extends Component {
   }
 
   render() {
+    const {params} = this.props.navigation.state;
+
     return (
       <Grid style={Styles.homeContainer}>
         <Row size={15}>
           <View style={Styles.logoContainer}>
-            <View style={Styles.row}>
-              <Image source={require('./../assets/images/home-logo.png')} style={Styles.appLogo} />
-              <Text style={Styles.appLabel}>Contribuinte{"\n"}Conectado</Text>
+            <View style={[Styles.row, {justifyContent: 'space-between'}]}>
+              <View style={Styles.row}>
+                <Image source={require('./../assets/images/home-logo.png')} style={Styles.appLogo} />
+                <Text style={Styles.appLabel}>Contribuinte{"\n"}Conectado</Text>
+              </View>
+              <View style={{paddingRight: 16}}>
+                <TouchableOpacity style={Styles.logoutButton} onPress={() => this.logout()}>
+                  <MaterialCommunityIcons name="logout" style={Styles.logoutIcon} />
+                  <Text style={Styles.logoutLabel}>Sair</Text>
+                </TouchableOpacity>
+                <View>
+                  <Text style={Styles.caceal}>{params.login}</Text>
+                </View>
+              </View>
             </View>
-            <TouchableOpacity style={Styles.logoutButton} onPress={() => this.logout()}>
-              <MaterialCommunityIcons name="logout" style={Styles.logoutIcon} />
-              <Text style={Styles.logoutLabel}>Sair</Text>
-            </TouchableOpacity>
           </View>
         </Row>
         <Row size={85} style={Styles.menu}>
@@ -296,7 +305,7 @@ export default class Home extends Component {
                 </TouchableOpacity>
               </Col>
               <Col>
-                <TouchableOpacity onPress={() => this.navigate('Certidao')} style={Styles.menuItem} allowFontScaling={false}>
+                <TouchableOpacity onPress={() => Alert.alert('Em desenvolvimento.')} style={Styles.menuItem} allowFontScaling={false}>
                   <MaterialCommunityIcons name="certificate" style={Styles.menuItemIcon}/>
                   <Text style={Styles.menuItemLabel}>Certidões</Text>
                 </TouchableOpacity>
@@ -346,7 +355,7 @@ export default class Home extends Component {
             </Row>
             <Row style={Styles.menuRow}>
             <Col>
-              <TouchableOpacity onPress={() => this.navigate('AcaoFiscal')} style={Styles.menuItem} allowFontScaling={false}>
+              <TouchableOpacity onPress={() => Alert.alert('Em desenvolvimento.')} style={Styles.menuItem} allowFontScaling={false}>
                 <MaterialCommunityIcons name="flag" style={Styles.menuItemIcon}/>
                 <Text style={Styles.menuItemLabel}>Ações Fiscais</Text>
               </TouchableOpacity>

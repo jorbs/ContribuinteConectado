@@ -353,14 +353,16 @@ const Styles = StyleSheet.create({
   },
   logoutButton: {
     flexDirection: 'row',
-    position: 'absolute',
-    right: 16,
-    top: 16
+    justifyContent: 'flex-end'
   },
   logoutLabel: {
-    marginLeft: 3,
     color: colors.white,
     fontWeight: 'bold'
+  },
+  caceal: {
+    marginTop: 24,
+    fontSize: 12,
+    color: colors.white,
   },
   appLogo: {
     height: 56,
