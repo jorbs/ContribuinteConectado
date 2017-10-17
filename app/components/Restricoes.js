@@ -34,7 +34,6 @@ export default class Restricoes extends Component {
       response.forEach(restriction => {
         restrictions.push({key: restrictions.length, title: 'Tipo', body: restriction.descricaoRestricao, icon: 'warning'});
         restrictions.push({key: restrictions.length, title: 'Competência', body: moment(restriction.dataCompetencia).utc().format(Constants.DATE_FORMAT)});
-        restrictions.push({key: restrictions.length, title: 'Solução', body: restriction.solucao});
       });
 
       this.setState({restrictions});
@@ -42,6 +41,25 @@ export default class Restricoes extends Component {
       Alert.alert('Erro na solicitação', e.message, [{text: 'OK', onPress: () => goBack()}]);
     } finally {
       this.setState({pendingRequest: false});      
+    }
+  }
+
+  renderRestrictions() {
+    if (this.state.restrictions && this.state.restrictions.length === 0) {
+      return (
+        <View style={Styles.centerContainer}>
+          <View style={[Styles.row, Styles.searchResult]}>
+            <MaterialCommunityIcons style={Styles.searchResultIcon} name="alert-circle" />
+            <Text style={Styles.searchResultLabel}>Nenhuma restrição encontrada.</Text>
+          </View>
+        </View>
+      );
+    } else if (this.state.restrictions) {
+      return (
+        <ScrollView style={Styles.mainContainer}>
+          <FlatList data={this.state.restrictions} renderItem={({item}) => this.renderItem(item)} style={Styles.listContainer} />
+        </ScrollView>
+      );
     }
   }
 
@@ -60,11 +78,6 @@ export default class Restricoes extends Component {
   }
 
   render() {
-    return (this.state.pendingRequest ?
-      <MyActivityIndicator/> :
-      <ScrollView style={Styles.mainContainer}>
-        <FlatList data={this.state.restrictions} renderItem={({item}) => this.renderItem(item)} style={Styles.listContainer} />
-      </ScrollView>
-    );
+    return this.state.pendingRequest ? <MyActivityIndicator/> : this.renderRestrictions();
   }
 }
