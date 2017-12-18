@@ -52,7 +52,8 @@ export default class Certidao extends Component {
         {key: 'Tipo de Certidão', data: documentType.type, icon: documentType.icon},
         {key: 'Número do Documento', data: response.numeroDocumento},
         {key: 'Emissão', data: `${response.dataEmissao} ${response.horaEmissao}`},
-        {key: 'Código de Autenticação', data: response.codigoAutenticacao}
+        {key: 'Código de Autenticação', data: response.codigoAutenticacao},
+        { key: 'Data de Validade', data: response.dataValidade },
       ];
 
       this.setState({items});

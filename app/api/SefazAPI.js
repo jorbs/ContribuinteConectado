@@ -19,7 +19,7 @@ export const autenticar = (caceal, authorizationId) =>
       idAutorizacao: authorizationId,
       tokenApp: APP_TOKEN
     })
-  }).then(response => response.ok ? response.json() : response.json().then(e => {throw e;}));
+  }).then(response => response.ok ? JSON.parse(response._bodyInit) : response.json().then(e => {throw e;}));
 
 export const solicitarAutorizacao = (caceal, deviceName) =>
   fetch(`${API_ENDPOINT}/sfz-habilitacao-aplicativo-api/api/public/autorizacao-aplicativo/solicitar`, {
@@ -54,8 +54,8 @@ export const consultarCnd = (requestToken, numeroDocumento, tipoDocumento = 'CAC
   fetch(`${API_ENDPOINT}/sfz_certidao_api/api/public/consultaCertidao/consultarCnd`, {
     method: 'POST',
     headers: {
-      Autorization: AUTH_TOKEN_PREFIX + requestToken,
-      ...headers
+      Authorization: AUTH_TOKEN_PREFIX + requestToken,
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify({
       numeroDocumento,

@@ -305,7 +305,7 @@ export default class Home extends Component {
                 </TouchableOpacity>
               </Col>
               <Col>
-                <TouchableOpacity onPress={() => Alert.alert('Em desenvolvimento.')} style={Styles.menuItem} allowFontScaling={false}>
+                <TouchableOpacity onPress={() => this.navigate('Certidao')} style={Styles.menuItem} allowFontScaling={false}>
                   <MaterialCommunityIcons name="certificate" style={Styles.menuItemIcon}/>
                   <Text style={Styles.menuItemLabel}>Certidões</Text>
                 </TouchableOpacity>

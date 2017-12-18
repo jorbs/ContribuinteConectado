@@ -15,7 +15,12 @@ export default class Autorizacao extends Component {
 
   render() {
     const {params} = this.props.navigation.state;
-    return <WebView source={{uri: params.authorizationUrl}} />;
+    return <WebView
+      source={{uri: params.authorizationUrl}}
+      javaScriptEnabled={true}
+      domStorageEnabled={true}
+      startInLoadingState={true}
+    />;
   }
 
 }
