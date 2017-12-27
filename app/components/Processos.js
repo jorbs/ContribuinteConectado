@@ -117,7 +117,7 @@ export default class Processos extends Component {
     try {
       const result = await AsyncStorage.getItem(Constants.WATCHED_PROCESSES_KEY);
       const processes = JSON.parse(result) || [];
-      
+
       for (const i in processes) {
         if (processes[i].number === processNumber) {
           return true;

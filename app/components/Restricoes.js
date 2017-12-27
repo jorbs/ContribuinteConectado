@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {View, ScrollView, Text, FlatList, Alert} from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import moment from 'moment';
 
 import Styles from '../common/Styles';
@@ -26,11 +27,11 @@ export default class Restricoes extends Component {
   async componentDidMount() {
     const {goBack} = this.props.navigation;
     const {params} = this.props.navigation.state;
-    
+
     try {
       const response = await SefazAPI.obterRestricoes(params.requestToken, params.login);
       const restrictions = [];
-      
+
       response.forEach(restriction => {
         restrictions.push({key: restrictions.length, title: 'Tipo', body: restriction.descricaoRestricao, icon: 'warning'});
         restrictions.push({key: restrictions.length, title: 'Competência', body: moment(restriction.dataCompetencia).utc().format(Constants.DATE_FORMAT)});
@@ -40,7 +41,7 @@ export default class Restricoes extends Component {
     } catch (e) {
       Alert.alert('Erro na solicitação', e.message, [{text: 'OK', onPress: () => goBack()}]);
     } finally {
-      this.setState({pendingRequest: false});      
+      this.setState({pendingRequest: false});
     }
   }
 

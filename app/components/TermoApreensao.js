@@ -55,7 +55,7 @@ export default class TermoApreensao extends Component {
 
       response.forEach(term => {
         const phone = Postos[term.posto].phones[0].replace(/[\(\ \)\-]/g, '');
-        
+
         terms.push({key: terms.length, title: 'Número do Termo', body: term.numeroTermo, icon: 'truck'});
         terms.push({key: terms.length, title: 'Status', body: term.status});
         terms.push({key: terms.length, title: 'Emissão', body: term.dataEmissao && moment(term.dataEmissao).utc().format(Constants.DATETIME_FORMAT)});

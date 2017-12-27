@@ -28,7 +28,12 @@ const Postos = {
     name: 'Posto Fiscal - Delmiro Gouveia',
     address: 'Rodovia AL 423, KM 101',
     phones: ['+55 (82) 3216-97000', '+55 (82) 3216-9701'],
-  }
+  },
+  'CENTRALNOTAS': {
+    name: 'Central de Notas',
+    address: 'Av. Menino Marcelo, s/n, Antares',
+    phones: ['+55 (82) 3315-7727', '+55 (82) 3315-9000'],
+  },
 };
 
 export default Postos;

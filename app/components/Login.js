@@ -9,7 +9,7 @@ import * as SefazAPI from '../api/SefazAPI';
 
 export default class Login extends Component {
   static navigationOptions = {
-    header: null,    
+    header: null,
   };
 
   constructor(props) {
@@ -39,14 +39,14 @@ export default class Login extends Component {
     try {
       const login = await AsyncStorage.getItem(Constants.REMEMBER_ME_KEY);
       const requestToken = await AsyncStorage.getItem(Constants.REQUEST_TOKEN_KEY);
-      
+
       if (requestToken && login) {
         this.props.navigation.navigate('Home', {login, requestToken});
         return;
       }
 
       const rememberMe = login != null;
-      
+
       this.setState({login, rememberMe, isLoadingScreen: false});
     } catch (e) {
       console.warn('Unable to retrieve login from AsyncStorage: ', e);
@@ -81,7 +81,7 @@ export default class Login extends Component {
 
   async requestAuthorization() {
     const deviceId = DeviceInfo.getDeviceId();
-    
+
     this.setState({pendingRequest: true});
 
     try {
@@ -92,7 +92,7 @@ export default class Login extends Component {
           authorizationId: response.idAutorizacao,
           authorizationUrl: response.urlAutorizacao
         });
-        this.props.navigation.navigate('Autorizacao', {authorizationUrl: response.urlAutorizacao});        
+        this.props.navigation.navigate('Autorizacao', {authorizationUrl: response.urlAutorizacao});
       } else if (response.mensagem != null) {
         Alert.alert(response.mensagem);
       } else {

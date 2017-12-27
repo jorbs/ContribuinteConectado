@@ -40,13 +40,20 @@ export default class AcaoFiscal extends Component {
         this.setState({serviceOrderNotFound: true});
       } else {
         const serviceOrder = [
-          {key: 'Emissão', data: moment(response.nomeInteressado).format('DD/MM/YYYY'), icon: 'flag'},
-          {key: 'Status', data: response.statusOs.dsc},
-          {key: 'Valor ICMS a recuperar', data: `R$ ${response.valIcmsRecuperar.toFixed(2)}`},
-          {key: 'Baixa', data: moment(response.datBaixa).format(Constants.DATE_FORMAT)},
-          {key: 'Data Inicial Auditoria', data: response.dataInicialPeriodoAuditado ? moment(response.dataInicialPeriodoAuditado).format(Constants.DATE_FORMAT) : '-'},
-          {key: 'Data Final Auditoria', data: response.dataFinalPeriodoAuditado ? moment(response.dataFinalPeriodoAuditado).format(Constants.DATE_FORMAT) : '-'},
+          {key: 'Número', data: response.num, icon: 'flag'},
+          {key: 'Emissão', data: moment(response.datEmissao).format('DD/MM/YYYY')},
+          {key: 'Situação', data: response.status},
+          {key: 'Nº Processo', data: response.processo ? `${response.processo.codOrgao}-${response.processo.numProtocolo}/${response.processo.datAno}` : '-'},
+          {key: 'Data de Início', data: response.evento ? moment(response.evento.datInicioAcaoFiscal).format('DD/MM/YYYY') : '-'},
         ];
+
+        if (response.fiscais && response.fiscais.length > 0) {
+          const label = response.fiscais.length > 1 ? 'Fiscais' : 'Fiscal';
+
+          response.fiscais.forEach(function(fiscal, i) {
+            serviceOrder.push({key: i === 0 ? label : '', data: `${fiscal.dscNome} (matrícula ${fiscal.numMatricula})`});
+          });
+        }
 
         this.setState({serviceOrder, serviceOrderNotFound: false});
       }

@@ -19,7 +19,7 @@ export const autenticar = (caceal, authorizationId) =>
       idAutorizacao: authorizationId,
       tokenApp: APP_TOKEN
     })
-  }).then(response => response.ok ? JSON.parse(response._bodyInit) : response.json().then(e => {throw e;}));
+  }).then(response => response.ok ? response.json() : response.json().then(e => {throw e;}));
 
 export const solicitarAutorizacao = (caceal, deviceName) =>
   fetch(`${API_ENDPOINT}/sfz-habilitacao-aplicativo-api/api/public/autorizacao-aplicativo/solicitar`, {
@@ -67,7 +67,7 @@ export const consultarPendencias = (requestToken, numeroDocumento, tipoDocumento
   fetch(`${API_ENDPOINT}/sfz_certidao_api/api/public/consultaCertidao/consultarPendencias`, {
     method: 'POST',
     headers: {
-      Autorization: AUTH_TOKEN_PREFIX + requestToken,
+      Authorization: AUTH_TOKEN_PREFIX + requestToken,
       ...headers
     },
     body: JSON.stringify({
@@ -145,7 +145,7 @@ export const listarChamados = (requestToken) =>
 export const obterCategorias = (requestToken) =>
   fetch(`${API_ENDPOINT}/sfz_glpi_api/api/public/obterCategorias`, {
     headers: {
-      Autorization: AUTH_TOKEN_PREFIX + requestToken,
+      Authorization: AUTH_TOKEN_PREFIX + requestToken,
       ...headers
     }
   }).then(response => response.ok ? response.json() : response.json().then(e => {throw e;}));
@@ -179,10 +179,10 @@ export const consultarOs = (requestToken, caceal, numeroOs) =>
     method: 'POST',
     headers: {
       Authorization: AUTH_TOKEN_PREFIX + requestToken,
-        ...headers
+      ...headers
     },
     body: JSON.stringify({
       cnpjCaceal: caceal,
       numeroOs
     })
-  }).then(response => response.ok ? response.json() : response.json().then(e => {throw e;}));
+  }).then(response => response.ok ? response.json().catch(e => []) : response.json().then(e => {throw e;}));

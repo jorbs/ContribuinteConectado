@@ -65,10 +65,10 @@ export default class Home extends Component {
   async notifyDarExpiration() {
     const {params} = this.props.navigation.state;
     const currentTime = moment();
-    
+
     for (let i = 3; i >= 1; i--) {
       const previousMonth = moment().subtract(i, 'month').format('MM/YYYY');
-      
+
       try {
         const records = await SefazAPI.consultarValoresAntecipados(params.requestToken, params.login, previousMonth);
 
@@ -78,7 +78,7 @@ export default class Home extends Component {
 
         records.map(async record => {
           const notificationPrefix = record.sequencialAntecipacao;
-          
+
           if (record.dataPagamento) {
             ['01', '02', '03'].map(async suffix => {
               const notificationId = notificationPrefix + suffix;
@@ -92,14 +92,14 @@ export default class Home extends Component {
 
           const documentType = record.codigoTributo === Constants.ANTECIPADO ? 'Antecipado' : 'FECOPEP';
           const expirationDate = moment(record.dataVencimento).hour(22).minute(0);
-          
+
           if (expirationDate.isBefore(currentTime)) {
             const notificationId = notificationPrefix + '01';
             const isScheduled = await this.isNotificationScheduled(notificationId);
 
             if (!isScheduled) {
               const notificationTime = moment(currentTime).add(30, 'minutes');
-              
+
               await this.scheduleNotification(notificationId);
 
               PushNotification.localNotificationSchedule({
@@ -117,11 +117,11 @@ export default class Home extends Component {
             }
           } else {
             const fromDate = moment(expirationDate).subtract(Constants.DAR_NOTIFICATION_7_DAYS, 'days').hour(0).minute(0);
-            
+
             if (currentTime.isBefore(fromDate)) {
               const notificationId = notificationPrefix + '02';
               const isScheduled = await this.isNotificationScheduled(notificationId);
-  
+
               if (!isScheduled) {
                 const notificationTime = moment(expirationDate).subtract(Constants.DAR_NOTIFICATION_7_DAYS, 'days').hour(10).minute(0);
 
@@ -140,11 +140,11 @@ export default class Home extends Component {
                 });
               }
             }
-  
+
             if (currentTime.isAfter(fromDate)) {
               const notificationId = notificationPrefix + '03';
               const isScheduled = await this.isNotificationScheduled(notificationId);
-  
+
               if (!isScheduled) {
                 const notificationTime = moment(expirationDate).subtract(Constants.DAR_NOTIFICATION_1_DAY, 'day').hour(16).minute(0);
 
@@ -202,7 +202,7 @@ export default class Home extends Component {
       const restrictionsCount = await AsyncStorage.getItem(Constants.RESTRICTIONS_COUNT_KEY);
 
       await AsyncStorage.setItem(Constants.RESTRICTIONS_COUNT_KEY, response.length.toString());
-      
+
       if (restrictionsCount != null && parseInt(restrictionsCount) != response.length) {
         PushNotification.localNotification({
           title: 'Restrições',
@@ -219,7 +219,7 @@ export default class Home extends Component {
 
   async notifyProcesses() {
     const {params} = this.props.navigation.state;
-    
+
     try {
       const result = await AsyncStorage.getItem(Constants.WATCHED_PROCESSES_KEY);
       const processes = JSON.parse(result) || [];
@@ -227,7 +227,7 @@ export default class Home extends Component {
       for (const i in processes) {
         const processNumber = processes[i].number;
         const processStatus = processes[i].status;
-        
+
         SefazAPI.consultarPorNumeroProcesso(params.requestToken, processNumber).then(process => {
           if (process != null && Object.keys(process).length > 0 && processStatus !== process.situacao) {
             PushNotification.localNotification({
@@ -253,9 +253,9 @@ export default class Home extends Component {
         onPress: async () => {
           const result = await AsyncStorage.getItem(Constants.NOTIFICATIONS_PARENT_KEY);
           const notificationIds = JSON.parse(result) || [];
-      
+
           notificationIds.map(notificationId => PushNotification.cancelLocalNotifications({id: notificationId}));
-      
+
           await AsyncStorage.multiRemove([
             Constants.REQUEST_TOKEN_KEY,
             Constants.CN_STATUS_KEY,
@@ -355,7 +355,7 @@ export default class Home extends Component {
             </Row>
             <Row style={Styles.menuRow}>
             <Col>
-              <TouchableOpacity onPress={() => Alert.alert('Em desenvolvimento.')} style={Styles.menuItem} allowFontScaling={false}>
+              <TouchableOpacity onPress={() => this.navigate('AcaoFiscal')} style={Styles.menuItem} allowFontScaling={false}>
                 <MaterialCommunityIcons name="flag" style={Styles.menuItemIcon}/>
                 <Text style={Styles.menuItemLabel}>Ações Fiscais</Text>
               </TouchableOpacity>
