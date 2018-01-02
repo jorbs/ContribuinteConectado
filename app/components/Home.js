@@ -361,7 +361,7 @@ export default class Home extends Component {
               </TouchableOpacity>
               </Col>
               <Col>
-              <TouchableOpacity style={Styles.menuItem} allowFontScaling={false} onPress={() => Alert.alert('Em desenvolvimento.')}>
+              <TouchableOpacity style={Styles.menuItem} allowFontScaling={false} onPress={() => Alert.alert('Ligue: 0800 284 1060')}>
                 <MaterialCommunityIcons name="phone" style={Styles.menuItemIcon} />
                 <Text style={Styles.menuItemLabel}>Call Center</Text>
               </TouchableOpacity>

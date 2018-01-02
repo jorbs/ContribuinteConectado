@@ -4,6 +4,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import {Col, Row, Grid} from 'react-native-easy-grid';
 import Entypo from 'react-native-vector-icons/Entypo';
 import dismissKeyboard from 'dismissKeyboard';
+import moment from 'moment';
 
 import Styles from '../common/Styles';
 import Constants from '../common/Constants';
@@ -49,12 +50,12 @@ export default class Processos extends Component {
       } else {
         const processDetails = [
           {key: 'Descrição', data: process.descricaoAssunto, icon: 'archive', watch: {processNumber: this.state.processNumber, status: process.situacao}},
-          {key: 'Interessado', data: process.nomeInteressado},
-          {key: 'Acatado em', data: process.dataAcatamento},
-          {key: 'Protocolado em', data: process.dataProtocolo},
+          {key: 'Interessado', data:process.nomeInteressado},
+          {key: 'Acatado em', data: moment(process.dataAcatamento).format('DD/MM/YYYY HH:mm')},
+          {key: 'Protocolado em', data:  moment(process.dataProtocolo).format('DD/MM/YYYY HH:mm')},
           {key: 'Situação', data: process.situacao},
           {key: 'Setor', data: process.setor},
-          {key: 'Última movimentação', data: process.ultimaMovimentacao}
+          {key: 'Última movimentação', data: moment(process.ultimaMovimentacao).format('DD/MM/YYYY HH:mm')}
         ];
 
         this.setState({processDetails, watched, processNotFound: false});
