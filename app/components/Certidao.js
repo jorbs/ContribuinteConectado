@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import {View, Text, FlatList, StyleSheet, Alert} from 'react-native';
+import {View, Text, FlatList, StyleSheet, Alert, TouchableOpacity} from 'react-native';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 import Styles from '../common/Styles';
@@ -48,13 +49,27 @@ export default class Certidao extends Component {
 
     SefazAPI.consultarCnd(params.requestToken, params.login).then(response => {
       const documentType = this.mapDocumentType(response.tipoCertidao);
-      const items = [
+      let items = [
         {key: 'Tipo de Certidão', data: documentType.type, icon: documentType.icon},
         {key: 'Número do Documento', data: response.numeroDocumento},
         {key: 'Emissão', data: `${response.dataEmissao} ${response.horaEmissao}`},
         {key: 'Código de Autenticação', data: response.codigoAutenticacao},
-        { key: 'Data de Validade', data: response.dataValidade },
       ];
+
+      if (documentType !== 'CN') {
+        items.push({key: 'Data de Validade', data: response.dataValidade});
+        items.push(
+          {
+            key: 'component',
+            component: (
+              <TouchableOpacity onPress={() => this.props.navigation.navigate('PendenciasCertidao', params)} style={{ flexDirection: 'row' }}>
+                <MaterialCommunityIcons name="magnify" style={[Styles.searchButtonIcon, { color: '#113A7E' }]} />
+                <Text style={Styles.searchPendencies}>Consultar Pendências</Text>
+              </TouchableOpacity>
+            )
+          }
+        );
+      }
 
       this.setState({items});
     }).catch((e) => Alert.alert('Erro na solicitação', e.message, [{text: 'OK', onPress: () => goBack()}]))
@@ -66,10 +81,17 @@ export default class Certidao extends Component {
       <View style={Styles.itemRow}>
         {item.icon || <Text style={Styles.itemLeftIcon} />}
         <View style={Styles.itemContainer}>
-          <View style={Styles.itemTextContainer}>
-            <Text style={Styles.itemPrimaryText}>{item.key}</Text>
-            <Text style={Styles.itemSecondaryText}>{item.data}</Text>
-          </View>
+          {item.data && (
+            <View style={Styles.itemTextContainer}>
+              <Text style={Styles.itemPrimaryText}>{item.key}</Text>
+              <Text style={Styles.itemSecondaryText}>{item.data}</Text>
+            </View>
+          )}
+          {item.component && (
+            <View>
+              {item.component}
+            </View>
+          )}
         </View>
       </View>
     );

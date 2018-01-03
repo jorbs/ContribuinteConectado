@@ -63,7 +63,7 @@ export const consultarCnd = (requestToken, numeroDocumento, tipoDocumento = 'CAC
     })
   }).then(response => response.ok ? response.json() : response.json().then(e => {throw e;}));
 
-export const consultarPendencias = (requestToken, numeroDocumento, tipoDocumento) =>
+export const consultarPendencias = (requestToken, numeroDocumento, tipoDocumento = 'CACE') =>
   fetch(`${API_ENDPOINT}/sfz_certidao_api/api/public/consultaCertidao/consultarPendencias`, {
     method: 'POST',
     headers: {
@@ -74,7 +74,7 @@ export const consultarPendencias = (requestToken, numeroDocumento, tipoDocumento
       numeroDocumento,
       tipoDocumento
     })
-  }).then(response => response.ok ? response.json().pendenciaDados : response.json().then(e => {throw e;}));
+  }).then(response => response.ok ? response.json() : response.json().then(e => {throw e;}));
 
 // FRONTEIRAS
 

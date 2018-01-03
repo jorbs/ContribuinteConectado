@@ -444,7 +444,10 @@ const Styles = StyleSheet.create({
   ncmSearchItem: {
     marginBottom: 8,
     color: colors.black
-  }
+  },
+  searchPendencies: {
+    color: colors.darkBlue,
+  },
 });
 
 Styles.headerTintColor = colors.white;

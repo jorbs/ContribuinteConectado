@@ -6,6 +6,7 @@ import Autorizacao from './app/components/Autorizacao';
 import Home from './app/components/Home';
 import SituacaoCadastral from './app/components/SituacaoCadastral';
 import Certidao from './app/components/Certidao';
+import PendenciasCertidao from './app/components/PendenciasCertidao';
 import TermoApreensao from './app/components/TermoApreensao';
 import RestricoesPendencias from './app/components/RestricoesPendencias';
 import Restricoes from './app/components/Restricoes';
@@ -34,6 +35,10 @@ const ContribuinteConectado = StackNavigator({
   Certidao: {
     path: 'certidao/:login/:requestToken',
     screen: Certidao
+  },
+  PendenciasCertidao: {
+    path: 'pendenciasCertidao/:login/:requestToken',
+    screen: PendenciasCertidao
   },
   TermoApreensao: {
     path: 'termoApreensao/:login/:requestToken',
