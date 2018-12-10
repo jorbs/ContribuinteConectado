@@ -1,6 +1,6 @@
 # Contribuinte Conectado
 
-App vencedor do 1° Hackathon Insano 72h no projeto Contribuinte Conectado da Sefaz. O app reune os serviços voltados para o contribuinte alagoano (pessoa jurídica) e que são disponibilizados pela Sefaz/AL, em http://www.sefaz.al.gov.br.
+App vencedor do 1° Hackathon Insano 72h no projeto Contribuinte Conectado da Sefaz. O app reune os serviços voltados para o contribuinte alagoano (pessoa jurídica) e que são disponibilizados pela Sefaz/AL.
 
 ## Funcionalidades
 
@@ -18,7 +18,3 @@ App vencedor do 1° Hackathon Insano 72h no projeto Contribuinte Conectado da Se
 4. `react-native run-android`
 
 Nota: É preciso executar o simulador da plataforma Android antes do passo #3.
-
-## API
-
-O app do Contribuinte Conectado faz chamadas remotas à API disponibilizada pela Sefaz/AL, documentada em https://sefazal.github.io.
